@@ -222,12 +222,14 @@ config.json file contains the following parameters -
   distributionDescription?: string;
   resource_removal_policy?: string
 
+
+
 Details of the parameters are given below
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
-|:---------------|:---------------|:---------------|:---------------|:---------------|
-
-| attr | Yes | String | poc | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
+| :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
+| attr | Yes | String | poc | NA | Meaningful |
+| 123 | Yes | String | poc | NA | Meaningful |
 
 
 
