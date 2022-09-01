@@ -1,0 +1,100 @@
+{
+	"baseImage": "ami-090fa75af13c156b4",
+	"ami_component_bucket_name": "golden-ami-component-poc",
+	"ami_component_bucket_create": false,
+	"attr": "poc",
+	"imagePipelineName": "Golden_Image_Pipeline-poc",
+	"components_prefix": "components",
+	"amitag": {
+		"isv_name": "isv",
+		"cnf_name": "cnf",
+		"env": "dev",
+		"Name": "golden-ami-{{imagebuilder:buildDate}}",
+		"Date_Created": "{{imagebuilder:buildDate}}",
+		"golden_ami": "true"
+	},
+	"tag": {
+		"isv_name": "isv",
+		"cnf_name": "cnf",
+		"env": "dev",
+		"Name": "golden-ami-isv-cnf-dev"
+	},
+	"image_recipe": {
+		"image_recipe_version": "1.0.0",
+		"image_recipe_name": "Golden_AMI_Image_Recipe-poc"
+	},
+	"infrastructure": {
+		"name": "Golden_AMI_Instance_Infra-poc"
+	},
+	"inspector_validation": false,
+	"Inspector_Config": {
+		"Build": [
+			{
+				"name": "inspector_validation",
+				"version": "3.0.9",
+				"file": "components/inspector.yaml",
+				"parameter": [
+					{
+						"name": "version",
+						"value": [
+							"1.0.5"
+						]
+					},
+					{
+						"name": "high_severity_findings_threshold",
+						"value": [
+							"15"
+						]
+					},
+					{
+						"name": "region",
+						"value": [
+							"us-east-1"
+						]
+					},
+					{
+						"name": "ignore_findings",
+						"value": [
+							"yes"
+						]
+					},
+					{
+						"name": "inspector_finding_script_path",
+						"value": [
+							"golden-ami-component-poc/components/inspector_findings.sh"
+						]
+					}
+				]
+			}
+		]
+	},
+	"Component_Config": {
+		"Build": [
+			{
+				"name": "build1",
+				"file": "components/build1.yaml",
+				"version": "1.0.1"
+			},
+			{
+				"name": "build2",
+				"file": "components/build2.yaml",
+				"version": "1.0.1"
+			}
+		],
+		"Test": [
+			{
+				"name": "test1",
+				"file": "components/test1.yaml",
+				"version": "1.0.2"
+			}
+		]
+	},
+	"Distribution": [
+		{
+			"region": "us-east-1",
+			"accounts": [
+				"208665233135"
+			]
+		}
+	]
+}

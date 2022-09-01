@@ -1,0 +1,885 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.64"
+        }
+      },
+      "ImagebuilderPipeline": {
+        "id": "ImagebuilderPipeline",
+        "path": "ImagebuilderPipeline",
+        "children": {
+          "ImagebuilderPipeline": {
+            "id": "ImagebuilderPipeline",
+            "path": "ImagebuilderPipeline/ImagebuilderPipeline",
+            "children": {
+              "imported-bucket-from-name": {
+                "id": "imported-bucket-from-name",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/imported-bucket-from-name",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                  "version": "2.34.2"
+                }
+              },
+              "DeployComponents": {
+                "id": "DeployComponents",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents",
+                "children": {
+                  "AwsCliLayer": {
+                    "id": "AwsCliLayer",
+                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/AwsCliLayer",
+                    "children": {
+                      "Code": {
+                        "id": "Code",
+                        "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/AwsCliLayer/Code",
+                        "children": {
+                          "Stage": {
+                            "id": "Stage",
+                            "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/AwsCliLayer/Code/Stage",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.AssetStaging",
+                              "version": "2.34.2"
+                            }
+                          },
+                          "AssetBucket": {
+                            "id": "AssetBucket",
+                            "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/AwsCliLayer/Code/AssetBucket",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                              "version": "2.34.2"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                          "version": "2.34.2"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/AwsCliLayer/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                          "aws:cdk:cloudformation:props": {
+                            "content": {
+                              "s3Bucket": {
+                                "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+                              },
+                              "s3Key": "d21f8b6ad7cafde52be800b4bc2704085a5402ea7401fa71bd8f1e3f995c6068.zip"
+                            },
+                            "description": "/opt/awscli/aws"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_lambda.CfnLayerVersion",
+                          "version": "2.34.2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.lambda_layer_awscli.AwsCliLayer",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "CustomResourceHandler": {
+                    "id": "CustomResourceHandler",
+                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/CustomResourceHandler",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.SingletonFunction",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "Asset1": {
+                    "id": "Asset1",
+                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/Asset1",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/Asset1/Stage",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.AssetStaging",
+                          "version": "2.34.2"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/Asset1/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                          "version": "2.34.2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "CustomResource": {
+                    "id": "CustomResource",
+                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/CustomResource",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/CustomResource/Default",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.34.2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CustomResource",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_deployment.BucketDeployment",
+                  "version": "2.34.2"
+                }
+              },
+              "build1-Build": {
+                "id": "build1-Build",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/build1-Build",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::Component",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "build1",
+                    "platform": "Linux",
+                    "version": "1.0.1",
+                    "uri": "s3://golden-ami-component-poc/components/build1.yaml"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnComponent",
+                  "version": "2.34.2"
+                }
+              },
+              "build2-Build": {
+                "id": "build2-Build",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/build2-Build",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::Component",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "build2",
+                    "platform": "Linux",
+                    "version": "1.0.1",
+                    "uri": "s3://golden-ami-component-poc/components/build2.yaml"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnComponent",
+                  "version": "2.34.2"
+                }
+              },
+              "test1-Test": {
+                "id": "test1-Test",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/test1-Test",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::Component",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "test1",
+                    "platform": "Linux",
+                    "version": "1.0.2",
+                    "uri": "s3://golden-ami-component-poc/components/test1.yaml"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnComponent",
+                  "version": "2.34.2"
+                }
+              },
+              "Golden_AMI_Instance_Profile_Role": {
+                "id": "Golden_AMI_Instance_Profile_Role",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Profile_Role",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Profile_Role/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "ec2.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/AmazonSSMManagedInstanceCore"
+                              ]
+                            ]
+                          },
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/EC2InstanceProfileForImageBuilder"
+                              ]
+                            ]
+                          },
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/AmazonInspectorFullAccess"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Profile_Role/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Profile_Role/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "ec2:CreateTags",
+                                    "ssm:SendCommand"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                },
+                                {
+                                  "Action": "s3:*",
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    "arn:aws:s3:::golden-ami-component-poc",
+                                    "arn:aws:s3:::golden-ami-component-poc/*"
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleDefaultPolicy26E43FDA",
+                            "roles": [
+                              {
+                                "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.34.2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.34.2"
+                }
+              },
+              "Golden_AMI_Instanc_Profile": {
+                "id": "Golden_AMI_Instanc_Profile",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instanc_Profile",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::InstanceProfile",
+                  "aws:cdk:cloudformation:props": {
+                    "roles": [
+                      {
+                        "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
+                      }
+                    ],
+                    "instanceProfileName": "Golden_AMI_Instance_Profile-poc"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnInstanceProfile",
+                  "version": "2.34.2"
+                }
+              },
+              "MyCfnDistributionConfiguration": {
+                "id": "MyCfnDistributionConfiguration",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/MyCfnDistributionConfiguration",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::DistributionConfiguration",
+                  "aws:cdk:cloudformation:props": {
+                    "distributions": [
+                      {
+                        "region": "us-east-1",
+                        "amiDistributionConfiguration": {
+                          "amiTags": {
+                            "isv_name": "isv",
+                            "cnf_name": "cnf",
+                            "env": "dev",
+                            "Name": "golden-ami-{{imagebuilder:buildDate}}",
+                            "Date_Created": "{{imagebuilder:buildDate}}",
+                            "golden_ami": "true"
+                          },
+                          "targetAccountIds": [
+                            "208665233135"
+                          ]
+                        }
+                      }
+                    ],
+                    "name": "Golden_AMI_Distribution-poc",
+                    "description": "Destribution settings for poc",
+                    "tags": {
+                      "cnf_name": "cnf",
+                      "env": "dev",
+                      "isv_name": "isv",
+                      "Name": "golden-ami-isv-cnf-dev"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnDistributionConfiguration",
+                  "version": "2.34.2"
+                }
+              },
+              "Golden_AMI_Encryption_Key": {
+                "id": "Golden_AMI_Encryption_Key",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::KMS::Key",
+                      "aws:cdk:cloudformation:props": {
+                        "keyPolicy": {
+                          "Statement": [
+                            {
+                              "Action": "kms:*",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":root"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "kms:CreateGrant",
+                                "kms:Decrypt",
+                                "kms:DescribeKey",
+                                "kms:Encrypt",
+                                "kms:Generate*",
+                                "kms:ReEncrypt*"
+                              ],
+                              "Condition": {
+                                "StringLike": {
+                                  "aws:PrincipalArn": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:aws:iam::",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":role/aws-service-role/imagebuilder.amazonaws.com/AWSServiceRoleForImageBuilder"
+                                      ]
+                                    ]
+                                  }
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":root"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            },
+                            {
+                              "Action": [
+                                "kms:CreateGrant",
+                                "kms:Decrypt",
+                                "kms:DescribeKey",
+                                "kms:Encrypt",
+                                "kms:Generate*",
+                                "kms:ReEncrypt*"
+                              ],
+                              "Condition": {
+                                "StringLike": {
+                                  "aws:PrincipalArn": "arn:aws:iam::208665233135:role/EC2ImageBuilderDistributionCrossAccountRole"
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::208665233135:root"
+                                    ]
+                                  ]
+                                }
+                              },
+                              "Resource": "*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_kms.CfnKey",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_kms.Key",
+                  "version": "2.34.2"
+                }
+              },
+              "ImageRecipe": {
+                "id": "ImageRecipe",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/ImageRecipe",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::ImageRecipe",
+                  "aws:cdk:cloudformation:props": {
+                    "components": [
+                      {
+                        "componentArn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+                      },
+                      {
+                        "componentArn": {
+                          "Fn::GetAtt": [
+                            "ImagebuilderPipelinebuild1BuildEA5A3692",
+                            "Arn"
+                          ]
+                        }
+                      },
+                      {
+                        "componentArn": {
+                          "Fn::GetAtt": [
+                            "ImagebuilderPipelinebuild2Build83E14989",
+                            "Arn"
+                          ]
+                        }
+                      },
+                      {
+                        "componentArn": {
+                          "Fn::GetAtt": [
+                            "ImagebuilderPipelinetest1Test4CBF6C26",
+                            "Arn"
+                          ]
+                        }
+                      },
+                      {
+                        "componentArn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+                      }
+                    ],
+                    "name": "Golden_AMI_Image_Recipe-poc",
+                    "parentImage": "ami-090fa75af13c156b4",
+                    "version": "1.0.0",
+                    "blockDeviceMappings": [
+                      {
+                        "deviceName": "/dev/xvda",
+                        "ebs": {
+                          "encrypted": true,
+                          "kmsKeyId": {
+                            "Ref": "ImagebuilderPipelineGoldenAMIEncryptionKey56A7C01D"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnImageRecipe",
+                  "version": "2.34.2"
+                }
+              },
+              "Golden_AMI_Instance_Infra": {
+                "id": "Golden_AMI_Instance_Infra",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Infra",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::InfrastructureConfiguration",
+                  "aws:cdk:cloudformation:props": {
+                    "instanceProfileName": "Golden_AMI_Instance_Profile-poc",
+                    "name": "Golden_AMI_Instance_Infra-poc"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnInfrastructureConfiguration",
+                  "version": "2.34.2"
+                }
+              },
+              "Golden_AMI_Pipeline": {
+                "id": "Golden_AMI_Pipeline",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Pipeline",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::ImagePipeline",
+                  "aws:cdk:cloudformation:props": {
+                    "infrastructureConfigurationArn": {
+                      "Fn::GetAtt": [
+                        "ImagebuilderPipelineGoldenAMIInstanceInfraCE69FF3F",
+                        "Arn"
+                      ]
+                    },
+                    "name": "Golden_Image_Pipeline-poc",
+                    "distributionConfigurationArn": {
+                      "Fn::GetAtt": [
+                        "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78",
+                        "Arn"
+                      ]
+                    },
+                    "imageRecipeArn": {
+                      "Fn::GetAtt": [
+                        "ImagebuilderPipelineImageRecipe2B281ADA",
+                        "Arn"
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnImagePipeline",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.64"
+            }
+          },
+          "Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": {
+            "id": "Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C",
+            "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetBucket*",
+                                    "s3:GetObject*",
+                                    "s3:List*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::",
+                                          {
+                                            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::",
+                                          {
+                                            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+                                          }
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "s3:Abort*",
+                                    "s3:DeleteObject*",
+                                    "s3:GetBucket*",
+                                    "s3:GetObject*",
+                                    "s3:List*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::golden-ami-component-poc"
+                                        ]
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          "arn:",
+                                          {
+                                            "Ref": "AWS::Partition"
+                                          },
+                                          ":s3:::golden-ami-component-poc/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+                            "roles": [
+                              {
+                                "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.34.2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.34.2"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.34.2"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.34.2"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.34.2"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+                      },
+                      "s3Key": "f98b78092dcdd31f5e6d47489beb5f804d4835ef86a8085d0a2053cb9ae711da.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+                        "Arn"
+                      ]
+                    },
+                    "handler": "index.handler",
+                    "layers": [
+                      {
+                        "Ref": "ImagebuilderPipelineDeployComponentsAwsCliLayerF34DBE13"
+                      }
+                    ],
+                    "runtime": "python3.7",
+                    "timeout": 900
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.34.2"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "ImagebuilderPipeline/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "ImagebuilderPipeline/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.34.2"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.64"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.34.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.34.2"
+    }
+  }
+}

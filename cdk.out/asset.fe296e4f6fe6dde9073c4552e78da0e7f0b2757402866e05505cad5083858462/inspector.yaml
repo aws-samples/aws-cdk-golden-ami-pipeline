@@ -1,0 +1,110 @@
+name: HelloWorldTestingDocument
+description: This is hello world testing document.
+schemaVersion: 1.0
+parameters:
+  - WorkingPath:
+      type: string
+      default: /var/tmp
+      description: "File path for payload download."
+  - version:
+      type: string
+      default: "1.0.5"
+      description: "Inspector Component Version"  
+  - high_severity_findings_threshold:
+      type: string
+      default: "10"
+      description: "high_severity_findings_threshold"  
+  - ignore_findings:
+      type: string
+      default: "no"
+      description: "ignore_findings"  
+  - inspector_finding_script_path:
+      type: string
+      default: "/tmp"
+      description: "Assessment script file location" 
+  - region:
+      type: string
+      default: "us-west-2"
+      description: "region name where Inspector will be running" 
+
+      
+phases:
+  - name: validate
+    steps:
+      - name: Source
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              ARCH=$(uname -m)
+              if [ $ARCH == x86_64 ]; then
+                echo 's3://ec2imagebuilder-managed-resources-us-west-2-prod/components/inspector-test-linux/{{ version }}/InspectorTestAmd64'
+              elif [ $ARCH == aarch64 ]; then
+                echo 's3://ec2imagebuilder-managed-resources-us-west-2-prod/components/inspector-test-linux/{{ version }}/InspectorTestArm64'
+              else
+                echo "This component does not support the $ARCH architecture. Failing build."
+                exit 1
+              fi
+      - name: CheckDistribution
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              ARCH=$(uname -m)
+              DISTRO=$(cat /etc/*release | head -n 1)
+              if [[ $ARCH == aarch64 ]] && [[ "$DISTRO" == *"Red Hat"* ]];  then
+                echo "Inspector Test for Linux does not currently support RHEL on ARM64."
+                exit 1
+              elif [[ $ARCH == aarch64 ]] && [[ "$DISTRO" == *"SLES"* ]]; then
+                echo "Inspector Test for Linux does not currently support SLES on ARM64."
+                exit 1
+              fi
+      - name: MakeStagingDirectory
+        action: ExecuteBash
+        inputs:
+          commands:
+            - mkdir -p {{ WorkingPath }}
+      - name: DownloadInspectorTest
+        action: S3Download
+        inputs:
+          - source: '{{ validate.Source.outputs.stdout }}'
+            destination: '{{ WorkingPath }}/InspectorTest'
+      - name: SetExecutablePermissions
+        action: ExecuteBash
+        inputs:
+          commands:
+            - chmod +x {{ WorkingPath }}/InspectorTest
+      - name: ExecuteInspectorAssessment
+        action: ExecuteBinary
+        inputs:
+          path: '{{ WorkingPath }}/InspectorTest'
+
+      - name: Downloadcustomscript
+        action: S3Download
+        inputs:
+          - source: "s3://{{inspector_finding_script_path}}"
+            destination: '{{ WorkingPath }}/inspector_findings.sh'
+
+      - name: set_perm_inspector_finding_script
+        action: ExecuteBash
+        inputs:
+          commands:
+            - chmod +x {{ WorkingPath }}/inspector_findings.sh
+
+      - name: Installjq
+        action: ExecuteBash
+        inputs:
+          commands:
+              - echo "Installing Jq"
+              - sudo yum install jq -y    
+
+      - name: execute_inspector_finding_script
+        action: ExecuteBash
+        inputs:
+          commands:
+              - |
+                echo '{{ validate.ExecuteInspectorAssessment.outputs.stdout }}'
+                url_part=$(echo '{{ validate.ExecuteInspectorAssessment.outputs.stdout }}' |tr -d '\n'|tail -1|awk -F"https" '{print $2}')
+                full_url="https"${url_part}
+                echo ${full_url}
+                {{ WorkingPath }}/inspector_findings.sh ${full_url} {{ ignore_findings }} {{ high_severity_findings_threshold }} {{ region }}

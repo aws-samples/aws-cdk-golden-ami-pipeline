@@ -1,92 +1,1149 @@
-# Cdk Golden Ami Pipeline
+# Welcome to your CDK TypeScript project
 
-CDK application to create Golden AMI Pipeline using Ec2 Image Builder Service
+This is a blank project for CDK development with TypeScript.
 
-## Getting started
+The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Useful commands
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+* `npm run build`   compile typescript to js
+* `npm run watch`   watch for changes and compile
+* `npm run test`    perform the jest unit tests
+* `cdk deploy`      deploy this stack to your default AWS account/region
+* `cdk diff`        compare deployed stack with current state
+* `cdk synth`       emits the synthesized CloudFormation template
 
-## Add your files
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Background
+As part of Infra deployment pipeline, we have been deploying EKS cluster with Node Group. The launch template of the Auto Scaling Group provides the information about the AMI (Amazon Machine Image) to be used for the worker nodes. At present, each ISV creates their own AMI ( per CNF) using manual process.There is no automated Pipeline to build , test and distribute Golden AMI in target account. 
+The following Solution describes how each ISV can create their own Golden AMI Pipeline to Build/Test/Distribute based on the configuration provided by them.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git
-git branch -M main
-git push -uf origin main
-```
+Target Architecture
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline/-/settings/integrations)
+Solution
+In this solution, we will be using AWS Ec2 Image Builder service for the heavy lifting work of Building, testing and Distributing the Golden AMI. 
+The AWS CodeCommit repository will contain all the configuration files provided the ISV. These configuration file will dictate how the image will be built, tested and distributed across multiple account/region. CDK application will read configuration file ( the details of the configuration file provided by ISV is described in Configuration File section)  deploy the necessary resources in ISV CICD account. The image builder pipeline consists of the following 
 
-## Collaborate with your team
+Recepi
+What Base Image to Use
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+What are the Build step
 
-## Test and Deploy
+What are the Test step
 
-Use the built-in continuous integration in GitLab.
+Infrastructure
+What type of EC2 instance to launch to build and test
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Which VPC, Subnet and Security Group to Use while launching the instance.
 
-***
+Distribution
+Where to Distribute the AMI after creation - which account/region
 
-# Editing this README
+What tag will be added in the AMI in the target account 
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Key features
+As part of the security best practice, there will be one Customer Manager Keys ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Base image can refer to AWS managed public ssm parameter (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest EKS optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
 
-## Name
-Choose a self-explaining name for your project.
+User can bring their own Build and Test steps ( in yaml file) or AWS managed pre-build SSM documentation can also be used.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+EC2 Inspector (by using AWS Managed SSM Document) can be integrated for Vulnerability scanning. 
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+Once the Golden AMI is distributed , the SSM parameter in target account will be updated in with the new AMI ID . The SSM parameters value in the target account will always contain the latest AMI built through the pipeline.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Image Pipeline will send SNS notification for success or failure. Later this can be used to update DynamoDB ( This part is not implemented in the solution)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+ 
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Here is one of the sample config.json file
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+{
+    "baseImage": "ami-090fa75af13c156b4",
+    "baseImageType": "id",
+    "resource_removal_policy": "destroy",
+    "ami_component_bucket_name": "golden-ami-component-nk-poc",
+    "attr": "nk-poc",
+    "instanceProfileName": "Golden_AMI_Instance_Profile_nk-poc",
+    "imagePipelineName": "Golden_Image_Pipeline-nk-poc",
+    "components_prefix": "components",
+    "iamEncryption": true,
+    "amitag": {
+        "isv_name": "nk",
+        "cnf_name": "amf",
+        "env": "dev",
+        "Name": "golden-ami-nk-amf-dev-{{imagebuilder:buildDate}}",
+        "Date_Created": "{{imagebuilder:buildDate}}"
+    },
+    "tag": {
+        "isv_name": "nk",
+        "cnf_name": "amf",
+        "env": "dev",
+        "Name": "golden-ami-nk-amf-dev"
+    },
+    "image_receipe": {
+        "image_receipe_version": "3.1.4",
+        "image_receipe_name": "Golden_AMI_Image_Recipe-nk-poc",
+        "volume_size": 3072,
+        "deleteOnTermination": false,
+        "volume_type": "gp2"
+    },
+    "infrastructure": {
+        "name": "Golden_AMI_Instance_Infra-nk-poc",
+        "instance_type": ["t2.small"]
+    },
+    "inspector_validation": true,
+    "Inspector_Config": {
+        "Build": [
+            {
+                "name": "inspector_validation",
+                "version": "3.0.7",
+                "file": "components/inspector.yaml",
+                "parameter": [
+                    {
+                        "name": "version",
+                        "value": [
+                            "1.0.5"
+                        ]
+                    },
+                    {
+                        "name": "high_severity_findings_threshold",
+                        "value": [
+                            "15"
+                        ]
+                    },
+                    {
+                        "name": "ignore_findings",
+                        "value": [
+                            "yes"
+                        ]
+                    },
+                    {
+                        "name": "inspector_finding_script_path",
+                        "value": [
+                            "golden-ami-component-nk-poc/components/inspector_findings.sh"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "isv_name": "nk",
+    "cnf_name": "amf",
+    "env": "dev",
+    "golden_ami": "true",
+    "Component_Config": {
+        "Build": [
+            {
+                "name": "build1",
+                "file": "components/build2.yaml",
+                "version": "1.0.0"
+            },
+            {
+                "name": "build2",
+                "file": "components/build7.yaml",
+                "version": "1.0.0"
+            },
+            {
+                "name": "build3",
+                "file": "components/build1.yaml",
+                "version": "1.0.0",
+                "parameter": [
+                    {
+                        "name": "testparam",
+                        "value": [
+                            "samplevalue"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "test1",
+                "file": "components/build2.yaml",
+                "version": "1.0.0"
+            }
+        ],
+        "Test": [
+            {
+                "name": "test2",
+                "file": "components/test1.yaml",
+                "version": "1.0.0"
+            },
+            {
+                "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+            }
+        ]
+    },
+    "Distribution": [
+        {
+            "region": "us-east-1",
+            "accounts": [
+                "208665233135"
+            ]
+        }
+    ]
+}
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+There are two config file - 
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+config.json - Configuration file that defines all the parameters needed to deploy the AMI Pipeline 
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+default_component.json - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+config.json file contains the following parameters - 
 
-## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+  baseImage: string;
+  baseImageType?: string;
+  ami_component_bucket_name?: string;
+  ami_component_bucket_create?: boolean;
+  ami_component_bucket_version?: boolean;
+  imagePipelineName: string;
+  instanceProfileName?: string;
+  instanceProfileRoleName?: string;
+  iamEncryption?: boolean;
+  components_prefix: string;
+  key_alias?: string;
+  image_receipe: receipe;
+  golden_ami?: string;
+  sns_topic?: string;
+  attr: string
+  amitag?: object;
+  tag?: object;
+  infrastructure: infrastructure;
+  inspector_validation?: boolean;
+  Inspector_Config?: ComponentConfig;
+  Component_Config: ComponentConfig;
+  Distribution?: distribution[];
+  distributionName?: string;
+  distributionDescription?: string;
+  resource_removal_policy?: string
+
+Details of the parameters are given below
+
+| Parameter Name | Required | Type | example | Default Value | Notes |
+|:---------------|:---------------|:---------------|:---------------|:---------------|
+
+| attr | Yes | String | poc | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
+
+
+
+baseImage
+
+Yes
+
+String
+
+"ami-090fa75af13c156b4"
+
+Or
+
+"/golden/ami"
+
+ 
+
+baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.
+
+baseImageType
+
+No
+
+String
+
+"ssm | id"
+
+id
+
+baseImageType select ssm, if baseImage contains SSM Parameter
+
+Select id if baseImage contains AMI ID
+
+resource_removal_policy
+
+No
+
+String
+
+"destroy | retain"
+
+retain
+
+Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.
+
+ami_component_bucket_name
+
+No
+
+String
+
+"golden-ami-component-nk"
+
+golden-ami-component-${attr}
+
+This bucket will contain all the related user defined build and test component
+
+If not specified, Bucket will be created with attribute name
+
+ami_component_bucket_create
+
+No
+
+Boolean
+
+true | false
+
+true
+
+If true, ami_component_bucket_name will be created.
+
+if selected as false, then ami_component_bucket_name should exists
+
+ami_component_bucket_version
+
+No
+
+Boolean
+
+true | false
+
+false
+
+The parameter is used to enable/disable S3 Bucket version
+
+instanceProfileName
+
+No
+
+String
+
+Golden_AMI_Instance_Profile_nk-amf
+
+Golden_AMI_Instance_Profile-${attr}
+
+ 
+
+instanceProfileRoleName
+
+No
+
+String
+
+Golden_Image_Pipeline-nk-amf-role
+
+CDK will create a dynamic name
+
+THis role will be attached to the EC2 instance Profile Role
+
+imagePipelineName
+
+Yes
+
+String
+
+Golden_Image_Pipeline-nk-amf
+
+NA
+
+The Name of the Image pipeline to be created.
+
+components_prefix
+
+Yes
+
+String
+
+golden_ami_amf_components
+
+NA
+
+prefix of the S3 Bucket ami_component_bucket_name where the related component will be deployed and referenced
+
+iamEncryption
+
+No
+
+Boolean
+
+true | false
+
+false
+
+If enabled, a new CDK key will be created and underlying EBS volume of the AMI will be encrypted with the same
+
+amitag
+
+No
+
+object
+
+example
+
+NA
+
+This tag will be appplied to the distributed AMI in target account/region
+
+tag
+
+No
+
+object
+
+example
+
+NA
+
+This tag will be applied to all the resources created by the CDK application.
+
+image_receipe
+
+Yes
+
+recipe
+
+example
+
+NA
+
+EC2 Builder image recipe
+
+infrastructure
+
+Yes
+
+infrastructure
+
+example
+
+ 
+
+Ec2 Builder Infrastrure details that will be used to launch EC2 instance
+
+inspector_validation
+
+No
+
+Boolean
+
+true | false
+
+false
+
+To add inspector validation step at the end of the build phase. 
+
+Inspector_Config
+
+No ( if inspector_validation is set to false)
+
+ 
+
+Yes ( if inspector_validation is set to true) 
+
+ComponentConfig
+
+example
+
+NA
+
+Details of the Inspector configuration parameter can be found here. 
+
+Component_Config
+
+Yes
+
+ComponentConfig
+
+example
+
+NA
+
+Defines the Build and Test Steps
+
+Distribution
+
+No
+
+list of distribution
+
+example
+
+NA
+
+The config detail about which target account and region the golden AMI will be distributed
+
+distributionName
+
+No
+
+String
+
+Golden_AMI_Distribution-am-amf
+
+Golden_AMI_Distribution-$attr
+
+Distribution settings name
+
+distributionDescription
+
+No
+
+String
+
+ 
+
+Destribution settings for $'attr'
+
+Description of the distribution settings
+
+sns_topic
+
+No
+
+String
+
+arn:aws:sns:us-east-1:0123456789:myTopic
+
+NA
+
+Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.
+
+ 
+
+key_alias
+
+No
+
+String
+
+Golden_AMI_key_nk_amf
+
+NA
+
+If not provided, KMS key will be created without alias name
+
+schedule
+
+No
+
+{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String } . For more information, link
+
+
+{
+        "scheduleExpression": "cron(0 10 * * ? *)"
+    }
+ 
+
+Manual
+
+AMI Pipeline Schedule.
+
+ 
+
+
+distribution
+
+
+{
+  region: string;
+  accounts: string[];
+}
+ 
+
+parameter
+
+Required
+
+Type
+
+example
+
+Default Value
+
+Notes
+
+region
+
+Yes
+
+String
+
+us-west-2
+
+NA
+
+Region name where Golden AMI will be distributed
+
+accounts
+
+Yes
+
+List of String
+
+["1234556789","987654321]
+
+NA
+
+Account Name where Golden AMI will be distributed
+
+
+infrastructure -  For More information, check CloudFormation property link 
+
+
+{
+        name: string;
+        instance_type?: string[];
+        subnet_id?: string;
+        security_groups?: string[];
+}
+ 
+
+parameter
+
+Required
+
+Type
+
+example
+
+Default Value
+
+Notes
+
+name
+
+Yes
+
+String
+
+Golden_AMI_Pipeline_infra_nk_amf
+
+NA
+
+Name of the infrastructure resource created in Image builder service.
+
+instance_type
+
+No
+
+List of String
+
+["t2.small"]
+
+NA
+
+Instance type to be used for Building Golden AMI
+
+subnet_id
+
+No
+
+String
+
+"subnet-123456"
+
+NA
+
+If not provided, default VPC and Subnet will be used.
+
+security_groups
+
+No
+
+List of String
+
+["sg-123456789"]
+
+NA
+
+This is needed if the subnet ID is provided.
+
+ 
+
+
+Component_Config
+
+
+{
+  Build?: {
+    name?: string;
+    file?: string;
+    version?: string;
+    arn?: string;
+    parameter?: { name: string; value: string[] }[];
+  }[];
+  Test?: {
+    name?: string;
+    file?: string;
+    version?: string;
+    arn?: string;
+    parameter?: { name: string; value: string[] }[];
+  }[];
+}
+Component_Config contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
+
+Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
+
+parameter
+
+Required
+
+Type
+
+example
+
+Default Value
+
+Notes
+
+name
+
+No ( If arn is mentioned)
+
+Yes ( if file is mentioned) 
+
+String
+
+Install_jq
+
+NA
+
+name of the Build/Test component
+
+file
+
+No ( If arn is mentioned)
+
+ 
+
+golden_ami_amf_components/build1.yaml
+
+NA
+
+user provided component yaml  file path 
+
+version
+
+No ( If arn is mentioned)
+
+Yes ( if file is mentioned) 
+
+String
+
+1.0.0
+
+NA
+
+semantic version of the component to be created
+
+arn
+
+No
+
+String
+
+arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1
+
+NA
+
+amazon managed component arn. Make sure this exists in the account/region the pipeline is being deployed. ( Navigate to image builder console ->component->select amazon owned)
+
+Also, if arn is provided, then name, file, version parameter is not required. Check the example
+
+parameter
+
+Yes ( if the component is created with non default parameter)
+
+List of { name: string; value: string[] }
+
+example
+
+NA
+
+parameter is needed if the component is created with non default parameter
+
+
+image_recipe
+
+
+ {
+    image_recipe_version: string; 
+    image_recipe_name: string ; 
+    volume_size?: number;
+    volume_type?: string;
+    deleteOnTermination?: boolean
+}
+Image Recipe is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the receipt version. 
+
+parameter
+
+Required
+
+Type
+
+example
+
+Default Value
+
+Notes
+
+image_recipe_name
+
+Yes
+
+String
+
+Golden_AMI_Pipeline_recipe_nk_amf
+
+NA
+
+Image Recipe Name to be created
+
+image_recipe_name
+
+Yes
+
+String
+
+1.0.0
+
+NA
+
+Semantic version of the component
+
+volume_size
+
+No
+
+Number
+
+2048
+
+NA
+
+EBS volume size of the EC2 instance
+
+volume_type
+
+No
+
+String
+
+"gp2
+
+NA
+
+EBS Volume type of the EC2 instance
+
+
+Inspector_Config  parameter
+
+Parameter
+
+Required
+
+Type
+
+Example
+
+Notes
+
+version
+
+Yes
+
+String
+
+1.0.5
+
+Which version of amazon owned SSM documentation for inspector to be used. you can see the latest version from the Ec2 Image Builder console → Component 
+
+
+high_severity_findings_threshold
+
+Yes
+
+String
+
+"15"
+
+Maximum number of high severity findings allowed.If the number of high severity findings is more than this number, pipeline will fail
+
+region
+
+Yes
+
+String
+
+us-west-2
+
+Region where the Inspector will be running ( same region where Image builder service is being deployed)
+
+ignore_findings
+
+Yes
+
+String
+
+yes
+
+if selected “yes”, Pipeline will continue and ignore inspector assessment result
+
+ 
+
+Example
+ 
+
+
+amitag
+
+
+{
+	"isv_name": "nk",
+	"cnf_name": "amf",
+	"env": "dev",
+	"Name": "golden-ami-nk-amf-dev-{{imagebuilder:buildDate}}",
+	"Date_Created": "{{imagebuilder:buildDate}}",
+	"golden_ami": "true"
+}
+ 
+
+
+tag
+
+
+{
+	"isv_name": "nk",
+	"cnf_name": "amf",
+	"env": "dev",
+	"Name": "golden-ami-nk-amf-dev"
+}
+ 
+
+ 
+
+
+infrastructure
+
+
+{
+	"name": "Golden_AMI_Instance_Infra-nk-poc",
+	"instance_type": ["t2.small"]
+}
+ 
+
+
+distribution
+
+
+[{
+	"region": "us-east-1",
+	"accounts": [
+		"208665233135"
+	]
+}]
+ 
+
+
+component
+
+
+{
+	"Build": [{
+			"name": "build1",
+			"file": "golden_ami_amf_components/build1.yaml",
+			"version": "1.0.1"
+		},
+		{
+           "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+        },
+		{
+			"name": "build2",
+			"file": "golden_ami_amf_components/build2.yaml",
+			"version": "1.0.1"
+		}
+	],
+	"Test": [{
+		"name": "test2",
+		"file": "golden_ami_amf_components/test1.yaml",
+		"version": "1.0.1"
+	},
+	{
+      "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+    }
+    ]
+}
+ 
+
+
+inspector_config
+
+
+{
+	"Build": [{
+		"name": "inspector_validation",
+		"version": "3.0.9",
+		"file": "golden_ami_amf_components/inspector.yaml",
+		"parameter": [{
+				"name": "version",
+				"value": [
+					"1.0.5"
+				]
+			},
+			{
+				"name": "high_severity_findings_threshold",
+				"value": [
+					"15"
+				]
+			},
+			{
+				"name": "region",
+				"value": [
+					"us-east-1"
+				]
+			},
+			{
+				"name": "ignore_findings",
+				"value": [
+					"yes"
+				]
+			},
+			{
+				"name": "inspector_finding_script_path",
+				"value": [
+					"golden-ami-component-nk/golden_ami_amf_components/inspector_findings.sh"
+				]
+			}
+		]
+	}]
+}
+
+image_recipe
+
+
+{
+	"image_recipe_version": "3.1.6",
+	"image_recipe_name": "Golden_AMI_Image_Recipe-nk-poc",
+	"volume_size": 3072,
+	"deleteOnTermination": false,
+	"volume_type": "gp2"
+}
+ 
+
+
+parameter
+
+ 
+
+
+[{
+		"name": "param1",
+		"value": [
+			"value1"
+		]
+	},
+	{
+		"name": "param2",
+		"value": [
+			"value2"
+		]
+	}
+]
+
+
+Follow  the below steps to deploy the solution 
+ 
+
+Prerequisites:
+
+Accounts bootstrapped with cdkv2
+
+Example: cdk bootstrap aws://346687249423/us-west-2 --qualifier dish-cdkv2 --toolkit-stack-name CDKToolkit-cicd-cdkv2
+
+If your bootstrap uses a qualifier, all target accounts must have the same qualifier
+
+CDK 2.33.0 or greater installed locally
+
+IAM Role in target accounts with the following:
+
+Trust relationship to allow sts assume-role from your local aws credentials
+
+Target role needs the ability to assume cdk deploy role. Ex CDK Role: cdk-dish-cdkv2-deploy-role-350335073051-us-east-2
+
+Local credentials 
+
+Ability to assume cdk deploy role in ISV CICD account
+
+Configured with ISV CICD account in aws credentials file under cicd profile
+
+ 
+
+Get CICD Dev account’s credential to clone the Base Repo
+
+git clone codecommit::us-west-2://Golden_AMI_Base_Repo
+
+Update config.json and default_component.json accordingly. More information about all the parameters can be found here and here.
+
+Verify prerequisites from above are met.
+
+Update isvAccountId (ISV CICD account) in prereq/bin/config.json 
+
+Update cross_account_deploy_role in prereq/bin/config.json with the role name your local credentials will assume in the target account.
+
+If your bootstrap uses a qualifier, update cdk.json with the qualifier in “context” ex:
+
+    "@aws-cdk/core:bootstrapQualifier": "dish-cdkv2"
+
+Update golden_ami_pipeline package with latest version in the package.json file. For example, 
+
+"golden_ami_pipeline": "1.0.1-rc.30"
+
+Run deploy script
+
+./deploy.sh
+
+Deploy script will do the following:
+
+Authenticate to codeartifact
+
+Install dependencies for prereq stack
+
+Iterate through Distribution in prereq/bin/config.json and deploy stacks to target environments
+
+Install dependencies for pipeline stack
+
+Deploy stack to source environment (ISV CICD account)
+
+How differentComponents are connected in EC2 Image Builder Service
+
+
+Run the Image Pipeline
+Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
+
+Recipe
+
+Components
+
+Infrastructure
+
+Distribution
+
+Image Pipelines
+
+ 
+
+Select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button as per the below screenshot.
+
+
+ 
+
+The status of the pipeline will change through different phase . 
+
+Building → Testing → Distributing → Integrating → Available
+
+
+Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
+
+
+

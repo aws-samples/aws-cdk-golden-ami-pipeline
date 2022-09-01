@@ -1,0 +1,189 @@
+{
+  "version": "20.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "ImagebuilderPipeline.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "ImagebuilderPipeline.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "ImagebuilderPipeline": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "ImagebuilderPipeline.template.json",
+        "tags": {
+          "cnf_name": "cnf",
+          "env": "dev",
+          "isv_name": "isv",
+          "Name": "golden-ami-isv-cnf-dev"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/83a226e0d8349c7ff7bf162ecb69a0844124db66180c999313e7431b6a07f22b.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "ImagebuilderPipeline.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "ImagebuilderPipeline.assets"
+      ],
+      "metadata": {
+        "/ImagebuilderPipeline": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "cnf_name",
+                "Value": "cnf"
+              },
+              {
+                "Key": "env",
+                "Value": "dev"
+              },
+              {
+                "Key": "isv_name",
+                "Value": "isv"
+              },
+              {
+                "Key": "Name",
+                "Value": "golden-ami-isv-cnf-dev"
+              }
+            ]
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineDeployComponentsAwsCliLayerF34DBE13"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineDeployComponentsCustomResource29782E2D"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/build1-Build": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelinebuild1BuildEA5A3692"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/build2-Build": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelinebuild2Build83E14989"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/test1-Test": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelinetest1Test4CBF6C26"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Profile_Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Profile_Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleDefaultPolicy26E43FDA"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instanc_Profile": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineGoldenAMIInstancProfile216FA320"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/MyCfnDistributionConfiguration": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineGoldenAMIEncryptionKey56A7C01D"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/ImageRecipe": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineImageRecipe2B281ADA"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Infra": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineGoldenAMIInstanceInfraCE69FF3F"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Pipeline": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineGoldenAMIPipeline82DEE6FC"
+          }
+        ],
+        "/ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ],
+        "/ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+          }
+        ],
+        "/ImagebuilderPipeline/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/ImagebuilderPipeline/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/ImagebuilderPipeline/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/ImagebuilderPipeline/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "ImagebuilderPipeline"
+    }
+  }
+}

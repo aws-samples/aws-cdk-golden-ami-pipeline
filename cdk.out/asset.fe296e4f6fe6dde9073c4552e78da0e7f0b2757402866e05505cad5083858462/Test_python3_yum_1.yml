@@ -1,0 +1,12 @@
+name: HelloWorldTestingDocument
+description: This is hello world testing document.
+schemaVersion: 1.0
+
+phases:
+  - name: test
+    steps:
+      - name: HelloWorldStep
+        action: ExecuteBash
+        inputs:
+          commands:
+            - echo "Hello World! Test."
