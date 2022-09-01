@@ -195,7 +195,7 @@ default_component.json - Optional component file that contains Build and Test st
 
 config.json file contains the following parameters - 
 
-
+```
   baseImage: string;
   baseImageType?: string;
   ami_component_bucket_name?: string;
@@ -221,7 +221,7 @@ config.json file contains the following parameters -
   distributionName?: string;
   distributionDescription?: string;
   resource_removal_policy?: string
-
+```
 
 
 Details of the parameters are given below
