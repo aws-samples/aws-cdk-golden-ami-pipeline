@@ -228,7 +228,7 @@ Details of the parameters are given below
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-| attr | Yes | String | poc | NA | Meaningful |
+| attr | Yes | String | poc | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
 | 123 | Yes | String | poc | NA | Meaningful |
 
 
