@@ -2,7 +2,7 @@
 # Table of Contents
 - [Background](#Background)
     - [test](#Test)
-- [Keyfeatures](#Keyfeatures)
+- [Keyfeatures](#keyfeatures)
 - [Background](#Background)
 - [Background](#Background)
 
@@ -43,7 +43,7 @@ On a **high level**, the image builder pipeline consists of the following -
 
 ![alt text](images/ImageBuilderHighLevelComponent.jpg)
 
-# Keyfeatures
+# <a name='keyfeatures'></a>Key Features 
 -   As part of the security best practice, there will be one Customer Manager Keys ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same
 
 -   Base image can refer to AWS managed public ssm parameter (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest EKS optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
