@@ -1,19 +1,15 @@
 <!-- vscode-markdown-toc -->
 # Table of Contents
-- [Background](#Background)
-    - [test](#Test)
-- [Keyfeatures](#keyfeatures)
-- [Background](#Background)
-- [Background](#Background)
-
-
-
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
-
+- [**Background**](#Background)
+- [**Solution**](#keyfeatures)
+- [**Target Architecture**](#Background)
+- [**Key Features**](#keyfeatures)
+- [**Pre Requisite**](#Background)
+- [**How to Deploy**](#howtodeploy)
+- [**Parameter Details**](#Background)
+- [**Sample Configuartion File**](#Background)
+- [**Conclusion**](#Background)
+- [**Clean Up**](#Background)
 
 # Background
 As part of Infra deployment pipeline, we have been deploying EKS cluster with Node Group. The launch template of the Auto Scaling Group provides the information about the AMI (Amazon Machine Image) to be used for the worker nodes. At present, each ISV creates their own AMI ( per CNF) using manual process.There is no automated Pipeline to build , test and distribute Golden AMI in target account. 
@@ -61,6 +57,15 @@ On a **high level**, the image builder pipeline consists of the following -
 
 
 # <a name='howtodeploy'></a>How to Deploy
+
+-   Clone the Repo and navigate to the folder
+```
+git clone
+cd 
+```
+- Update config.json file. For more information on all the supported parater, check this
+- Update default_component.json file. For more information on all the supported parater, check this
+- cdk deploy 
 
 
 ## <a name='prereq'></a>Pre-Requisite
