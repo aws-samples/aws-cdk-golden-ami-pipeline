@@ -415,7 +415,7 @@ Any changes in Component content , requires a new version to be created. All the
 
 ### Type
 
-
+```
 {
     image_recipe_version: string; 
     image_recipe_name: string ; 
@@ -423,6 +423,7 @@ Any changes in Component content , requires a new version to be created. All the
     volume_type?: string;
     deleteOnTermination?: boolean
 }
+```
 Image Recipe is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the receipt version. 
 
 ### Details
@@ -504,9 +505,13 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 ```
  
 
-amitag
+## amitag
 
 
+### Example
+
+
+```
 {
 	"isv_name": "nk",
 	"cnf_name": "amf",
@@ -515,136 +520,29 @@ amitag
 	"Date_Created": "{{imagebuilder:buildDate}}",
 	"golden_ami": "true"
 }
- 
+``` 
 
 
-tag
+## tag
 
-
+### Example
+```
 {
 	"isv_name": "nk",
 	"cnf_name": "amf",
 	"env": "dev",
 	"Name": "golden-ami-nk-amf-dev"
 }
- 
-
- 
+```
 
 
-infrastructure
 
 
-{
-	"name": "Golden_AMI_Instance_Infra-nk-poc",
-	"instance_type": ["t2.small"]
-}
- 
+## Componenet parameter
 
+### Example
 
-distribution
-
-
-[{
-	"region": "us-east-1",
-	"accounts": [
-		"208665233135"
-	]
-}]
- 
-
-
-component
-
-
-{
-	"Build": [{
-			"name": "build1",
-			"file": "golden_ami_amf_components/build1.yaml",
-			"version": "1.0.1"
-		},
-		{
-           "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
-        },
-		{
-			"name": "build2",
-			"file": "golden_ami_amf_components/build2.yaml",
-			"version": "1.0.1"
-		}
-	],
-	"Test": [{
-		"name": "test2",
-		"file": "golden_ami_amf_components/test1.yaml",
-		"version": "1.0.1"
-	},
-	{
-      "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
-    }
-    ]
-}
- 
-# TEST
-
-inspector_config
-
-
-{
-	"Build": [{
-		"name": "inspector_validation",
-		"version": "3.0.9",
-		"file": "golden_ami_amf_components/inspector.yaml",
-		"parameter": [{
-				"name": "version",
-				"value": [
-					"1.0.5"
-				]
-			},
-			{
-				"name": "high_severity_findings_threshold",
-				"value": [
-					"15"
-				]
-			},
-			{
-				"name": "region",
-				"value": [
-					"us-east-1"
-				]
-			},
-			{
-				"name": "ignore_findings",
-				"value": [
-					"yes"
-				]
-			},
-			{
-				"name": "inspector_finding_script_path",
-				"value": [
-					"golden-ami-component-nk/golden_ami_amf_components/inspector_findings.sh"
-				]
-			}
-		]
-	}]
-}
-
-image_recipe
-
-
-{
-	"image_recipe_version": "3.1.6",
-	"image_recipe_name": "Golden_AMI_Image_Recipe-nk-poc",
-	"volume_size": 3072,
-	"deleteOnTermination": false,
-	"volume_type": "gp2"
-}
- 
-
-
-parameter
-
- 
-
-
+```
 [{
 		"name": "param1",
 		"value": [
@@ -658,7 +556,7 @@ parameter
 		]
 	}
 ]
-
+```
 
 Follow  the below steps to deploy the solution 
  
