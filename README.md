@@ -4,7 +4,7 @@
 - [**Solution**](#keyfeatures)
 - [**Target Architecture**](#Background)
 - [**Key Features**](#keyfeatures)
-- [**Pre Requisite**](#Background)
+- [**Pre Requisite**](#prereq)
 - [**How to Deploy**](#howtodeploy)
 - [**Parameter Details**](#Background)
 - [**Sample Configuartion File**](#Background)
@@ -55,16 +55,71 @@ On a **high level**, the image builder pipeline consists of the following -
 -   AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
 
 
+# <a name='prereq'></a>Pre-Requisite
+
+
+To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
+
+1. To use Image Builder AMIs that are distributed across accounts, the destination account owner must create a new IAM role in their account called ```EC2ImageBuilderDistributionCrossAccountRole```.
+
+2. They must attach the ```Ec2ImageBuilderCrossAccountDistributionAccess``` policy to the role to enable cross-account distribution.
+
+3. Verify that the source account ID is added to the trust policy attached to the IAM role of the destination account. Example - 
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::<SOURCE_AWS_ACCOUNT_ID>:root"
+                ]
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```
+4. If the AMI you distribute is encrypted, the destination account owner must add the following inline policy to the ```EC2ImageBuilderDistributionCrossAccountRole``` in their account so that they can use your KMS keys. The Principal section contains their account number. This enables Image Builder to act on their behalf when it uses AWS KMS to encrypt and decrypt the AMI with the appropriate keys for each Region.
+```
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "kms:CreateGrant",
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:Generate*",
+                "kms:ListGrants",
+                "kms:ReEncrypt*"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": "ec2:CreateTags",
+            "Resource": "arn:aws:ec2:*::snapshot/*",
+            "Effect": "Allow"
+        }
+    ]
+}
+```
+For more information on setting up cross-account AMI distribution, visit [Page](https://docs.aws.amazon.com/imagebuilder/latest/userguide/cross-account-dist.html#cross-account-prereqs-iam)
+
 
 # <a name='howtodeploy'></a>How to Deploy
 
 -   Clone the Repo and navigate to the folder
 ```
-git clone
-cd 
+git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git
+cd cdk-golden-ami-pipeline
 ```
 - Update config.json file. For more information on all the supported parater, check this
-- Update default_component.json file. For more information on all the supported parater, check this
+- Optional . Update default_component.json file. For more information on all the supported parater, check this
 - cdk deploy 
 
 
