@@ -200,7 +200,7 @@ resource_removal_policy?: string
 |amitag|No|object|example|NA|This tag will be appplied to the distributed AMI in target account/region|
 |tag|No|object|example|NA|This tag will be applied to all the resources created by the CDK application|
 |image_receipe|Yes|recipe|example|NA|EC2 Builder image recipe|
-|infrastructure|yes|infrastructure|example|Ec2 Builder Infrastrure details that will be used to launch EC2 instance|
+|infrastructure|yes|[**infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastrure details that will be used to launch EC2 instance|
 |inspector_validation|No|Boolean|true or false|false|To add inspector validation step at the end of the build phase. |
 |Inspector_Config|No|ComponentConfig|example|Details of the Inspector configuration parameter can be found here.|
 |Component_Config|Yes|ComponentConfig|example|NA|Defines the Build and Test Steps|
@@ -210,7 +210,6 @@ resource_removal_policy?: string
 |sns_topic|No|String|arn:aws:sns:us-east-1:0123456789:myTopic|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
 |key_alias|No|String|Golden_AMI_key_nk_amf|NA|If not provided, KMS key will be created without alias name
 |schedule|No|{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String } . For more information, link|{ "scheduleExpression": "cron(0 10 * * ? *)"}|Manual|AMI Pipeline Schedule|
-
 
 
 
@@ -245,7 +244,7 @@ resource_removal_policy?: string
 ]
 ```
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **infrastructure**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='infrastructure'></a> **infrastructure**
 
 ### Type
 ```
