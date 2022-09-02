@@ -216,60 +216,10 @@ resource_removal_policy?: string
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 | attr | Yes | String | poc | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
 |baseImage|Yes|String|ami-090fa75af13c156b4 or /golden/ami|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.|
-
-baseImageType
-
-No
-
-String
-
-"ssm | id"
-
-id
-
-baseImageType select ssm, if baseImage contains SSM Parameter
-
-Select id if baseImage contains AMI ID
-
-resource_removal_policy
-
-No
-
-String
-
-"destroy | retain"
-
-retain
-
-Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.
-
-ami_component_bucket_name
-
-No
-
-String
-
-"golden-ami-component-nk"
-
-golden-ami-component-${attr}
-
-This bucket will contain all the related user defined build and test component
-
-If not specified, Bucket will be created with attribute name
-
-ami_component_bucket_create
-
-No
-
-Boolean
-
-true | false
-
-true
-
-If true, ami_component_bucket_name will be created.
-
-if selected as false, then ami_component_bucket_name should exists
+|baseImageType| No| String | ssm or id | id | baseImageType select ssm, if baseImage contains SSM Parameter, Select id if baseImage contains AMI ID
+|resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.
+|ami_component_bucket_name|No|String|golden-ami-component-nk|golden-ami-component-${attr}|This bucket will contain all the related user defined build and test component. If not specified, Bucket will be created with attribute name
+|ami_component_bucket_create|No|Boolean|true or false | true|If true, ami_component_bucket_name will be created. If selected as false, then ami_component_bucket_name should exists
 
 ami_component_bucket_version
 
