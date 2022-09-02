@@ -329,71 +329,10 @@ resource_removal_policy?: string
 ```
 
 
-parameter
+## **Component_Config**
 
-Required
-
-Type
-
-example
-
-Default Value
-
-Notes
-
-name
-
-Yes
-
-String
-
-Golden_AMI_Pipeline_infra_nk_amf
-
-NA
-
-Name of the infrastructure resource created in Image builder service.
-
-instance_type
-
-No
-
-List of String
-
-["t2.small"]
-
-NA
-
-Instance type to be used for Building Golden AMI
-
-subnet_id
-
-No
-
-String
-
-"subnet-123456"
-
-NA
-
-If not provided, default VPC and Subnet will be used.
-
-security_groups
-
-No
-
-List of String
-
-["sg-123456789"]
-
-NA
-
-This is needed if the subnet ID is provided.
-
- 
-
-
-Component_Config
-
+### Type
+```
 
 {
   Build?: {
@@ -411,90 +350,59 @@ Component_Config
     parameter?: { name: string; value: string[] }[];
   }[];
 }
-Component_Config contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
+```
 
+### Details
+
+| Parameter Name | Required | Type | example | Default Value | Notes |
+| :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
+|name|Depends, check notes|String|Install_jq|NA|name of the Build/Test component
+|file|No ( If arn is mentioned)|golden_ami_amf_components/build1.yaml|NA|user provided component yaml  file path 
+|version|Depends, check notes|String|1.0.0|NA|semantic version of the component to be created
+arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|NA|amazon managed component arn. Make sure this exists in the account/region the pipeline is being deployed( Navigate to image builder console ->component->select amazon owned).Also, if arn is provided, then name, file, version parameter is not required. Check the example|
+|parameter|Yes ( if the component is created with non default parameter)|List of { name: string; value: string[] }|example|NA|parameter is needed if the component is created with non default parameter
+
+### Example
+
+```
+{
+	"Build": [{
+			"name": "build1",
+			"file": "golden_ami_amf_components/build1.yaml",
+			"version": "1.0.1"
+		},
+		{
+           "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+        },
+		{
+			"name": "build2",
+			"file": "golden_ami_amf_components/build2.yaml",
+			"version": "1.0.1"
+		}
+	],
+	"Test": [{
+		"name": "test2",
+		"file": "golden_ami_amf_components/test1.yaml",
+		"version": "1.0.1"
+	},
+	{
+      "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+    }
+    ]
+}
+```
+
+Component_Config contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
 Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
 
-parameter
-
-Required
-
-Type
-
-example
-
-Default Value
-
-Notes
-
-name
-
-No ( If arn is mentioned)
-
-Yes ( if file is mentioned) 
-
-String
-
-Install_jq
-
-NA
-
-name of the Build/Test component
-
-file
-
-No ( If arn is mentioned)
-
- 
-
-golden_ami_amf_components/build1.yaml
-
-NA
-
-user provided component yaml  file path 
-
-version
-
-No ( If arn is mentioned)
-
-Yes ( if file is mentioned) 
-
-String
-
-1.0.0
-
-NA
-
-semantic version of the component to be created
-
-arn
-
-No
-
-String
-
-arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1
-
-NA
-
-amazon managed component arn. Make sure this exists in the account/region the pipeline is being deployed. ( Navigate to image builder console ->component->select amazon owned)
-
-Also, if arn is provided, then name, file, version parameter is not required. Check the example
-
-parameter
-
-Yes ( if the component is created with non default parameter)
-
-List of { name: string; value: string[] }
-
-example
-
-NA
-
-parameter is needed if the component is created with non default parameter
 
 
-image_recipe
+
+
+
+## image_recipe
+
+### Type
 
 
 {
@@ -505,6 +413,18 @@ image_recipe
     deleteOnTermination?: boolean
 }
 Image Recipe is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the receipt version. 
+
+### Example
+
+```
+{
+	"image_recipe_version": "3.1.6",
+	"image_recipe_name": "Golden_AMI_Image_Recipe-nk-poc",
+	"volume_size": 3072,
+	"deleteOnTermination": false,
+	"volume_type": "gp2"
+}
+```
 
 parameter
 
