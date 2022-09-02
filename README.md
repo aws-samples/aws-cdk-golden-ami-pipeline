@@ -39,9 +39,10 @@ On a **high level**, the image builder pipeline consists of the following -
 
 -   Image Pipeline will send SNS notification for success or failure. Later this can be used to update DynamoDB ( This part is not implemented in the solution)
 
+-   AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
 
 
-AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
+### Configuration File
 
 A sample `config.json` file looks like below - 
 
@@ -209,31 +210,12 @@ distributionDescription?: string;
 resource_removal_policy?: string
 ```
 
-
-### Details of the parameters
+### Parameter Details
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 | attr | Yes | String | poc | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
-| 123 | Yes | String | poc | NA | Meaningful |
-
-
-
-baseImage
-
-Yes
-
-String
-
-"ami-090fa75af13c156b4"
-
-Or
-
-"/golden/ami"
-
- 
-
-baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.
+|baseImage|Yes|String|ami-090fa75af13c156b4 or /golden/ami|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.|
 
 baseImageType
 
