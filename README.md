@@ -329,7 +329,7 @@ resource_removal_policy?: string
 ```
 
 
-## **Component_Config**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Component_Config**
 
 ### Type
 ```
@@ -411,7 +411,7 @@ Any changes in Component content , requires a new version to be created. All the
 :warning:
 :busstop:
 
-## image_recipe
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) image_recipe
 
 ### Type
 
@@ -505,7 +505,7 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 ```
  
 
-## amitag
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) amitag
 
 
 ### Example
@@ -523,8 +523,7 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 ``` 
 
 
-##   #1589F0tag
-#1589F0 yrdy
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) tag
 
 ### Example
 ```
@@ -558,6 +557,15 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 	}
 ]
 ```
+
+> **Note**
+> This is a note
+
+> **Warning**
+> This is a warning
+
+
+
 
 Follow  the below steps to deploy the solution 
  
