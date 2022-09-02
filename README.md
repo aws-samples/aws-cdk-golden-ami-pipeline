@@ -114,17 +114,27 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 # <a name='howtodeploy'></a>How to Deploy
 
 -   Clone the Repo and navigate to the folder
-```
-git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git
-cd cdk-golden-ami-pipeline
-```
+
+    ```git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git```
+
+    ```cd cdk-golden-ami-pipeline```
 - Update config.json file. For more information on all the supported parater, check this
 - **Optional**. Update default_component.json file. For more information on all the supported parater, check this
-- cdk deploy 
+- ```cdk deploy ```
+-   Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
+    * Recipe
+    * Components
+    * Infrastructure
+    * Distribution
+    * Image Pipelines
 
-## <a name='prereq'></a>Pre-Requisite
+- Run the Image Pipeline. Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
+The status of the pipeline will change through different phase . 
 
+    > Building :arrow_right:  Testing :arrow_right:  Distributing :arrow_right: Integrating :arrow_right: Available
+
+    Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
 
 # <a name='sample'></a>Sample Config File
 
@@ -670,23 +680,6 @@ Deploy stack to source environment (ISV CICD account)
 How differentComponents are connected in EC2 Image Builder Service
 
 
-Run the Image Pipeline
-Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
-
-* Recipe
-* Components
-* Infrastructure
-* Distribution
-* Image Pipelines
-
-Select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button as per the below screenshot.
-
-
-The status of the pipeline will change through different phase . 
-
-> Building :arrow_right:  Testing :arrow_right:  Distributing :arrow_right: Integrating :arrow_right: Available
-
-Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
 
 
 
