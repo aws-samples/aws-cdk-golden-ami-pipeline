@@ -123,7 +123,13 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
     `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
 
-- ```cdk deploy ```
+- set the region where the stakc will be deployed. For example
+
+    ``export CDK_DEPLOY_REGION=us-west-2``
+
+- Deploy the CDK application
+
+    ```cdk deploy ```
 -   Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
     * Recipe
@@ -131,6 +137,7 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     * Infrastructure
     * Distribution
     * Image Pipelines
+    
 
 - Run the Image Pipeline. Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
 The status of the pipeline will change through different phase . 
