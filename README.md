@@ -217,249 +217,63 @@ resource_removal_policy?: string
 | attr | Yes | String | poc | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
 |baseImage|Yes|String|ami-090fa75af13c156b4 or /golden/ami|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.|
 |baseImageType| No| String | ssm or id | id | baseImageType select ssm, if baseImage contains SSM Parameter, Select id if baseImage contains AMI ID
-|resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.
-|ami_component_bucket_name|No|String|golden-ami-component-nk|golden-ami-component-${attr}|This bucket will contain all the related user defined build and test component. If not specified, Bucket will be created with attribute name
-|ami_component_bucket_create|No|Boolean|true or false | true|If true, ami_component_bucket_name will be created. If selected as false, then ami_component_bucket_name should exists
+|resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.|
+|ami_component_bucket_name|No|String|golden-ami-component-nk|golden-ami-component-${attr}|This bucket will contain all the related user defined build and test component. If not specified, Bucket will be created with attribute name|
+|ami_component_bucket_create|No|Boolean|true or false | true|If true, ami_component_bucket_name will be created. If selected as false, then ami_component_bucket_name should exists|
 |ami_component_bucket_version|No|Boolean|true or false|true|The parameter is used to enable/disable S3 Bucket version
 |instanceProfileName|No|String|Golden_AMI_Instance_Profile_nk-amf|Golden_AMI_Instance_Profile-${attr} | Instance Profile
 |instanceProfileRoleName|No|String|Golden_Image_Pipeline-nk-amf-role|CDK will create a dynamic name. This role will be attached to the EC2 instance Profile Role|
-|imagePipelineName|Yes|String|Golden_Image_Pipeline-nk-amf|NA|The Name of the Image pipeline to be created.
-|components_prefix|Yes|String|golden_ami_amf_components|NA|prefix of the S3 Bucket ami_component_bucket_name where the related component will be deployed and referenced
-
-
-
-
-
-iamEncryption
-
-No
-
-Boolean
-
-true | false
-
-false
-
-If enabled, a new CDK key will be created and underlying EBS volume of the AMI will be encrypted with the same
-
-amitag
-
-No
-
-object
-
-example
-
-NA
-
-This tag will be appplied to the distributed AMI in target account/region
-
-tag
-
-No
-
-object
-
-example
-
-NA
-
-This tag will be applied to all the resources created by the CDK application.
-
-image_receipe
-
-Yes
-
-recipe
-
-example
-
-NA
-
-EC2 Builder image recipe
-
-infrastructure
-
-Yes
-
-infrastructure
-
-example
-
- 
-
-Ec2 Builder Infrastrure details that will be used to launch EC2 instance
-
-inspector_validation
-
-No
-
-Boolean
-
-true | false
-
-false
-
-To add inspector validation step at the end of the build phase. 
-
-Inspector_Config
-
-No ( if inspector_validation is set to false)
-
- 
-
-Yes ( if inspector_validation is set to true) 
-
-ComponentConfig
-
-example
-
-NA
-
-Details of the Inspector configuration parameter can be found here. 
-
-Component_Config
-
-Yes
-
-ComponentConfig
-
-example
-
-NA
-
-Defines the Build and Test Steps
-
-Distribution
-
-No
-
-list of distribution
-
-example
-
-NA
-
-The config detail about which target account and region the golden AMI will be distributed
-
-distributionName
-
-No
-
-String
-
-Golden_AMI_Distribution-am-amf
-
-Golden_AMI_Distribution-$attr
-
-Distribution settings name
-
-distributionDescription
-
-No
-
-String
-
- 
-
-Destribution settings for $'attr'
-
-Description of the distribution settings
-
-sns_topic
-
-No
-
-String
-
-arn:aws:sns:us-east-1:0123456789:myTopic
-
-NA
-
-Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.
-
- 
-
-key_alias
-
-No
-
-String
-
-Golden_AMI_key_nk_amf
-
-NA
-
-If not provided, KMS key will be created without alias name
-
-schedule
-
-No
-
-{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String } . For more information, link
-
-
-{
-        "scheduleExpression": "cron(0 10 * * ? *)"
-    }
- 
-
-Manual
-
-AMI Pipeline Schedule.
-
- 
-
-
-distribution
-
-
+|imagePipelineName|Yes|String|Golden_Image_Pipeline-nk-amf|NA|The Name of the Image pipeline to be created.|
+|components_prefix|Yes|String|golden_ami_amf_components|NA|prefix of the S3 Bucket ami_component_bucket_name where the related component will be deployed and referenced|
+|iamEncryption|No|Boolean|true or false|false|If enabled, a new CDK key will be created and underlying EBS volume of the AMI will be encrypted with the same|
+|amitag|No|object|example|NA|This tag will be appplied to the distributed AMI in target account/region|
+|tag|No|object|example|NA|This tag will be applied to all the resources created by the CDK application|
+|image_receipe|Yes|recipe|example|NA|EC2 Builder image recipe|
+|infrastructure|yes|infrastructure|example|Ec2 Builder Infrastrure details that will be used to launch EC2 instance|
+|inspector_validation|No|Boolean|true or false|false|To add inspector validation step at the end of the build phase. |
+|Inspector_Config|No|ComponentConfig|example|Details of the Inspector configuration parameter can be found here.|
+|Component_Config|Yes|ComponentConfig|example|NA|Defines the Build and Test Steps|
+|Distribution|No|list of distribution|example|NA|The config detail about which target account and region the golden AMI will be distributed|
+|distributionName|No|String|Golden_AMI_Distribution-am-amf|Golden_AMI_Distribution-$attr|Distribution settings name|
+|distributionDescription|No|String|example|Destribution settings for $'attr'|Description of the distribution settings
+|sns_topic|No|String|arn:aws:sns:us-east-1:0123456789:myTopic|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
+|key_alias|No|String|Golden_AMI_key_nk_amf|NA|If not provided, KMS key will be created without alias name
+|schedule|No|{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String } . For more information, link|{ "scheduleExpression": "cron(0 10 * * ? *)"}|Manual|AMI Pipeline Schedule|
+
+
+Type - distribution
+
+
+```
 {
   region: string;
   accounts: string[];
 }
+```
  
 
-parameter
+| Parameter Name | Required | Type | example | Default Value | Notes |
+| :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
+|region|Yes|String|us-west-2|NA|Region name where Golden AMI will be distributed
+|accounts|Yes|List of String|["1234556789","987654321"]|NA|Account Name where Golden AMI will be distributed
 
-Required
 
-Type
-
-example
-
-Default Value
-
-Notes
-
-region
-
-Yes
-
-String
-
-us-west-2
-
-NA
-
-Region name where Golden AMI will be distributed
-
-accounts
-
-Yes
-
-List of String
-
-["1234556789","987654321]
-
-NA
-
-Account Name where Golden AMI will be distributed
-
+Example - distribution
+```
+[
+    {
+        "region": "us-east-1",
+        "accounts": [
+            "1234556789",
+            "987654321"
+        ]
+    }
+]
+```
 
 infrastructure -  For More information, check CloudFormation property link 
 
-
+```
 {
         name: string;
         instance_type?: string[];
@@ -467,7 +281,7 @@ infrastructure -  For More information, check CloudFormation property link
         security_groups?: string[];
 }
  
-
+```
 parameter
 
 Required
@@ -636,7 +450,7 @@ parameter is needed if the component is created with non default parameter
 image_recipe
 
 
- {
+{
     image_recipe_version: string; 
     image_recipe_name: string ; 
     volume_size?: number;
