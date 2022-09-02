@@ -1,8 +1,18 @@
-[
-    {
-        "region": "us-east-1",
-        "accounts": [
-            "208665233135"
-        ]
-    }
-]
+{
+    Build?: {
+      name?: string;
+      file?: string;
+      version?: string;
+      arn?: string;
+      parameter?: { name: string; value: string[]
+        }[];
+    }[];
+    Test?: {
+      name?: string;
+      file?: string;
+      version?: string;
+      arn?: string;
+      parameter?: { name: string; value: string[]
+        }[];
+    }[];
+}

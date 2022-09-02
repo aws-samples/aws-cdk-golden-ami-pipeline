@@ -335,20 +335,22 @@ resource_removal_policy?: string
 ```
 
 {
-  Build?: {
-    name?: string;
-    file?: string;
-    version?: string;
-    arn?: string;
-    parameter?: { name: string; value: string[] }[];
-  }[];
-  Test?: {
-    name?: string;
-    file?: string;
-    version?: string;
-    arn?: string;
-    parameter?: { name: string; value: string[] }[];
-  }[];
+    Build?: {
+      name?: string;
+      file?: string;
+      version?: string;
+      arn?: string;
+      parameter?: { name: string; value: string[]
+        }[];
+    }[];
+    Test?: {
+      name?: string;
+      file?: string;
+      version?: string;
+      arn?: string;
+      parameter?: { name: string; value: string[]
+        }[];
+    }[];
 }
 ```
 
@@ -366,39 +368,38 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
 
 ```
 {
-	"Build": [{
-			"name": "build1",
-			"file": "golden_ami_amf_components/build1.yaml",
-			"version": "1.0.1"
-		},
-		{
-           "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+    "Build": [
+        {
+            "name": "build1",
+            "file": "golden_ami_amf_components/build1.yaml",
+            "version": "1.0.1"
         },
-		{
-			"name": "build2",
-			"file": "golden_ami_amf_components/build2.yaml",
-			"version": "1.0.1"
-		}
-	],
-	"Test": [{
-		"name": "test2",
-		"file": "golden_ami_amf_components/test1.yaml",
-		"version": "1.0.1"
-	},
-	{
-      "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
-    }
+        {
+            "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+        },
+        {
+            "name": "build2",
+            "file": "golden_ami_amf_components/build2.yaml",
+            "version": "1.0.1"
+        }
+    ],
+    "Test": [
+        {
+            "name": "test2",
+            "file": "golden_ami_amf_components/test1.yaml",
+            "version": "1.0.1"
+        },
+        {
+            "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+        }
     ]
 }
 ```
-
+> U+1F4DD Dorothy :laughing: followed her through many of the beautiful rooms in her castl
 Component_Config contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
 Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
 
-
-
-
-
+:blowfish: for 🐡, :earth_africa: for 🌍, the extremely commonly used :waxing_gibbous_moon: for 🌔, and :dog2: for 🐕 if :dog isn’t good enough for you.
 
 ## image_recipe
 
