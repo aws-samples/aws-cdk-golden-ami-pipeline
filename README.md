@@ -17,7 +17,6 @@ The following Solution describes how each ISV can create their own Golden AMI Pi
 
 # Target Architecture
 
-
 ![alt text](images/ami.jpg)
 
 # Solution
@@ -110,6 +109,7 @@ To configure cross-account distribution permissions in AWS Identity and Access M
 ```
 For more information on setting up cross-account AMI distribution, visit [Page](https://docs.aws.amazon.com/imagebuilder/latest/userguide/cross-account-dist.html#cross-account-prereqs-iam)
 
+5. If you enable, **Inspector** in the Image Pipeline, service-linked role for Amazon Inspecor should present. Amazon Inspector uses the service-linked role named ```AWSServiceRoleForAmazonInspector2```. You don't need to manually create a service-linked role. When you enable the Amazon Inspector service in the AWS Management Console, the AWS CLI, or the AWS API, Amazon Inspector creates the service-linked role for you
 
 # <a name='howtodeploy'></a>How to Deploy
 
@@ -119,7 +119,7 @@ git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git
 cd cdk-golden-ami-pipeline
 ```
 - Update config.json file. For more information on all the supported parater, check this
-- Optional . Update default_component.json file. For more information on all the supported parater, check this
+- **Optional**. Update default_component.json file. For more information on all the supported parater, check this
 - cdk deploy 
 
 
