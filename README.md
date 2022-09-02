@@ -6,10 +6,9 @@
 - [**Key Features**](#keyfeatures)
 - [**Pre Requisite**](#prereq)
 - [**How to Deploy**](#howtodeploy)
-- [**Parameter Details**](#Background)
-- [**Sample Configuartion File**](#Background)
-- [**Conclusion**](#Background)
-- [**Clean Up**](#Background)
+- [**Parameter Details**](#ParameterDetails)
+- [**Conclusion**](#conclusion)
+- [**Clean Up**](#cleanup)
 
 # Background
 As part of Infra deployment pipeline, we have been deploying EKS cluster with Node Group. The launch template of the Auto Scaling Group provides the information about the AMI (Amazon Machine Image) to be used for the worker nodes. At present, each ISV creates their own AMI ( per CNF) using manual process.There is no automated Pipeline to build , test and distribute Golden AMI in target account. 
@@ -483,70 +482,10 @@ Any changes in Component content , requires a new version to be created. All the
 ]
 ```
 
-Follow  the below steps to deploy the solution 
- 
+# <a name='conclusion'></a>Conclusion
 
-Prerequisites:
 
-Accounts bootstrapped with cdkv2
-
-Example: cdk bootstrap aws://346687249423/us-west-2 --qualifier dish-cdkv2 --toolkit-stack-name CDKToolkit-cicd-cdkv2
-
-If your bootstrap uses a qualifier, all target accounts must have the same qualifier
-
-CDK 2.33.0 or greater installed locally
-
-IAM Role in target accounts with the following:
-
-Trust relationship to allow sts assume-role from your local aws credentials
-
-Target role needs the ability to assume cdk deploy role. Ex CDK Role: cdk-dish-cdkv2-deploy-role-350335073051-us-east-2
-
-Local credentials 
-
-Ability to assume cdk deploy role in ISV CICD account
-
-Configured with ISV CICD account in aws credentials file under cicd profile
-
- 
-
-Get CICD Dev account’s credential to clone the Base Repo
-
-git clone codecommit::us-west-2://Golden_AMI_Base_Repo
-
-Update config.json and default_component.json accordingly. More information about all the parameters can be found here and here.
-
-Verify prerequisites from above are met.
-
-Update isvAccountId (ISV CICD account) in prereq/bin/config.json 
-
-Update cross_account_deploy_role in prereq/bin/config.json with the role name your local credentials will assume in the target account.
-
-If your bootstrap uses a qualifier, update cdk.json with the qualifier in “context” ex:
-
-    "@aws-cdk/core:bootstrapQualifier": "dish-cdkv2"
-
-Update golden_ami_pipeline package with latest version in the package.json file. For example, 
-
-"golden_ami_pipeline": "1.0.1-rc.30"
-
-Run deploy script
-
-./deploy.sh
-
-Deploy script will do the following:
-
-Authenticate to codeartifact
-
-Install dependencies for prereq stack
-
-Iterate through Distribution in prereq/bin/config.json and deploy stacks to target environments
-
-Install dependencies for pipeline stack
-
-Deploy stack to source environment (ISV CICD account)
-
-How differentComponents are connected in EC2 Image Builder Service
+# <a name='cleanup'></a> Clean up
 
 
 
