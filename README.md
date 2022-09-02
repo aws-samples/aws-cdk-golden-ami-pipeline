@@ -266,7 +266,7 @@ resource_removal_policy?: string
 
 
 
-# Parameter Types
+# Parameter Details
 
 ## **distribution**
 
@@ -425,6 +425,15 @@ Any changes in Component content , requires a new version to be created. All the
 }
 Image Recipe is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the receipt version. 
 
+### Details
+
+| Parameter Name | Required | Type | example | Default Value | Notes |
+| :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
+|image_recipe_name|Yes|String|Golden_AMI_Pipeline_recipe_nk_amf|NA|Image Recipe Name to be created
+|image_recipe_version|Yes|String|1.0.0|NA|Semantic version of the component
+|volume_size|No|Number|2048|NA|EBS volume size of the EC2 instance|EBS Volume type of the EC2 instance
+|volume_type|No|String|gp2|NA|
+
 ### Example
 
 ```
@@ -437,125 +446,63 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 }
 ```
 
-parameter
 
-Required
+## Inspector_Config - Same as Component Config
 
-Type
-
-example
-
-Default Value
-
-Notes
-
-image_recipe_name
-
-Yes
-
-String
-
-Golden_AMI_Pipeline_recipe_nk_amf
-
-NA
-
-Image Recipe Name to be created
-
-image_recipe_name
-
-Yes
-
-String
-
-1.0.0
-
-NA
-
-Semantic version of the component
-
-volume_size
-
-No
-
-Number
-
-2048
-
-NA
-
-EBS volume size of the EC2 instance
-
-volume_type
-
-No
-
-String
-
-"gp2
-
-NA
-
-EBS Volume type of the EC2 instance
+| Parameter Name | Required | Type | example | Default Value | Notes |
+| :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
+|version|yes|String|1.0.5|NA|Which version of amazon owned SSM documentation for inspector to be used. you can see the latest version from the Ec2 Image Builder console → Component
+|high_severity_findings_threshold|yes|String|15|Maximum number of high severity findings allowed.If the number of high severity findings is more than this number, pipeline will fail
+|region|Yes|String|us-west-2|NA|Region where the Inspector will be running ( same region where Image builder service is being deployed)
+|ignore_findings|Yes|String|yes|if selected “yes”, Pipeline will continue and ignore inspector assessment result
 
 
-Inspector_Config  parameter
 
-Parameter
-
-Required
-
-Type
-
-Example
-
-Notes
-
-version
-
-Yes
-
-String
-
-1.0.5
-
-Which version of amazon owned SSM documentation for inspector to be used. you can see the latest version from the Ec2 Image Builder console → Component 
-
-
-high_severity_findings_threshold
-
-Yes
-
-String
-
-"15"
-
-Maximum number of high severity findings allowed.If the number of high severity findings is more than this number, pipeline will fail
-
-region
-
-Yes
-
-String
-
-us-west-2
-
-Region where the Inspector will be running ( same region where Image builder service is being deployed)
-
-ignore_findings
-
-Yes
-
-String
-
-yes
-
-if selected “yes”, Pipeline will continue and ignore inspector assessment result
-
+### Example
+```
+{
+    "Build": [
+        {
+            "name": "inspector_validation",
+            "version": "3.0.9",
+            "file": "golden_ami_amf_components/inspector.yaml",
+            "parameter": [
+                {
+                    "name": "version",
+                    "value": [
+                        "1.0.5"
+                    ]
+                },
+                {
+                    "name": "high_severity_findings_threshold",
+                    "value": [
+                        "15"
+                    ]
+                },
+                {
+                    "name": "region",
+                    "value": [
+                        "us-east-1"
+                    ]
+                },
+                {
+                    "name": "ignore_findings",
+                    "value": [
+                        "yes"
+                    ]
+                },
+                {
+                    "name": "inspector_finding_script_path",
+                    "value": [
+                        "golden-ami-component-nk/golden_ami_amf_components/inspector_findings.sh"
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
  
-
-Example
- 
-##  1. <a name='Test'></a>Summary 
 
 amitag
 
