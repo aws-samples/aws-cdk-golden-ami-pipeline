@@ -151,7 +151,7 @@ The status of the pipeline will change through different phase .
 
 # <a name='ParameterDetails'></a>Parameter Details
 
-`config.json` file contains the following parameters - 
+`config.json` file contains the following parameters ("?" represensts optional paramter)- 
 
 ```
 baseImage: string;
@@ -382,7 +382,7 @@ Any changes in Component content , requires a new version to be created. All the
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='InspectorConfig'></a> **Inspector_Config
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='InspectorConfig'></a> **Inspector_Config**
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
