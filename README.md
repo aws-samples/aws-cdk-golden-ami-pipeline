@@ -268,7 +268,7 @@ resource_removal_policy?: string
 
 # Parameter Details
 
-## **distribution**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **distribution**
 
 ### Type
 ```
@@ -298,7 +298,7 @@ resource_removal_policy?: string
 ]
 ```
 
-## **infrastructure**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **infrastructure**
 
 ### Type
 ```
@@ -411,7 +411,7 @@ Any changes in Component content , requires a new version to be created. All the
 :warning:
 :busstop:
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) image_recipe
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **image_recipe**
 
 ### Type
 
@@ -448,7 +448,7 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 ```
 
 
-## Inspector_Config - Same as Component Config
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Inspector_Config - Same as Component Config**
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
@@ -505,7 +505,7 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 ```
  
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) amitag
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **amitag**
 
 
 ### Example
@@ -523,7 +523,7 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 ``` 
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) tag
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **tag**
 
 ### Example
 ```
@@ -538,7 +538,7 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 
 
 
-## Componenet parameter
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Componenet parameter**
 
 ### Example
 
