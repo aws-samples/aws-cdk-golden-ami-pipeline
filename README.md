@@ -14,9 +14,7 @@
 As part of Infra deployment pipeline, we have been deploying EKS cluster with Node Group. The launch template of the Auto Scaling Group provides the information about the AMI (Amazon Machine Image) to be used for the worker nodes. At present, each ISV creates their own AMI ( per CNF) using manual process.There is no automated Pipeline to build , test and distribute Golden AMI in target account. 
 The following Solution describes how each ISV can create their own Golden AMI Pipeline to Build/Test/Distribute based on the configuration provided by them.
 
-# Target Architecture
 
-![alt text](images/ami.jpg)
 
 # Solution
 In this solution, we will be using AWS Ec2 Image Builder service for the heavy lifting work of Building, testing and Distributing the Golden AMI. 
@@ -36,6 +34,10 @@ On a **high level**, the image builder pipeline consists of the following -
 
 
 ![alt text](images/ImageBuilderHighLevelComponent.jpg)
+
+# Target Architecture
+
+![alt text](images/ami.jpg)
 
 # <a name='keyfeatures'></a>Key Features 
 -   As part of the security best practice, there will be one Customer Manager Keys ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same
@@ -119,7 +121,7 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     ```cd cdk-golden-ami-pipeline```
 - Update Config files. There are two config files - 
 
-    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here*](#ParameterDetails)
+    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails)
 
     `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
 
@@ -137,7 +139,7 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     * Infrastructure
     * Distribution
     * Image Pipelines
-    
+
 
 - Run the Image Pipeline. Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
 The status of the pipeline will change through different phase . 
@@ -202,7 +204,7 @@ resource_removal_policy?: string
 |inspector_validation|No|Boolean|true or false|false|To add inspector validation step at the end of the build phase. |
 |Inspector_Config|No|ComponentConfig|example|Details of the Inspector configuration parameter can be found here.|
 |Component_Config|Yes|ComponentConfig|example|NA|Defines the Build and Test Steps|
-|Distribution|No|list of distribution|example|NA|The config detail about which target account and region the golden AMI will be distributed|
+|Distribution|No|list of [**distribution**](#distribution)|[**example**](#distribution)|NA|The config detail about which target account and region the golden AMI will be distributed|
 |distributionName|No|String|Golden_AMI_Distribution-am-amf|Golden_AMI_Distribution-$attr|Distribution settings name|
 |distributionDescription|No|String|example|Destribution settings for $'attr'|Description of the distribution settings
 |sns_topic|No|String|arn:aws:sns:us-east-1:0123456789:myTopic|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
@@ -213,7 +215,7 @@ resource_removal_policy?: string
 
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **distribution**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='distribution'></a> **distribution**
 
 ### Type
 ```
@@ -469,7 +471,7 @@ Any changes in Component content , requires a new version to be created. All the
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Componenet parameter**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Component parameter**
 
 ### Example
 
@@ -494,6 +496,13 @@ Any changes in Component content , requires a new version to be created. All the
 
 # <a name='cleanup'></a> Clean up
 
+- set the region where the stakc is deployed. For example
+
+    ``export CDK_DEPLOY_REGION=us-west-2``
+
+- Destroy the CDK application
+
+    ```cdk destroy```
 
 
 
