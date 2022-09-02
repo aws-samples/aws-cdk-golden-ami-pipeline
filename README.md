@@ -59,7 +59,14 @@ On a **high level**, the image builder pipeline consists of the following -
 -   AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
 
 
-###  1. <a name='ConfigurationFile'></a>Configuration File
+
+# <a name='howtodeploy'></a>How to Deploy
+
+
+## <a name='prereq'></a>Pre-Requisite
+
+
+# <a name='sample'></a>Sample Config File
 
 A sample `config.json` file looks like below - 
 
@@ -258,16 +265,19 @@ resource_removal_policy?: string
 |schedule|No|{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String } . For more information, link|{ "scheduleExpression": "cron(0 10 * * ? *)"}|Manual|AMI Pipeline Schedule|
 
 
-Type - distribution
 
+# Parameter Types
 
+## **distribution**
+
+### Type
 ```
 {
   region: string;
   accounts: string[];
 }
 ```
- 
+### Details
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
@@ -275,7 +285,7 @@ Type - distribution
 |accounts|Yes|List of String|["1234556789","987654321"]|NA|Account Name where Golden AMI will be distributed
 
 
-Example - distribution
+### Example
 ```
 [
     {
@@ -288,8 +298,9 @@ Example - distribution
 ]
 ```
 
-infrastructure -  For More information, check CloudFormation property link 
+## **infrastructure**
 
+### Type
 ```
 {
         name: string;
@@ -299,6 +310,15 @@ infrastructure -  For More information, check CloudFormation property link
 }
  
 ```
+### Example 
+```
+{
+	"name": "Golden_AMI_Instance_Infra-nk-poc",
+	"instance_type": ["t2.small"]
+}
+```
+
+
 parameter
 
 Required
