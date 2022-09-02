@@ -202,8 +202,8 @@ resource_removal_policy?: string
 |image_receipe|Yes|recipe|example|NA|EC2 Builder image recipe|
 |infrastructure|yes|[**infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastrure details that will be used to launch EC2 instance|
 |inspector_validation|No|Boolean|true or false|false|To add inspector validation step at the end of the build phase. |
-|Inspector_Config|No|ComponentConfig|example|Details of the Inspector configuration parameter can be found here.|
-|Component_Config|Yes|ComponentConfig|example|NA|Defines the Build and Test Steps|
+|Inspector_Config|No|[**ComponentConfig**]ComponentConfig|[**InspectorConfig**]ComponentConfig|Details of the Inspector configuration parameter can be found here.|
+|Component_Config|Yes|[**ComponentConfig**]ComponentConfig|[**example**]ComponentConfig|NA|Defines the Build and Test Steps|
 |Distribution|No|list of [**distribution**](#distribution)|[**example**](#distribution)|NA|The config detail about which target account and region the golden AMI will be distributed|
 |distributionName|No|String|Golden_AMI_Distribution-am-amf|Golden_AMI_Distribution-$attr|Distribution settings name|
 |distributionDescription|No|String|example|Destribution settings for $'attr'|Description of the distribution settings
@@ -275,7 +275,7 @@ resource_removal_policy?: string
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Component_Config**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='ComponentConfig'></a> **Component_Config**
 
 ### Type
 ```
@@ -382,7 +382,7 @@ Any changes in Component content , requires a new version to be created. All the
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Inspector_Config - Same as Component Config**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='InspectorConfig'></a> **Inspector_Config
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
@@ -390,7 +390,6 @@ Any changes in Component content , requires a new version to be created. All the
 |high_severity_findings_threshold|yes|String|15|Maximum number of high severity findings allowed.If the number of high severity findings is more than this number, pipeline will fail
 |region|Yes|String|us-west-2|NA|Region where the Inspector will be running ( same region where Image builder service is being deployed)
 |ignore_findings|Yes|String|yes|if selected “yes”, Pipeline will continue and ignore inspector assessment result
-
 
 
 ### Example
