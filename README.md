@@ -399,7 +399,15 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
 Component_Config contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
 Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
 
+
+> **Warning**
+> This is a warning
+
+
 :blowfish: for 🐡, :earth_africa: for 🌍, the extremely commonly used :waxing_gibbous_moon: for 🌔, and :dog2: for 🐕 if :dog isn’t good enough for you.
+
+> :warning: **If you are using mobile browser**: Be very careful here!
+
 
 ## image_recipe
 
