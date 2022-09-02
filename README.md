@@ -308,8 +308,18 @@ resource_removal_policy?: string
         subnet_id?: string;
         security_groups?: string[];
 }
- 
 ```
+
+### Details
+
+| Parameter Name | Required | Type | example | Default Value | Notes |
+| :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
+|name|Yes|String|Golden_AMI_Pipeline_infra_nk_amf|NA|Name of the infrastructure resource created in Image builder service.
+|instance_type|No|List of String|["t2.small"]|NA|Instance type to be used for Building Golden AMI
+|subnet_id|No|String|"subnet-123456"|NA|If not provided, default VPC and Subnet will be used.
+|security_groups|No|List of String|["sg-123456789"]|NA|This is needed if the subnet ID is provided.
+
+
 ### Example 
 ```
 {
