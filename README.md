@@ -395,21 +395,9 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
     ]
 }
 ```
-> U+1F4DD Dorothy :laughing: followed her through many of the beautiful rooms in her castl
-Component_Config contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
+>:warning: **Component_Config** contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
 Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
 
-
-> **Warning**
-> This is a warning
-
-
-:blowfish: for 🐡, :earth_africa: for 🌍, the extremely commonly used :waxing_gibbous_moon: for 🌔, and :dog2: for 🐕 if :dog isn’t good enough for you.
-
-> :warning: **If you are using mobile browser**: Be very careful here!
-
-:warning:
-:busstop:
 
 ## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **image_recipe**
 
@@ -424,7 +412,7 @@ Any changes in Component content , requires a new version to be created. All the
     deleteOnTermination?: boolean
 }
 ```
-Image Recipe is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the receipt version. 
+> :warning: **Image Recipe** is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the receipt version. 
 
 ### Details
 
@@ -536,8 +524,6 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 ```
 
 
-
-
 ## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Componenet parameter**
 
 ### Example
@@ -557,15 +543,6 @@ Image Recipe is immutable with a specific version. Recipe contains all the compo
 	}
 ]
 ```
-
-> **Note**
-> This is a note
-
-> **Warning**
-> This is a warning
-
-
-
 
 Follow  the below steps to deploy the solution 
  
@@ -636,27 +613,18 @@ How differentComponents are connected in EC2 Image Builder Service
 Run the Image Pipeline
 Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
-Recipe
-
-Components
-
-Infrastructure
-
-Distribution
-
-Image Pipelines
-
- 
+* Recipe
+* Components
+* Infrastructure
+* Distribution
+* Image Pipelines
 
 Select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button as per the below screenshot.
 
 
- 
-
 The status of the pipeline will change through different phase . 
 
-Building → Testing → Distributing → Integrating → Available
-
+> Building :arrow_right:  Testing :arrow_right:  Distributing :arrow_right: Integrating :arrow_right: Available
 
 Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
 
