@@ -220,66 +220,15 @@ resource_removal_policy?: string
 |resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.
 |ami_component_bucket_name|No|String|golden-ami-component-nk|golden-ami-component-${attr}|This bucket will contain all the related user defined build and test component. If not specified, Bucket will be created with attribute name
 |ami_component_bucket_create|No|Boolean|true or false | true|If true, ami_component_bucket_name will be created. If selected as false, then ami_component_bucket_name should exists
+|ami_component_bucket_version|No|Boolean|true or false|true|The parameter is used to enable/disable S3 Bucket version
+|instanceProfileName|No|String|Golden_AMI_Instance_Profile_nk-amf|Golden_AMI_Instance_Profile-${attr} | Instance Profile
+|instanceProfileRoleName|No|String|Golden_Image_Pipeline-nk-amf-role|CDK will create a dynamic name. This role will be attached to the EC2 instance Profile Role|
+|imagePipelineName|Yes|String|Golden_Image_Pipeline-nk-amf|NA|The Name of the Image pipeline to be created.
+|components_prefix|Yes|String|golden_ami_amf_components|NA|prefix of the S3 Bucket ami_component_bucket_name where the related component will be deployed and referenced
 
-ami_component_bucket_version
 
-No
 
-Boolean
 
-true | false
-
-false
-
-The parameter is used to enable/disable S3 Bucket version
-
-instanceProfileName
-
-No
-
-String
-
-Golden_AMI_Instance_Profile_nk-amf
-
-Golden_AMI_Instance_Profile-${attr}
-
- 
-
-instanceProfileRoleName
-
-No
-
-String
-
-Golden_Image_Pipeline-nk-amf-role
-
-CDK will create a dynamic name
-
-THis role will be attached to the EC2 instance Profile Role
-
-imagePipelineName
-
-Yes
-
-String
-
-Golden_Image_Pipeline-nk-amf
-
-NA
-
-The Name of the Image pipeline to be created.
-
-components_prefix
-
-Yes
-
-String
-
-golden_ami_amf_components
-
-NA
-
-prefix of the S3 Bucket ami_component_bucket_name where the related component will be deployed and referenced
 
 iamEncryption
 
