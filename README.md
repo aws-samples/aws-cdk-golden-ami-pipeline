@@ -118,8 +118,12 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     ```git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git```
 
     ```cd cdk-golden-ami-pipeline```
-- Update config.json file. For more information on all the supported parater, check this
-- **Optional**. Update default_component.json file. For more information on all the supported parater, check this
+- Update Config files. There are two config files - 
+
+    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here*](#ParameterDetails)
+
+    `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
+
 - ```cdk deploy ```
 -   Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
@@ -136,143 +140,8 @@ The status of the pipeline will change through different phase .
 
     Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
 
-# <a name='sample'></a>Sample Config File
 
-A sample `config.json` file looks like below - 
-
-```
-{
-    "baseImage": "ami-090fa75af13c156b4",
-    "baseImageType": "id",
-    "resource_removal_policy": "destroy",
-    "ami_component_bucket_name": "golden-ami-component-nk-poc",
-    "attr": "nk-poc",
-    "instanceProfileName": "Golden_AMI_Instance_Profile_nk-poc",
-    "imagePipelineName": "Golden_Image_Pipeline-nk-poc",
-    "components_prefix": "components",
-    "iamEncryption": true,
-    "amitag": {
-        "isv_name": "nk",
-        "cnf_name": "amf",
-        "env": "dev",
-        "Name": "golden-ami-nk-amf-dev-{{imagebuilder:buildDate}}",
-        "Date_Created": "{{imagebuilder:buildDate}}"
-    },
-    "tag": {
-        "isv_name": "nk",
-        "cnf_name": "amf",
-        "env": "dev",
-        "Name": "golden-ami-nk-amf-dev"
-    },
-    "image_receipe": {
-        "image_receipe_version": "3.1.4",
-        "image_receipe_name": "Golden_AMI_Image_Recipe-nk-poc",
-        "volume_size": 3072,
-        "deleteOnTermination": false,
-        "volume_type": "gp2"
-    },
-    "infrastructure": {
-        "name": "Golden_AMI_Instance_Infra-nk-poc",
-        "instance_type": ["t2.small"]
-    },
-    "inspector_validation": true,
-    "Inspector_Config": {
-        "Build": [
-            {
-                "name": "inspector_validation",
-                "version": "3.0.7",
-                "file": "components/inspector.yaml",
-                "parameter": [
-                    {
-                        "name": "version",
-                        "value": [
-                            "1.0.5"
-                        ]
-                    },
-                    {
-                        "name": "high_severity_findings_threshold",
-                        "value": [
-                            "15"
-                        ]
-                    },
-                    {
-                        "name": "ignore_findings",
-                        "value": [
-                            "yes"
-                        ]
-                    },
-                    {
-                        "name": "inspector_finding_script_path",
-                        "value": [
-                            "golden-ami-component-nk-poc/components/inspector_findings.sh"
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    "isv_name": "nk",
-    "cnf_name": "amf",
-    "env": "dev",
-    "golden_ami": "true",
-    "Component_Config": {
-        "Build": [
-            {
-                "name": "build1",
-                "file": "components/build2.yaml",
-                "version": "1.0.0"
-            },
-            {
-                "name": "build2",
-                "file": "components/build7.yaml",
-                "version": "1.0.0"
-            },
-            {
-                "name": "build3",
-                "file": "components/build1.yaml",
-                "version": "1.0.0",
-                "parameter": [
-                    {
-                        "name": "testparam",
-                        "value": [
-                            "samplevalue"
-                        ]
-                    }
-                ]
-            },
-            {
-                "name": "test1",
-                "file": "components/build2.yaml",
-                "version": "1.0.0"
-            }
-        ],
-        "Test": [
-            {
-                "name": "test2",
-                "file": "components/test1.yaml",
-                "version": "1.0.0"
-            },
-            {
-                "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
-            }
-        ]
-    },
-    "Distribution": [
-        {
-            "region": "us-east-1",
-            "accounts": [
-                "208665233135"
-            ]
-        }
-    ]
-}
-```
-
-There are two config file - 
-
-`config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline 
-
-`default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
+# <a name='ParameterDetails'></a>Parameter Details
 
 `config.json` file contains the following parameters - 
 
@@ -304,7 +173,7 @@ distributionDescription?: string;
 resource_removal_policy?: string
 ```
 
-###  2. <a name='ParameterDetails'></a>Parameter Details
+
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
@@ -336,7 +205,7 @@ resource_removal_policy?: string
 
 
 
-# Parameter Details
+
 
 ## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **distribution**
 

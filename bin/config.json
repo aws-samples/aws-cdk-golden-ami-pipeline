@@ -1,37 +1,45 @@
 {
 	"baseImage": "ami-090fa75af13c156b4",
-	"ami_component_bucket_name": "golden-ami-component-poc",
-	"ami_component_bucket_create": false,
-	"attr": "poc",
-	"imagePipelineName": "Golden_Image_Pipeline-poc",
+	"baseImageType": "id",
+	"resource_removal_policy": "destroy",
+	"ami_component_bucket_name": "golden-ami-component-nk-poc",
+	"attr": "nk-poc",
+	"instanceProfileName": "Golden_AMI_Instance_Profile_nk-poc",
+	"imagePipelineName": "Golden_Image_Pipeline-nk-poc",
 	"components_prefix": "components",
+	"iamEncryption": true,
 	"amitag": {
-		"isv_name": "isv",
-		"cnf_name": "cnf",
+		"isv_name": "nk",
+		"cnf_name": "amf",
 		"env": "dev",
-		"Name": "golden-ami-{{imagebuilder:buildDate}}",
-		"Date_Created": "{{imagebuilder:buildDate}}",
-		"golden_ami": "true"
+		"Name": "golden-ami-nk-amf-dev-{{imagebuilder:buildDate}}",
+		"Date_Created": "{{imagebuilder:buildDate}}"
 	},
 	"tag": {
-		"isv_name": "isv",
-		"cnf_name": "cnf",
+		"isv_name": "nk",
+		"cnf_name": "amf",
 		"env": "dev",
-		"Name": "golden-ami-isv-cnf-dev"
+		"Name": "golden-ami-nk-amf-dev"
 	},
-	"image_recipe": {
-		"image_recipe_version": "1.0.0",
-		"image_recipe_name": "Golden_AMI_Image_Recipe-poc"
+	"image_receipe": {
+		"image_receipe_version": "3.1.4",
+		"image_receipe_name": "Golden_AMI_Image_Recipe-nk-poc",
+		"volume_size": 3072,
+		"deleteOnTermination": false,
+		"volume_type": "gp2"
 	},
 	"infrastructure": {
-		"name": "Golden_AMI_Instance_Infra-poc"
+		"name": "Golden_AMI_Instance_Infra-nk-poc",
+		"instance_type": [
+			"t2.small"
+		]
 	},
-	"inspector_validation": false,
+	"inspector_validation": true,
 	"Inspector_Config": {
 		"Build": [
 			{
 				"name": "inspector_validation",
-				"version": "3.0.9",
+				"version": "3.0.7",
 				"file": "components/inspector.yaml",
 				"parameter": [
 					{
@@ -47,12 +55,6 @@
 						]
 					},
 					{
-						"name": "region",
-						"value": [
-							"us-east-1"
-						]
-					},
-					{
 						"name": "ignore_findings",
 						"value": [
 							"yes"
@@ -61,31 +63,56 @@
 					{
 						"name": "inspector_finding_script_path",
 						"value": [
-							"golden-ami-component-poc/components/inspector_findings.sh"
+							"golden-ami-component-nk-poc/components/inspector_findings.sh"
 						]
 					}
 				]
 			}
 		]
 	},
+	"isv_name": "nk",
+	"cnf_name": "amf",
+	"env": "dev",
+	"golden_ami": "true",
 	"Component_Config": {
 		"Build": [
 			{
 				"name": "build1",
-				"file": "components/build1.yaml",
-				"version": "1.0.1"
+				"file": "components/build2.yaml",
+				"version": "1.0.0"
 			},
 			{
 				"name": "build2",
+				"file": "components/build7.yaml",
+				"version": "1.0.0"
+			},
+			{
+				"name": "build3",
+				"file": "components/build1.yaml",
+				"version": "1.0.0",
+				"parameter": [
+					{
+						"name": "testparam",
+						"value": [
+							"samplevalue"
+						]
+					}
+				]
+			},
+			{
+				"name": "test1",
 				"file": "components/build2.yaml",
-				"version": "1.0.1"
+				"version": "1.0.0"
 			}
 		],
 		"Test": [
 			{
-				"name": "test1",
+				"name": "test2",
 				"file": "components/test1.yaml",
-				"version": "1.0.2"
+				"version": "1.0.0"
+			},
+			{
+				"arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
 			}
 		]
 	},
