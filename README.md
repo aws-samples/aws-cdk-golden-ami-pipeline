@@ -1,66 +1,51 @@
-# Welcome to your CDK TypeScript project
-
-This is a blank project for CDK development with TypeScript.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-## Useful commands
-
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `cdk deploy`      deploy this stack to your default AWS account/region
-* `cdk diff`        compare deployed stack with current state
-* `cdk synth`       emits the synthesized CloudFormation template
-
-
-Background
+# Background
 As part of Infra deployment pipeline, we have been deploying EKS cluster with Node Group. The launch template of the Auto Scaling Group provides the information about the AMI (Amazon Machine Image) to be used for the worker nodes. At present, each ISV creates their own AMI ( per CNF) using manual process.There is no automated Pipeline to build , test and distribute Golden AMI in target account. 
 The following Solution describes how each ISV can create their own Golden AMI Pipeline to Build/Test/Distribute based on the configuration provided by them.
 
-Target Architecture
+# Target Architecture
 
 
-Solution
+![alt text](images/ami.jpg)
+
+# Solution
 In this solution, we will be using AWS Ec2 Image Builder service for the heavy lifting work of Building, testing and Distributing the Golden AMI. 
-The AWS CodeCommit repository will contain all the configuration files provided the ISV. These configuration file will dictate how the image will be built, tested and distributed across multiple account/region. CDK application will read configuration file ( the details of the configuration file provided by ISV is described in Configuration File section)  deploy the necessary resources in ISV CICD account. The image builder pipeline consists of the following 
+The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple account/region. CDK application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) deploy the necessary resources in ISV CICD account. 
+On a **high level**, the image builder pipeline consists of the following - 
 
-Recepi
-What Base Image to Use
+- Recepi
+    -   What Base Image to Use
+    -   What are the Build step
+    -   What are the Test and validate step
+- Infrastructure
+    -   What type of EC2 instance to launch to build and test
+    -   Which VPC, Subnet and Security Group to Use while launching the instance.
+- Distribution
+    -   Where to Distribute the AMI after creation - which account/region
+    -   What tag will be added in the AMI in the target account 
 
-What are the Build step
 
-What are the Test step
+![alt text](images/ImageBuilderHighLevelComponent.jpg)
 
-Infrastructure
-What type of EC2 instance to launch to build and test
+# Key features
+-   As part of the security best practice, there will be one Customer Manager Keys ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same
 
-Which VPC, Subnet and Security Group to Use while launching the instance.
+-   Base image can refer to AWS managed public ssm parameter (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest EKS optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
 
-Distribution
-Where to Distribute the AMI after creation - which account/region
+-   User can bring their own Build and Test steps ( in yaml file) or AWS managed pre-build SSM documentation can also be used.
 
-What tag will be added in the AMI in the target account 
+-   EC2 Inspector (by using AWS Managed SSM Document) can be integrated for Vulnerability scanning. 
 
-Key features
-As part of the security best practice, there will be one Customer Manager Keys ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same
+-   Once the Golden AMI is distributed , the SSM parameter in target account will be updated in with the new AMI ID . The SSM parameters value in the target account will always contain the latest AMI built through the pipeline.
 
-Base image can refer to AWS managed public ssm parameter (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest EKS optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
+-   Image Pipeline will send SNS notification for success or failure. Later this can be used to update DynamoDB ( This part is not implemented in the solution)
 
-User can bring their own Build and Test steps ( in yaml file) or AWS managed pre-build SSM documentation can also be used.
 
-EC2 Inspector (by using AWS Managed SSM Document) can be integrated for Vulnerability scanning. 
-
-Once the Golden AMI is distributed , the SSM parameter in target account will be updated in with the new AMI ID . The SSM parameters value in the target account will always contain the latest AMI built through the pipeline.
-
-Image Pipeline will send SNS notification for success or failure. Later this can be used to update DynamoDB ( This part is not implemented in the solution)
-
- 
 
 AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
 
-Here is one of the sample config.json file
+A sample `config.json` file looks like below - 
 
+```
 {
     "baseImage": "ami-090fa75af13c156b4",
     "baseImageType": "id",
@@ -186,45 +171,46 @@ Here is one of the sample config.json file
         }
     ]
 }
+```
 
 There are two config file - 
 
-config.json - Configuration file that defines all the parameters needed to deploy the AMI Pipeline 
+`config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline 
 
-default_component.json - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
+`default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
 
-config.json file contains the following parameters - 
+`config.json` file contains the following parameters - 
 
 ```
-  baseImage: string;
-  baseImageType?: string;
-  ami_component_bucket_name?: string;
-  ami_component_bucket_create?: boolean;
-  ami_component_bucket_version?: boolean;
-  imagePipelineName: string;
-  instanceProfileName?: string;
-  instanceProfileRoleName?: string;
-  iamEncryption?: boolean;
-  components_prefix: string;
-  key_alias?: string;
-  image_receipe: receipe;
-  golden_ami?: string;
-  sns_topic?: string;
-  attr: string
-  amitag?: object;
-  tag?: object;
-  infrastructure: infrastructure;
-  inspector_validation?: boolean;
-  Inspector_Config?: ComponentConfig;
-  Component_Config: ComponentConfig;
-  Distribution?: distribution[];
-  distributionName?: string;
-  distributionDescription?: string;
-  resource_removal_policy?: string
+baseImage: string;
+baseImageType?: string;
+ami_component_bucket_name?: string;
+ami_component_bucket_create?: boolean;
+ami_component_bucket_version?: boolean;
+imagePipelineName: string;
+instanceProfileName?: string;
+instanceProfileRoleName?: string;
+iamEncryption?: boolean;
+components_prefix: string;
+key_alias?: string;
+image_receipe: receipe;
+golden_ami?: string;
+sns_topic?: string;
+attr: string
+amitag?: object;
+tag?: object;
+infrastructure: infrastructure;
+inspector_validation?: boolean;
+Inspector_Config?: ComponentConfig;
+Component_Config: ComponentConfig;
+Distribution?: distribution[];
+distributionName?: string;
+distributionDescription?: string;
+resource_removal_policy?: string
 ```
 
 
-Details of the parameters are given below
+### Details of the parameters
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
