@@ -308,7 +308,7 @@ resource_removal_policy?: string
 |file|No ( If arn is mentioned)|golden_ami_amf_components/build1.yaml|NA|user provided component yaml  file path 
 |version|Depends, check notes|String|1.0.0|NA|semantic version of the component to be created
 arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|NA|amazon managed component arn. Make sure this exists in the account/region the pipeline is being deployed( Navigate to image builder console ->component->select amazon owned).Also, if arn is provided, then name, file, version parameter is not required. Check the example|
-|parameter|Yes ( if the component is created with non default parameter)|List of { name: string; value: string[] }|example|NA|parameter is needed if the component is created with non default parameter
+|parameter|Yes ( if the component is created with non default parameter)|List of [**Component Paremeter**](#parameter)|[**example**](#parameter)|NA|parameter is needed if the component is created with non default parameter
 
 ### Example
 
@@ -469,7 +469,7 @@ Any changes in Component content , requires a new version to be created. All the
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **Component parameter**
+## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='parameter'></a> **Component parameter**
 
 ### Example
 
