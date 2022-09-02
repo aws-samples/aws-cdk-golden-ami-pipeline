@@ -408,6 +408,8 @@ Any changes in Component content , requires a new version to be created. All the
 
 > :warning: **If you are using mobile browser**: Be very careful here!
 
+:warning:
+:busstop:
 
 ## image_recipe
 
