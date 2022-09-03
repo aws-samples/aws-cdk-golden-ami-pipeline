@@ -33,11 +33,11 @@ On a **high level**, the image builder pipeline consists of the following -
     -   What tag will be added in the AMI in the target account 
 
 
-![alt text](images/ImageBuilderHighLevelComponent.jpg)
+
 
 # Target Architecture
 
-![alt text](images/ami.jpg)
+![alt text](images/golden_ami.png)
 
 # <a name='keyfeatures'></a>Key Features 
 -   As part of the security best practice, there will be one Customer Manager Keys ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same
@@ -48,7 +48,6 @@ On a **high level**, the image builder pipeline consists of the following -
 
 -   EC2 Inspector (by using AWS Managed SSM Document) can be integrated for Vulnerability scanning. 
 
--   Once the Golden AMI is distributed , the SSM parameter in target account will be updated in with the new AMI ID . The SSM parameters value in the target account will always contain the latest AMI built through the pipeline.
 
 -   Image Pipeline will send SNS notification for success or failure. Later this can be used to update DynamoDB ( This part is not implemented in the solution)
 
