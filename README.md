@@ -46,9 +46,6 @@ On a **high level**, the image builder pipeline consists of the following -
 
 -   User can bring their own Build and Test steps ( in yaml file) or AWS managed pre-build SSM documentation can also be used.
 
--   EC2 Inspector (by using AWS Managed SSM Document) can be integrated for Vulnerability scanning. 
-
-
 -   Image Pipeline will send SNS notification for success or failure. Later this can be used to update DynamoDB ( This part is not implemented in the solution)
 
 -   AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
@@ -109,7 +106,6 @@ To configure cross-account distribution permissions in AWS Identity and Access M
 ```
 For more information on setting up cross-account AMI distribution, visit [Page](https://docs.aws.amazon.com/imagebuilder/latest/userguide/cross-account-dist.html#cross-account-prereqs-iam)
 
-5. If you enable, **Inspector** in the Image Pipeline, service-linked role for Amazon Inspecor should present. Amazon Inspector uses the service-linked role named ```AWSServiceRoleForAmazonInspector2```. You don't need to manually create a service-linked role. When you enable the Amazon Inspector service in the AWS Management Console, the AWS CLI, or the AWS API, Amazon Inspector creates the service-linked role for you
 
 # <a name='howtodeploy'></a>How to Deploy
 
@@ -171,8 +167,6 @@ attr: string
 amitag?: object;
 tag?: object;
 infrastructure: infrastructure;
-inspector_validation?: boolean;
-Inspector_Config?: ComponentConfig;
 Component_Config: ComponentConfig;
 Distribution?: distribution[];
 distributionName?: string;
@@ -200,8 +194,6 @@ resource_removal_policy?: string
 |tag|No|object|example|NA|This tag will be applied to all the resources created by the CDK application|
 |image_receipe|Yes|recipe|example|NA|EC2 Builder image recipe|
 |infrastructure|yes|[**infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastrure details that will be used to launch EC2 instance|
-|inspector_validation|No|Boolean|true or false|false|To add inspector validation step at the end of the build phase. |
-|Inspector_Config|No|[**ComponentConfig**](#ComponentConfig)|[**InspectorConfig**](#InspectorConfig)|Details of the Inspector configuration parameter can be found here.|
 |Component_Config|Yes|[**ComponentConfig**](#ComponentConfig)|[**example**](#ComponentConfig)|NA|Defines the Build and Test Steps|
 |Distribution|No|list of [**distribution**](#distribution)|[**example**](#distribution)|NA|The config detail about which target account and region the golden AMI will be distributed|
 |distributionName|No|String|Golden_AMI_Distribution-am-amf|Golden_AMI_Distribution-$attr|Distribution settings name|
@@ -380,62 +372,6 @@ Any changes in Component content , requires a new version to be created. All the
 }
 ```
 
-
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='InspectorConfig'></a> **Inspector_Config**
-
-| Parameter Name | Required | Type | example | Default Value | Notes |
-| :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-|version|yes|String|1.0.5|NA|Which version of amazon owned SSM documentation for inspector to be used. you can see the latest version from the Ec2 Image Builder console → Component
-|high_severity_findings_threshold|yes|String|15|Maximum number of high severity findings allowed.If the number of high severity findings is more than this number, pipeline will fail
-|region|Yes|String|us-west-2|NA|Region where the Inspector will be running ( same region where Image builder service is being deployed)
-|ignore_findings|Yes|String|yes|if selected “yes”, Pipeline will continue and ignore inspector assessment result
-
-
-### Example
-```
-{
-    "Build": [
-        {
-            "name": "inspector_validation",
-            "version": "3.0.9",
-            "file": "golden_ami_amf_components/inspector.yaml",
-            "parameter": [
-                {
-                    "name": "version",
-                    "value": [
-                        "1.0.5"
-                    ]
-                },
-                {
-                    "name": "high_severity_findings_threshold",
-                    "value": [
-                        "15"
-                    ]
-                },
-                {
-                    "name": "region",
-                    "value": [
-                        "us-east-1"
-                    ]
-                },
-                {
-                    "name": "ignore_findings",
-                    "value": [
-                        "yes"
-                    ]
-                },
-                {
-                    "name": "inspector_finding_script_path",
-                    "value": [
-                        "golden-ami-component-nk/golden_ami_amf_components/inspector_findings.sh"
-                    ]
-                }
-            ]
-        }
-    ]
-}
-```
- 
 
 ## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) **amitag**
 

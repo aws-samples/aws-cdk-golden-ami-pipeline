@@ -34,46 +34,6 @@
 			"t2.small"
 		]
 	},
-	"inspector_validation": true,
-	"Inspector_Config": {
-		"Build": [
-			{
-				"name": "inspector_validation",
-				"version": "3.0.7",
-				"file": "components/inspector.yaml",
-				"parameter": [
-					{
-						"name": "version",
-						"value": [
-							"1.0.5"
-						]
-					},
-					{
-						"name": "high_severity_findings_threshold",
-						"value": [
-							"15"
-						]
-					},
-					{
-						"name": "ignore_findings",
-						"value": [
-							"yes"
-						]
-					},
-					{
-						"name": "inspector_finding_script_path",
-						"value": [
-							"golden-ami-component-nk-poc/components/inspector_findings.sh"
-						]
-					}
-				]
-			}
-		]
-	},
-	"isv_name": "nk",
-	"cnf_name": "amf",
-	"env": "dev",
-	"golden_ami": "true",
 	"Component_Config": {
 		"Build": [
 			{
