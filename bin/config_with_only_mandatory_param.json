@@ -1,7 +1,6 @@
 {
 	"baseImage": "ami-090fa75af13c156b4",
 	"baseImageType": "id",
-	"resource_removal_policy": "destroy",
 	"ami_component_bucket_name": "golden-ami-component-poc",
 	"attr": "nk-poc",
 	"instanceProfileName": "Golden_AMI_Instance_Profile-poc",
@@ -19,10 +18,7 @@
 	},
 	"image_receipe": {
 		"image_receipe_version": "3.1.4",
-		"image_receipe_name": "Golden_AMI_Image_Recipe-poc",
-		"volume_size": 3072,
-		"deleteOnTermination": false,
-		"volume_type": "gp2"
+		"image_receipe_name": "Golden_AMI_Image_Recipe-poc"
 	},
 	"infrastructure": {
 		"name": "Golden_AMI_Instance_Infra-poc",
@@ -71,13 +67,5 @@
 				"arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
 			}
 		]
-	},
-	"Distribution": [
-		{
-			"region": "us-east-1",
-			"accounts": [
-				"208665233135"
-			]
-		}
-	]
+	}
 }

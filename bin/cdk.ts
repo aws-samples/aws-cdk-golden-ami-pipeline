@@ -3,7 +3,9 @@ import * as cdk from "aws-cdk-lib";
 import user_config from "./config.json";
 import default_component from "./default_component.json";
 import { Stack } from "aws-cdk-lib";
-import {ImagebuilderPipeline, MainConfing} from 'golden_ami_pipeline';
+// import {ImagebuilderPipeline, MainConfing} from 'golden_ami_pipeline';
+import { ImagebuilderPipeline } from './../lib/imagebuilderpipeline'
+import { MainConfing } from './../lib/interface/mainConfig'
 
 
 const app = new cdk.App();
