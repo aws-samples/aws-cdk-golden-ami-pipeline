@@ -253,7 +253,7 @@ resource_removal_policy?: string
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-|name|Yes|String|Golden_AMI_Pipeline_infra_nk_amf|NA|Name of the infrastructure resource created in Image builder service.
+|name|No|String|golden-ami-infra-demo|golden-ami-infra-${attr}|Name of the infrastructure resource created in Image builder service.
 |instance_type|No|List of String|["t2.small"]|m5.large|Instance type to be used for Building Golden AMI
 |subnet_id|No|String|"subnet-0caeab2cb8575df26"|Default VPC in the account/region|If not provided, default VPC should exist
 |security_groups|No|List of String|["sg-077b2c5e060e46f50"]|Default Security Group|This is needed if the subnet ID is provided.
@@ -367,7 +367,7 @@ Any changes in Component content , requires a new version to be created. All the
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-|image_recipe_name|Yes|String|Golden_AMI_Pipeline_recipe_nk_amf|NA|Image Recipe Name to be created
+|image_recipe_name|No|String|golden-ami-recipe-demo|golden-ami-recipe-${attr}|Image Recipe Name to be created
 |image_recipe_version|Yes|String|1.0.0|NA|Semantic version of the component
 |volume_size|No|Number|2048|8192|EBS volume size of the EC2 instance|EBS Volume type of the EC2 instance
 |volume_type|No|String|gp2|NA|
