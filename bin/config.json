@@ -3,7 +3,6 @@
 	"baseImageType": "id",
 	"resource_removal_policy": "destroy",
 	"ami_component_bucket_name": "golden-ami-component-poc",
-	"attr": "nk-poc",
 	"instanceProfileName": "Golden_AMI_Instance_Profile-poc",
 	"imagePipelineName": "Golden_Image_Pipeline-poc",
 	"components_prefix": "components",
@@ -17,9 +16,9 @@
 		"env": "dev",
 		"Name": "golden-ami-poc"
 	},
-	"image_receipe": {
-		"image_receipe_version": "3.1.4",
-		"image_receipe_name": "Golden_AMI_Image_Recipe-poc",
+	"image_recipe": {
+		"image_recipe_version": "3.1.4",
+		"image_recipe_name": "Golden_AMI_Image_Recipe-poc",
 		"volume_size": 3072,
 		"deleteOnTermination": false,
 		"volume_type": "gp2"

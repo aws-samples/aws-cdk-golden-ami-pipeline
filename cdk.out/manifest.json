@@ -17,26 +17,24 @@
     },
     "ImagebuilderPipeline": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://unknown-account/us-east-1",
+      "environment": "aws://unknown-account/us-west-2",
       "properties": {
         "templateFile": "ImagebuilderPipeline.template.json",
         "tags": {
-          "cnf_name": "cnf",
           "env": "dev",
-          "isv_name": "isv",
-          "Name": "golden-ami-isv-cnf-dev"
+          "Name": "golden-ami-poc"
         },
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/83a226e0d8349c7ff7bf162ecb69a0844124db66180c999313e7431b6a07f22b.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2/70d6e32c5c8d69ce3ad3ffa562a6b13fe3ebebbf44f32243160a68338110baf0.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
           "ImagebuilderPipeline.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-west-2",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }
@@ -50,22 +48,20 @@
             "type": "aws:cdk:stack-tags",
             "data": [
               {
-                "Key": "cnf_name",
-                "Value": "cnf"
-              },
-              {
                 "Key": "env",
                 "Value": "dev"
               },
               {
-                "Key": "isv_name",
-                "Value": "isv"
-              },
-              {
                 "Key": "Name",
-                "Value": "golden-ami-isv-cnf-dev"
+                "Value": "golden-ami-poc"
               }
             ]
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/ImagebuilderPipeline/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineF62C751B"
           }
         ],
         "/ImagebuilderPipeline/ImagebuilderPipeline/DeployComponents/AwsCliLayer/Resource": [
@@ -116,12 +112,6 @@
             "data": "ImagebuilderPipelineGoldenAMIInstancProfile216FA320"
           }
         ],
-        "/ImagebuilderPipeline/ImagebuilderPipeline/MyCfnDistributionConfiguration": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78"
-          }
-        ],
         "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -162,6 +152,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/ImagebuilderPipeline/S3bucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "S3bucketName"
+          }
+        ],
+        "/ImagebuilderPipeline/PipelineName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineName"
+          }
+        ],
+        "/ImagebuilderPipeline/ImageRecipeName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImageRecipeName"
           }
         ],
         "/ImagebuilderPipeline/CDKMetadata/Default": [

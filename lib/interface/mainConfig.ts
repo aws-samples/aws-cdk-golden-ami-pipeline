@@ -1,24 +1,32 @@
-import { ComponentConfig } from "./component_config";
-import { distribution } from "./distribution";
+import { ComponentConfig } from "./Component_config";
+import { distribution } from "./Distribution";
+import { infrastructure } from "./Infrastructure";
+import { Recipe } from "./Recipe"
 export interface MainConfing {
-  region: string;
   baseImage: string;
-  baseImageType: string;
-  ami_component_bucket_name: string;
+  baseImageType?: string;
+  ami_component_bucket_name?: string;
+  ami_component_bucket_create?: boolean;
+  ami_component_bucket_version?: boolean;
   imagePipelineName?: string;
-  image_receipe: { image_receipe_version: string; image_receipe_name: string };
+  instanceProfileName?: string;
+  instanceProfileRoleName?: string;
+  iamEncryption?: boolean;
+  components_prefix: string;
+  key_alias?: string;
+  image_recipe: Recipe;
   golden_ami?: string;
   sns_topic?: string;
-  attr: string
-  amitag?:object;
+  attr?: string
+  amitag?: object;
   tag?: object;
-  infrastructure?: {
-    instance_type: string[];
-    subnet_id: string;
-    security_groups: string[];
-  };
+  schedule?: object;
+  infrastructure: infrastructure;
   inspector_validation?: boolean;
   Inspector_Config?: ComponentConfig;
   Component_Config: ComponentConfig;
   Distribution?: distribution[];
+  distributionName?: string;
+  distributionDescription?: string;
+  resource_removal_policy?: string
 }

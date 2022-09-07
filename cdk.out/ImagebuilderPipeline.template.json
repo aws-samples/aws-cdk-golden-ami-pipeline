@@ -1,11 +1,27 @@
 {
  "Resources": {
+  "ImagebuilderPipelineF62C751B": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "aws-cdk:cr-owned:components:e451b96d",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/ImagebuilderPipeline/Resource"
+   }
+  },
   "ImagebuilderPipelineDeployComponentsAwsCliLayerF34DBE13": {
    "Type": "AWS::Lambda::LayerVersion",
    "Properties": {
     "Content": {
      "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2"
      },
      "S3Key": "d21f8b6ad7cafde52be800b4bc2704085a5402ea7401fa71bd8f1e3f995c6068.zip"
     },
@@ -29,13 +45,15 @@
     },
     "SourceBucketNames": [
      {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2"
      }
     ],
     "SourceObjectKeys": [
-     "b15d9136ac28286b645e2f7abe94c1f2c3d66fe467c48b8a43b2cea5f61c7f4c.zip"
+     "fbe463de26b05bf478171c093fe4ccda66f9afa2921afa72b50dc40c53a99c2c.zip"
     ],
-    "DestinationBucketName": "golden-ami-component-poc",
+    "DestinationBucketName": {
+     "Ref": "ImagebuilderPipelineF62C751B"
+    },
     "DestinationBucketKeyPrefix": "components",
     "Prune": true
    },
@@ -50,8 +68,19 @@
    "Properties": {
     "Name": "build1",
     "Platform": "Linux",
-    "Version": "1.0.1",
-    "Uri": "s3://golden-ami-component-poc/components/build1.yaml"
+    "Version": "3.0.0",
+    "Uri": {
+     "Fn::Join": [
+      "",
+      [
+       "s3://",
+       {
+        "Ref": "ImagebuilderPipelineF62C751B"
+       },
+       "/components/build1.yaml"
+      ]
+     ]
+    }
    },
    "DependsOn": [
     "ImagebuilderPipelineDeployComponentsAwsCliLayerF34DBE13",
@@ -68,8 +97,19 @@
    "Properties": {
     "Name": "build2",
     "Platform": "Linux",
-    "Version": "1.0.1",
-    "Uri": "s3://golden-ami-component-poc/components/build2.yaml"
+    "Version": "3.0.0",
+    "Uri": {
+     "Fn::Join": [
+      "",
+      [
+       "s3://",
+       {
+        "Ref": "ImagebuilderPipelineF62C751B"
+       },
+       "/components/build2.yaml"
+      ]
+     ]
+    }
    },
    "DependsOn": [
     "ImagebuilderPipelineDeployComponentsAwsCliLayerF34DBE13",
@@ -86,8 +126,19 @@
    "Properties": {
     "Name": "test1",
     "Platform": "Linux",
-    "Version": "1.0.2",
-    "Uri": "s3://golden-ami-component-poc/components/test1.yaml"
+    "Version": "3.0.0",
+    "Uri": {
+     "Fn::Join": [
+      "",
+      [
+       "s3://",
+       {
+        "Ref": "ImagebuilderPipelineF62C751B"
+       },
+       "/components/test1.yaml"
+      ]
+     ]
+    }
    },
    "DependsOn": [
     "ImagebuilderPipelineDeployComponentsAwsCliLayerF34DBE13",
@@ -174,8 +225,29 @@
        "Action": "s3:*",
        "Effect": "Allow",
        "Resource": [
-        "arn:aws:s3:::golden-ami-component-poc",
-        "arn:aws:s3:::golden-ami-component-poc/*"
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:s3:::",
+           {
+            "Ref": "ImagebuilderPipelineF62C751B"
+           },
+           "/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:aws:s3:::",
+           {
+            "Ref": "ImagebuilderPipelineF62C751B"
+           }
+          ]
+         ]
+        }
        ]
       }
      ],
@@ -200,44 +272,10 @@
       "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
      }
     ],
-    "InstanceProfileName": "Golden_AMI_Instance_Profile-poc"
+    "InstanceProfileName": "Golden_AMI_Instance_Profile-undefined"
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instanc_Profile"
-   }
-  },
-  "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78": {
-   "Type": "AWS::ImageBuilder::DistributionConfiguration",
-   "Properties": {
-    "Distributions": [
-     {
-      "AmiDistributionConfiguration": {
-       "amiTags": {
-        "isv_name": "isv",
-        "cnf_name": "cnf",
-        "env": "dev",
-        "Name": "golden-ami-{{imagebuilder:buildDate}}",
-        "Date_Created": "{{imagebuilder:buildDate}}",
-        "golden_ami": "true"
-       },
-       "targetAccountIds": [
-        "208665233135"
-       ]
-      },
-      "Region": "us-east-1"
-     }
-    ],
-    "Name": "Golden_AMI_Distribution-poc",
-    "Description": "Destribution settings for poc",
-    "Tags": {
-     "cnf_name": "cnf",
-     "env": "dev",
-     "isv_name": "isv",
-     "Name": "golden-ami-isv-cnf-dev"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/MyCfnDistributionConfiguration"
    }
   },
   "ImagebuilderPipelineGoldenAMIEncryptionKey56A7C01D": {
@@ -313,37 +351,6 @@
         }
        },
        "Resource": "*"
-      },
-      {
-       "Action": [
-        "kms:CreateGrant",
-        "kms:Decrypt",
-        "kms:DescribeKey",
-        "kms:Encrypt",
-        "kms:Generate*",
-        "kms:ReEncrypt*"
-       ],
-       "Condition": {
-        "StringLike": {
-         "aws:PrincipalArn": "arn:aws:iam::208665233135:role/EC2ImageBuilderDistributionCrossAccountRole"
-        }
-       },
-       "Effect": "Allow",
-       "Principal": {
-        "AWS": {
-         "Fn::Join": [
-          "",
-          [
-           "arn:",
-           {
-            "Ref": "AWS::Partition"
-           },
-           ":iam::208665233135:root"
-          ]
-         ]
-        }
-       },
-       "Resource": "*"
       }
      ],
      "Version": "2012-10-17"
@@ -360,15 +367,20 @@
    "Properties": {
     "Components": [
      {
-      "ComponentArn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
-     },
-     {
       "ComponentArn": {
        "Fn::GetAtt": [
         "ImagebuilderPipelinebuild1BuildEA5A3692",
         "Arn"
        ]
-      }
+      },
+      "Parameters": [
+       {
+        "Name": "testparam",
+        "Value": [
+         "samplevalue"
+        ]
+       }
+      ]
      },
      {
       "ComponentArn": {
@@ -385,14 +397,11 @@
         "Arn"
        ]
       }
-     },
-     {
-      "ComponentArn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
      }
     ],
-    "Name": "Golden_AMI_Image_Recipe-poc",
-    "ParentImage": "ami-090fa75af13c156b4",
-    "Version": "1.0.0",
+    "Name": "golden-ami-recipe-poc-0906",
+    "ParentImage": "ami-0c2ab3b8efb09f272",
+    "Version": "3.0.0",
     "BlockDeviceMappings": [
      {
       "DeviceName": "/dev/xvda",
@@ -414,7 +423,7 @@
   "ImagebuilderPipelineGoldenAMIInstanceInfraCE69FF3F": {
    "Type": "AWS::ImageBuilder::InfrastructureConfiguration",
    "Properties": {
-    "InstanceProfileName": "Golden_AMI_Instance_Profile-poc",
+    "InstanceProfileName": "Golden_AMI_Instance_Profile-undefined",
     "Name": "Golden_AMI_Instance_Infra-poc"
    },
    "DependsOn": [
@@ -433,13 +442,7 @@
       "Arn"
      ]
     },
-    "Name": "Golden_Image_Pipeline-poc",
-    "DistributionConfigurationArn": {
-     "Fn::GetAtt": [
-      "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78",
-      "Arn"
-     ]
-    },
+    "Name": "golden-ami-pipeline-poc-0906",
     "ImageRecipeArn": {
      "Fn::GetAtt": [
       "ImagebuilderPipelineImageRecipe2B281ADA",
@@ -511,7 +514,7 @@
            },
            ":s3:::",
            {
-            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2"
            },
            "/*"
           ]
@@ -527,7 +530,7 @@
            },
            ":s3:::",
            {
-            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+            "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2"
            }
           ]
          ]
@@ -550,26 +553,22 @@
        "Effect": "Allow",
        "Resource": [
         {
-         "Fn::Join": [
-          "",
-          [
-           "arn:",
-           {
-            "Ref": "AWS::Partition"
-           },
-           ":s3:::golden-ami-component-poc"
-          ]
+         "Fn::GetAtt": [
+          "ImagebuilderPipelineF62C751B",
+          "Arn"
          ]
         },
         {
          "Fn::Join": [
           "",
           [
-           "arn:",
            {
-            "Ref": "AWS::Partition"
+            "Fn::GetAtt": [
+             "ImagebuilderPipelineF62C751B",
+             "Arn"
+            ]
            },
-           ":s3:::golden-ami-component-poc/*"
+           "/*"
           ]
          ]
         }
@@ -594,7 +593,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2"
      },
      "S3Key": "f98b78092dcdd31f5e6d47489beb5f804d4835ef86a8085d0a2053cb9ae711da.zip"
     },
@@ -627,11 +626,24 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/21QTWvDMAz9Lb273taMsWubMijboaSwa3AcJaix5WLZKyXkv89xP3bZ6T09PUnorWTxKlcLdealboelwUaOh6D0IJJUj1zITdQDhI1iEFzUYwsn4y4WKNw624cgFDMElusZJmGUbVolx7KjL3UB/w2e0ZE4IPUGgqOPSDrMyoMk651PAq3qoYloWvB5S+nsydF8KBVb5OCxibO3dNRhH726L9nNoxVoPEEuqfMq2aMO0cP/7n3yGiRId5WVY+VMHs24dwb1ZS7/2I44KNKw965Dk8YGy3L8hNxMMN0DqM38fJ3i1Abl+sylwZyHyDmlsPsUiCgjB2crYBe9vp6+8UmQa0Ee+enn5U2+y+fFkRGXPlJAC7K64i+nQ08VyQEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/01Qy2rDMBD8ltyVbZuU0mviUAgtNDjQq1HktdlYD6OVGoLxv1eWm7SnmX3NMrOC9TOsFvLCS1V3S00nGI5Bqk6kVjXwGoZtVB0GUTT2l82wlYyj4HU11NhrdzVoA8yj3b0hJDMGhs0Eo9DSnGoJQ9L6kFf0X+iZnBVHsq3G4OxbtCpMnTtJqzc+CjKyxVMkXaPPKoUzvbPTo1Tsp2mJinrMpW285OCjCtFj4WxDbfTyppq3D2lXk01GSBoYSqfzacaD06SuU/nH9paDtAoP3jWk01lnGIZ3zMME481jpSd/VQpRaYLNhQtN2bLIUaSI2+RZFJGDMyWyi17Nr//xzxj6mGKzrkY488P30wu8wuPizERLH20gg1DO+AMVXjigyQEAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/CDKMetadata/Default"
    }
+  }
+ },
+ "Outputs": {
+  "S3bucketName": {
+   "Value": {
+    "Ref": "ImagebuilderPipelineF62C751B"
+   }
+  },
+  "PipelineName": {
+   "Value": "golden-ami-pipeline-poc-0906"
+  },
+  "ImageRecipeName": {
+   "Value": "golden-ami-recipe-poc-0906"
   }
  },
  "Parameters": {

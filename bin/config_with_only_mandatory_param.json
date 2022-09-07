@@ -1,47 +1,27 @@
 {
-	"baseImage": "ami-090fa75af13c156b4",
-	"baseImageType": "id",
-	"ami_component_bucket_name": "golden-ami-component-poc",
-	"attr": "nk-poc",
-	"instanceProfileName": "Golden_AMI_Instance_Profile-poc",
-	"imagePipelineName": "Golden_Image_Pipeline-poc",
+	"baseImage": "ami-0c2ab3b8efb09f272",
 	"components_prefix": "components",
-	"iamEncryption": true,
 	"amitag": {
 		"env": "dev",
-		"Name": "golden-ami-dev-{{imagebuilder:buildDate}}",
+		"Name": "golden-ami-{{imagebuilder:buildDate}}",
 		"Date_Created": "{{imagebuilder:buildDate}}"
 	},
 	"tag": {
 		"env": "dev",
 		"Name": "golden-ami-poc"
 	},
-	"image_receipe": {
-		"image_receipe_version": "3.1.4",
-		"image_receipe_name": "Golden_AMI_Image_Recipe-poc"
+	"image_recipe": {
+		"image_recipe_version": "3.0.0"
 	},
 	"infrastructure": {
-		"name": "Golden_AMI_Instance_Infra-poc",
-		"instance_type": [
-			"t2.small"
-		]
+		"name": "Golden_AMI_Instance_Infra-poc"
 	},
 	"Component_Config": {
 		"Build": [
 			{
 				"name": "build1",
-				"file": "components/build2.yaml",
-				"version": "1.0.0"
-			},
-			{
-				"name": "build2",
-				"file": "components/build7.yaml",
-				"version": "1.0.0"
-			},
-			{
-				"name": "build3",
 				"file": "components/build1.yaml",
-				"version": "1.0.0",
+				"version": "3.0.0",
 				"parameter": [
 					{
 						"name": "testparam",
@@ -52,19 +32,16 @@
 				]
 			},
 			{
-				"name": "test1",
+				"name": "build2",
 				"file": "components/build2.yaml",
-				"version": "1.0.0"
+				"version": "3.0.0"
 			}
 		],
 		"Test": [
 			{
-				"name": "test2",
+				"name": "test1",
 				"file": "components/test1.yaml",
-				"version": "1.0.0"
-			},
-			{
-				"arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+				"version": "3.0.0"
 			}
 		]
 	}
