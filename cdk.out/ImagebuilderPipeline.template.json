@@ -3,6 +3,7 @@
   "ImagebuilderPipelineF62C751B": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
+    "BucketName": "golden-ami-bucket-20220906",
     "Tags": [
      {
       "Key": "aws-cdk:cr-owned:components:e451b96d",
@@ -68,7 +69,7 @@
    "Properties": {
     "Name": "build1",
     "Platform": "Linux",
-    "Version": "4.0.0",
+    "Version": "1.0.1",
     "Uri": {
      "Fn::Join": [
       "",
@@ -97,7 +98,7 @@
    "Properties": {
     "Name": "test1",
     "Platform": "Linux",
-    "Version": "4.0.0",
+    "Version": "1.0.1",
     "Uri": {
      "Fn::Join": [
       "",
@@ -173,7 +174,8 @@
        ]
       ]
      }
-    ]
+    ],
+    "RoleName": "golden-ami-instance-profile-role-blog-demo"
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instance_Profile_Role/Resource"
@@ -243,16 +245,48 @@
       "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
      }
     ],
-    "InstanceProfileName": "golden-ami-instance-profile-demo"
+    "InstanceProfileName": "golden-ami-instance-profile-blog-demo"
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instanc_Profile"
+   }
+  },
+  "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78": {
+   "Type": "AWS::ImageBuilder::DistributionConfiguration",
+   "Properties": {
+    "Distributions": [
+     {
+      "AmiDistributionConfiguration": {
+       "amiTags": {
+        "env": "dev",
+        "Name": "golden-ami-{{imagebuilder:buildDate}}",
+        "Date_Created": "{{imagebuilder:buildDate}}"
+       },
+       "targetAccountIds": [
+        "107703766638"
+       ]
+      },
+      "Region": "us-east-1"
+     }
+    ],
+    "Name": "golden-ami-distribution-blog-demo",
+    "Description": "Distribution settings for Golden AMI Pipeline",
+    "Tags": {
+     "env": "dev",
+     "Name": "golden-ami-blog-demo"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/MyCfnDistributionConfiguration"
    }
   },
   "ImagebuilderPipelineImageRecipe2B281ADA": {
    "Type": "AWS::ImageBuilder::ImageRecipe",
    "Properties": {
     "Components": [
+     {
+      "ComponentArn": "arn:aws:imagebuilder:us-west-2:aws:component/update-linux/1.0.2/1"
+     },
      {
       "ComponentArn": {
        "Fn::GetAtt": [
@@ -276,16 +310,22 @@
         "Arn"
        ]
       }
+     },
+     {
+      "ComponentArn": "arn:aws:imagebuilder:us-west-2:aws:component/reboot-test-linux/1.0.0/1"
      }
     ],
-    "Name": "golden-ami-recipe-demo",
+    "Name": "golden-ami-recipe-blog-demo",
     "ParentImage": "ami-0c2ab3b8efb09f272",
-    "Version": "4.0.0",
+    "Version": "1.0.3",
     "BlockDeviceMappings": [
      {
       "DeviceName": "/dev/xvda",
       "Ebs": {
-       "Encrypted": false
+       "DeleteOnTermination": true,
+       "Encrypted": false,
+       "VolumeSize": 2048,
+       "VolumeType": "gp2"
       }
      }
     ]
@@ -299,8 +339,15 @@
   "ImagebuilderPipelineGoldenAMIInstanceInfraCE69FF3F": {
    "Type": "AWS::ImageBuilder::InfrastructureConfiguration",
    "Properties": {
-    "InstanceProfileName": "golden-ami-instance-profile-demo",
-    "Name": "golden-ami-infra-demo"
+    "InstanceProfileName": "golden-ami-instance-profile-blog-demo",
+    "Name": "golden-ami-infra-blog-demo",
+    "InstanceTypes": [
+     "t2.small"
+    ],
+    "SecurityGroupIds": [
+     "sg-00470b762398482d8"
+    ],
+    "SubnetId": "subnet-0296dd4b15fa52ccc"
    },
    "DependsOn": [
     "ImagebuilderPipelineGoldenAMIInstancProfile216FA320"
@@ -318,12 +365,21 @@
       "Arn"
      ]
     },
-    "Name": "golden-ami-pipeline-demo",
+    "Name": "golden-ami-recipe-blog-demo",
+    "DistributionConfigurationArn": {
+     "Fn::GetAtt": [
+      "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78",
+      "Arn"
+     ]
+    },
     "ImageRecipeArn": {
      "Fn::GetAtt": [
       "ImagebuilderPipelineImageRecipe2B281ADA",
       "Arn"
      ]
+    },
+    "Schedule": {
+     "ScheduleExpression": "cron(0 10 * * ? *)"
     }
    },
    "DependsOn": [
@@ -502,7 +558,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/01Q0WrDMAz8lr673taOsdc2Y1AYLKSw1+A4SlBry8GyV0rIv89x1m5PdzpJJ04buX2Wm5W68Fq357XBRo7HoPRZJKkeeSvHfdRnCKLo6JctsFcMk+BtPbYwGHe1QEEurbe7IBQzBJa7GSZhlG1aJcfk9aGu4L/AMzoSR6TeQHD0HkmHWbmTNHrjk0CremgimhZ8dimcHRzNh1JxmLsVaBwgl9R5xcFHHaKHwlGHffTq5pqnyzRrkFIQVFaOlTN5NWPpDOrrXP6xA3FQpKH0rkMD0y1SbeY4dfqZNih3Fy4M5oQiJ08f7VNEUUQOzlbALnq9XPrHP2MYYvoSuRbkiR++n17kq3xcnRhx7SMFtCCrBX8A+K4KZbgBAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/21QwWrDMAz9lt5db2vH2LVNGRQGKynsGhxHCWptOVj2Sgn599nJ2u2w03uSniTeW8n1s1wt1IWXujkvDdZyOAalzyK1qoHXcthGfYYgipZ+2AxbxTAKXldDA71xVwsU5Dza3RtCMUNguckwCqNs3Sg5pFvv6gr+EzyjI3FE6gwER2+RdMidO0nSGx8FWtVBHdE04KcrhbO9o/woFTvk4LGOWVs4arGLXt2O7PNqCRp7mEpqvUryqEP08L/6kLQGKblEZeVQOjOtTnhwBvU1l79sTxwUaTh416KB8ea3MtlrlQLVBuXmwoXByb6YYklxd8m/KCIHZ0tgF72eP/3hHzH0MUVIrgF54oevpxf5Kh8XJ0Zc+kgBLchyxm8mcG4z1QEAAA=="
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/CDKMetadata/Default"
@@ -516,16 +572,16 @@
    }
   },
   "PipelineName": {
-   "Value": "golden-ami-pipeline-demo"
+   "Value": "golden-ami-recipe-blog-demo"
   },
   "ImageRecipeName": {
-   "Value": "golden-ami-recipe-demo"
+   "Value": "golden-ami-recipe-blog-demo"
   },
   "ImagePipelineInfraName": {
-   "Value": "golden-ami-infra-demo"
+   "Value": "golden-ami-infra-blog-demo"
   },
   "AMIInstanceProfile": {
-   "Value": "golden-ami-instance-profile-demo"
+   "Value": "golden-ami-instance-profile-blog-demo"
   }
  },
  "Parameters": {

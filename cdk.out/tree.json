@@ -30,6 +30,7 @@
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                       "aws:cdk:cloudformation:props": {
+                        "bucketName": "golden-ami-bucket-20220906",
                         "tags": [
                           {
                             "key": "aws-cdk:cr-owned:components:e451b96d",
@@ -175,7 +176,7 @@
                   "aws:cdk:cloudformation:props": {
                     "name": "build1",
                     "platform": "Linux",
-                    "version": "4.0.0",
+                    "version": "1.0.1",
                     "uri": {
                       "Fn::Join": [
                         "",
@@ -203,7 +204,7 @@
                   "aws:cdk:cloudformation:props": {
                     "name": "test1",
                     "platform": "Linux",
-                    "version": "4.0.0",
+                    "version": "1.0.1",
                     "uri": {
                       "Fn::Join": [
                         "",
@@ -282,7 +283,8 @@
                               ]
                             ]
                           }
-                        ]
+                        ],
+                        "roleName": "golden-ami-instance-profile-role-blog-demo"
                       }
                     },
                     "constructInfo": {
@@ -378,11 +380,45 @@
                         "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
                       }
                     ],
-                    "instanceProfileName": "golden-ami-instance-profile-demo"
+                    "instanceProfileName": "golden-ami-instance-profile-blog-demo"
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.CfnInstanceProfile",
+                  "version": "2.34.2"
+                }
+              },
+              "MyCfnDistributionConfiguration": {
+                "id": "MyCfnDistributionConfiguration",
+                "path": "ImagebuilderPipeline/ImagebuilderPipeline/MyCfnDistributionConfiguration",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::DistributionConfiguration",
+                  "aws:cdk:cloudformation:props": {
+                    "distributions": [
+                      {
+                        "region": "us-east-1",
+                        "amiDistributionConfiguration": {
+                          "amiTags": {
+                            "env": "dev",
+                            "Name": "golden-ami-{{imagebuilder:buildDate}}",
+                            "Date_Created": "{{imagebuilder:buildDate}}"
+                          },
+                          "targetAccountIds": [
+                            "107703766638"
+                          ]
+                        }
+                      }
+                    ],
+                    "name": "golden-ami-distribution-blog-demo",
+                    "description": "Distribution settings for Golden AMI Pipeline",
+                    "tags": {
+                      "env": "dev",
+                      "Name": "golden-ami-blog-demo"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnDistributionConfiguration",
                   "version": "2.34.2"
                 }
               },
@@ -393,6 +429,9 @@
                   "aws:cdk:cloudformation:type": "AWS::ImageBuilder::ImageRecipe",
                   "aws:cdk:cloudformation:props": {
                     "components": [
+                      {
+                        "componentArn": "arn:aws:imagebuilder:us-west-2:aws:component/update-linux/1.0.2/1"
+                      },
                       {
                         "componentArn": {
                           "Fn::GetAtt": [
@@ -416,16 +455,22 @@
                             "Arn"
                           ]
                         }
+                      },
+                      {
+                        "componentArn": "arn:aws:imagebuilder:us-west-2:aws:component/reboot-test-linux/1.0.0/1"
                       }
                     ],
-                    "name": "golden-ami-recipe-demo",
+                    "name": "golden-ami-recipe-blog-demo",
                     "parentImage": "ami-0c2ab3b8efb09f272",
-                    "version": "4.0.0",
+                    "version": "1.0.3",
                     "blockDeviceMappings": [
                       {
                         "deviceName": "/dev/xvda",
                         "ebs": {
-                          "encrypted": false
+                          "deleteOnTermination": true,
+                          "encrypted": false,
+                          "volumeSize": 2048,
+                          "volumeType": "gp2"
                         }
                       }
                     ]
@@ -442,8 +487,15 @@
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ImageBuilder::InfrastructureConfiguration",
                   "aws:cdk:cloudformation:props": {
-                    "instanceProfileName": "golden-ami-instance-profile-demo",
-                    "name": "golden-ami-infra-demo"
+                    "instanceProfileName": "golden-ami-instance-profile-blog-demo",
+                    "name": "golden-ami-infra-blog-demo",
+                    "instanceTypes": [
+                      "t2.small"
+                    ],
+                    "securityGroupIds": [
+                      "sg-00470b762398482d8"
+                    ],
+                    "subnetId": "subnet-0296dd4b15fa52ccc"
                   }
                 },
                 "constructInfo": {
@@ -463,12 +515,21 @@
                         "Arn"
                       ]
                     },
-                    "name": "golden-ami-pipeline-demo",
+                    "name": "golden-ami-recipe-blog-demo",
+                    "distributionConfigurationArn": {
+                      "Fn::GetAtt": [
+                        "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78",
+                        "Arn"
+                      ]
+                    },
                     "imageRecipeArn": {
                       "Fn::GetAtt": [
                         "ImagebuilderPipelineImageRecipe2B281ADA",
                         "Arn"
                       ]
+                    },
+                    "schedule": {
+                      "scheduleExpression": "cron(0 10 * * ? *)"
                     }
                   }
                 },

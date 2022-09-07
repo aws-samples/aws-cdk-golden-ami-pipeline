@@ -1,50 +1,49 @@
 {
-	"baseImage": "ami-090fa75af13c156b4",
+	"baseImage": "ami-0c2ab3b8efb09f272",
 	"baseImageType": "id",
-	"resource_removal_policy": "destroy",
-	"ami_component_bucket_name": "golden-ami-component-poc",
-	"instanceProfileName": "Golden_AMI_Instance_Profile-poc",
-	"imagePipelineName": "Golden_Image_Pipeline-poc",
+	"ami_component_bucket_name": "golden-ami-bucket-20220906",
+	"ami_component_bucket_create": true,
+	"attr": "blog-demo",
+	"imagePipelineName": "golden-ami-recipe-blog-demo",
 	"components_prefix": "components",
-	"iamEncryption": true,
+	"instanceProfileName": "golden-ami-instance-profile-blog-demo",
+	"instanceProfileRoleName": "golden-ami-instance-profile-role-blog-demo",
+	"iamEncryption": false,
+	"schedule": {
+		"scheduleExpression": "cron(0 10 * * ? *)"
+	},
 	"amitag": {
 		"env": "dev",
-		"Name": "golden-ami-dev-{{imagebuilder:buildDate}}",
+		"Name": "golden-ami-{{imagebuilder:buildDate}}",
 		"Date_Created": "{{imagebuilder:buildDate}}"
 	},
 	"tag": {
 		"env": "dev",
-		"Name": "golden-ami-poc"
+		"Name": "golden-ami-blog-demo"
 	},
 	"image_recipe": {
-		"image_recipe_version": "3.1.4",
-		"image_recipe_name": "Golden_AMI_Image_Recipe-poc",
-		"volume_size": 3072,
-		"deleteOnTermination": false,
-		"volume_type": "gp2"
+		"image_recipe_version": "1.0.3",
+		"image_recipe_name": "golden-ami-recipe-blog-demo",
+		"volume_size": 2048,
+		"volume_type": "gp2",
+		"deleteOnTermination": true
 	},
 	"infrastructure": {
-		"name": "Golden_AMI_Instance_Infra-poc",
+		"name": "golden-ami-infra-blog-demo",
 		"instance_type": [
 			"t2.small"
+		],
+		"subnet_id": "subnet-0296dd4b15fa52ccc",
+		"security_groups": [
+			"sg-00470b762398482d8"
 		]
 	},
 	"Component_Config": {
 		"Build": [
 			{
 				"name": "build1",
-				"file": "components/build2.yaml",
-				"version": "1.0.0"
-			},
-			{
-				"name": "build2",
-				"file": "components/build7.yaml",
-				"version": "1.0.0"
-			},
-			{
-				"name": "build3",
 				"file": "components/build1.yaml",
-				"version": "1.0.0",
+				"version": "1.0.1",
 				"parameter": [
 					{
 						"name": "testparam",
@@ -53,21 +52,13 @@
 						]
 					}
 				]
-			},
-			{
-				"name": "test1",
-				"file": "components/build2.yaml",
-				"version": "1.0.0"
 			}
 		],
 		"Test": [
 			{
-				"name": "test2",
+				"name": "test1",
 				"file": "components/test1.yaml",
-				"version": "1.0.0"
-			},
-			{
-				"arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+				"version": "1.0.1"
 			}
 		]
 	},
@@ -75,8 +66,11 @@
 		{
 			"region": "us-east-1",
 			"accounts": [
-				"208665233135"
+				"107703766638"
 			]
 		}
-	]
+	],
+	"distributionName": "golden-ami-distribution-blog-demo",
+	"distributionDescription": "Distribution settings for Golden AMI Pipeline",
+	"resource_removal_policy": "retain"
 }

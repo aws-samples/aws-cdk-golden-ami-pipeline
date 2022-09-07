@@ -22,12 +22,12 @@
         "templateFile": "ImagebuilderPipeline.template.json",
         "tags": {
           "env": "dev",
-          "Name": "golden-ami-poc"
+          "Name": "golden-ami-blog-demo"
         },
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2/22c9b74405a6632ea4540da380d10fa9239b24ad04f81f12902d5497959112aa.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2/7947993fbe37024112920c85f4ec9abf254ba174c13fb2144b049803b6c32a94.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -53,7 +53,7 @@
               },
               {
                 "Key": "Name",
-                "Value": "golden-ami-poc"
+                "Value": "golden-ami-blog-demo"
               }
             ]
           }
@@ -104,6 +104,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ImagebuilderPipelineGoldenAMIInstancProfile216FA320"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagebuilderPipeline/MyCfnDistributionConfiguration": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagebuilderPipelineMyCfnDistributionConfiguration30D86D78"
           }
         ],
         "/ImagebuilderPipeline/ImagebuilderPipeline/ImageRecipe": [

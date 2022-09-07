@@ -1,13 +1,12 @@
 {
-    "Build": [
-      {
-        "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
-      }
-    ],
-    "Test": [
-      {
-        "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
-      }
-    ]
-  }
-  
+  "Build": [
+    {
+      "arn": "arn:aws:imagebuilder:us-west-2:aws:component/update-linux/1.0.2/1"
+    }
+  ],
+  "Test": [
+    {
+      "arn": "arn:aws:imagebuilder:us-west-2:aws:component/reboot-test-linux/1.0.0/1"
+    }
+  ]
+}

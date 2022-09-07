@@ -15,7 +15,7 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 
 export interface ImageBuilderProps {
   user_config: MainConfing
-  mandatory_component?: ComponentConfig
+  default_component?: ComponentConfig
 }
 
 export interface component_list {
@@ -48,14 +48,16 @@ export class ImagebuilderPipeline extends Construct {
     super(scope, id);
     const {
       user_config,
-      mandatory_component
+      default_component
     } = props;
 
     const attr = user_config['attr'] ?? 'demo'
     const ami_component_bucket_name = user_config['ami_component_bucket_name'] ?? undefined
     const bucket_create = user_config['ami_component_bucket_create'] ?? true
+    console.log(bucket_create)
 
     if (bucket_create) {
+      console.log(bucket_create)
       this.bucket = new Bucket(this, id, {
         versioned: user_config['ami_component_bucket_version'],
         bucketName: ami_component_bucket_name,
@@ -81,10 +83,10 @@ export class ImagebuilderPipeline extends Construct {
       destinationKeyPrefix: user_config['components_prefix']
     });
 
-    if (mandatory_component) { this.AddComponent(mandatory_component, this.bucket.bucketName, "Build", s3componentdeploy); }
+    if (default_component) { this.AddComponent(default_component, this.bucket.bucketName, "Build", s3componentdeploy); }
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Build", s3componentdeploy);
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Test", s3componentdeploy);
-    if (mandatory_component) { this.AddComponent(mandatory_component, this.bucket.bucketName, "Test", s3componentdeploy); }
+    if (default_component) { this.AddComponent(default_component, this.bucket.bucketName, "Test", s3componentdeploy); }
 
 
     this.component_build.forEach((value) => {

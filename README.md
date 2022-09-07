@@ -120,15 +120,20 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
     `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails)
 
-    `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below
+    `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below. In this example we used two Amazon-managed component.
 
-- set the region where the stakc will be deployed. For example
+- set the region where the stack will be deployed. For example
 
     ``export CDK_DEPLOY_REGION=us-west-2``
+
+- Install required packages
+
+    ```npm install```
 
 - Deploy the CDK application
 
     ```cdk deploy ```
+
 -   Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
     * Recipe
@@ -156,19 +161,19 @@ baseImageType?: string;
 ami_component_bucket_name?: string;
 ami_component_bucket_create?: boolean;
 ami_component_bucket_version?: boolean;
-imagePipelineName: string;
+imagePipelineName?: string;
 instanceProfileName?: string;
 instanceProfileRoleName?: string;
 iamEncryption?: boolean;
 components_prefix: string;
 key_alias?: string;
-image_receipe: receipe;
-golden_ami?: string;
+image_recipe: Recipe;
 sns_topic?: string;
-attr: string
+attr?: string
 amitag?: object;
 tag?: object;
-infrastructure: infrastructure;
+schedule?: object;
+infrastructure?: infrastructure;
 Component_Config: ComponentConfig;
 Distribution?: distribution[];
 distributionName?: string;
@@ -176,17 +181,15 @@ distributionDescription?: string;
 resource_removal_policy?: string
 ```
 
-
-
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-| attr | Yes | String | demo | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
-|baseImage|Yes|String|ami-090fa75af13c156b4 or /golden/ami|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.|
-|baseImageType| No| String | ssm or id | id | baseImageType select ssm, if baseImage contains SSM Parameter, Select id if baseImage contains AMI ID
-|resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder component and recipe will either be deleted or retained.|
-|ami_component_bucket_name|No|String|golden-ami-bucket-20220911|CDK application will create a dynamic name|This bucket will contain all the related user defined build and test component. If not specified, Bucket will be created with attribute name|
-|ami_component_bucket_create|No|Boolean|true or false | true|If true, a new S3 bucket will be created. If false, then ami_component_bucket_name must be provided and bucket must exist|
-|ami_component_bucket_version|No|Boolean|true or false|true|The parameter is used to enable/disable S3 Bucket version
+| attr | Yes | String | demo | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to deployed resource name if not provided |
+|baseImage|Yes|String|`ami-090fa75af13c156b4` or `/golden/ami`|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.|
+|baseImageType| No| String | `ssm` or `id` | `id` | select `ssm`, if baseImage contains SSM Parameter, Select `id` if baseImage contains AMI ID
+|resource_removal_policy|No|String | `destroy` or `retain` |`retain`|Image Builder component and recipe removal policy. Based on this, the older version of image builder component and recipe will either be deleted or retained.|
+|ami_component_bucket_name|No|String|`golden-ami-bucket-20220911`|CDK application will create a dynamic name|This bucket will contain all the related user defined build and test component. If not specified, CDK application will create a new bucket with autogenerated name|
+|ami_component_bucket_create|No|Boolean|`true` or `false` | `true`|If true, a new S3 bucket will be created. If false, then `ami_component_bucket_name` must be provided and bucket must exist|
+|ami_component_bucket_version|No|Boolean|`true` or `false`|`true`|The parameter is used to enable/disable S3 Bucket version
 |instanceProfileName|No|String|golden-ami-instance-profile-demo|golden-ami-instance-profile-${attr}| Instance Profile
 |instanceProfileRoleName|No|String|golden-ami-instance-profile-role-demo|CDK application will create a dynamic name|This role will be attached to the EC2 instance Profile Role|
 |imagePipelineName|No|String|golden-ami-pipeline-demo|golden-ami-pipeline-${attr}|The Name of the Image pipeline to be created.|

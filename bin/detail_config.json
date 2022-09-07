@@ -2,14 +2,13 @@
 	"baseImage": "ami-0c2ab3b8efb09f272",
 	"baseImageType": "id",
 	"ami_component_bucket_name": "golden-ami-bucket-20220906",
-	"ami_component_bucket_create": false,
-	"ami_component_bucket_version": true,
-	"attr": "demo",
-	"imagePipelineName": "golden-ami-recipe-demo",
+	"ami_component_bucket_create": true,
+	"attr": "blog-demo",
+	"imagePipelineName": "golden-ami-recipe-blog-demo",
 	"components_prefix": "components",
-	"instanceProfileName": "golden-ami-instance-profile-demo",
-	"instanceProfileRoleName": "golden-ami-instance-profile-role-demo",
-	"iamEncryption": true,
+	"instanceProfileName": "golden-ami-instance-profile-blog-demo",
+	"instanceProfileRoleName": "golden-ami-instance-profile-role-blog-demo",
+	"iamEncryption": false,
 	"schedule": {
 		"scheduleExpression": "cron(0 10 * * ? *)"
 	},
@@ -20,27 +19,31 @@
 	},
 	"tag": {
 		"env": "dev",
-		"Name": "golden-ami-demo"
+		"Name": "golden-ami-blog-demo"
 	},
 	"image_recipe": {
-		"image_recipe_version": "4.0.0",
-		"image_recipe_name": "golden-ami-recipe-demo",
+		"image_recipe_version": "1.0.2",
+		"image_recipe_name": "golden-ami-recipe-blog-demo",
 		"volume_size": 2048,
 		"volume_type": "gp2",
 		"deleteOnTermination": true
 	},
 	"infrastructure": {
-		"name": "golden-ami-infra-demo",
-        "instance_type": ["t2.small"],
-        "subnet_id": "subnet-0cfa0bbca57d17c46",
-        "security_groups": ["sg-0201b5fe0111842f9"]
+		"name": "golden-ami-infra-blog-demo",
+		"instance_type": [
+			"t2.large"
+		],
+		"subnet_id": "subnet-0cfa0bbca57d17c46",
+		"security_groups": [
+			"sg-00470b762398482d8"
+		]
 	},
 	"Component_Config": {
 		"Build": [
 			{
 				"name": "build1",
 				"file": "components/build1.yaml",
-				"version": "4.0.0",
+				"version": "1.0.1",
 				"parameter": [
 					{
 						"name": "testparam",
@@ -55,11 +58,11 @@
 			{
 				"name": "test1",
 				"file": "components/test1.yaml",
-				"version": "4.0.0"
+				"version": "1.0.1"
 			}
 		]
 	},
-    "Distribution": [
+	"Distribution": [
 		{
 			"region": "us-east-1",
 			"accounts": [
@@ -67,7 +70,7 @@
 			]
 		}
 	],
-	"distributionName": "golden-ami-distribution-demo",
+	"distributionName": "golden-ami-distribution-blog-demo",
 	"distributionDescription": "Distribution settings for Golden AMI Pipeline",
 	"resource_removal_policy": "retain"
 }

@@ -1,5 +1,5 @@
 import * as cdk from "aws-cdk-lib";
-import user_config from "./config_with_only_mandatory_param.json";
+import user_config from "./config.json";
 import default_component from "./default_component.json";
 import { Stack } from "aws-cdk-lib";
 import { ImagebuilderPipeline } from './../lib/imagebuilderpipeline'
@@ -12,7 +12,8 @@ export class createImageBuilder extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const Golden_AMI_Pipeline = new ImagebuilderPipeline(this, "ImagebuilderPipeline", {
-      user_config: ami_config
+      user_config: ami_config,
+      default_component: default_component
     });
     new cdk.CfnOutput(this, 'S3bucketName', { value: Golden_AMI_Pipeline.bucket.bucketName });
     new cdk.CfnOutput(this, 'PipelineName', { value: Golden_AMI_Pipeline.pipeline.name });
