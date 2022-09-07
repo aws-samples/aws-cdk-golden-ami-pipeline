@@ -262,7 +262,7 @@ resource_removal_policy?: string
 ### Type
 ```
 {
-        name: string;
+        name?: string;
         instance_type?: string[];
         subnet_id?: string;
         security_groups?: string[];
@@ -379,7 +379,7 @@ Any changes in Component content , requires a new version to be created. All the
 ```
 {
     image_recipe_version: string; 
-    image_recipe_name: string ; 
+    image_recipe_name?: string ; 
     volume_size?: number;
     volume_type?: string;
     deleteOnTermination?: boolean
