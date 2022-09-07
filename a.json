@@ -1,41 +1,10 @@
 {
-    "Build": [
-        {
-            "name": "inspector_validation",
-            "version": "3.0.9",
-            "file": "golden_ami_amf_components/inspector.yaml",
-            "parameter": [
-                {
-                    "name": "version",
-                    "value": [
-                        "1.0.5"
-                    ]
-                },
-                {
-                    "name": "high_severity_findings_threshold",
-                    "value": [
-                        "15"
-                    ]
-                },
-                {
-                    "name": "region",
-                    "value": [
-                        "us-east-1"
-                    ]
-                },
-                {
-                    "name": "ignore_findings",
-                    "value": [
-                        "yes"
-                    ]
-                },
-                {
-                    "name": "inspector_finding_script_path",
-                    "value": [
-                        "golden-ami-component-nk/golden_ami_amf_components/inspector_findings.sh"
-                    ]
-                }
-            ]
-        }
+    "name": "golden-ami-infra-demo",
+    "instance_type": [
+        "t2.small"
+    ],
+    "subnet_id": "subnet-0caeab2cb8575df26",
+    "security_groups": [
+        "sg-077b2c5e060e46f50"
     ]
 }

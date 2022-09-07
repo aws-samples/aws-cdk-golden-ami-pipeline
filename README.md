@@ -262,10 +262,14 @@ resource_removal_policy?: string
 ### Example 
 ```
 {
-	"name": "golden-ami-infra-demo",
-	"instance_type": ["t2.small"],
+    "name": "golden-ami-infra-demo",
+    "instance_type": [
+        "t2.small"
+    ],
     "subnet_id": "subnet-0caeab2cb8575df26",
-    "security_groups": ["sg-077b2c5e060e46f50"]
+    "security_groups": [
+        "sg-077b2c5e060e46f50"
+    ]
 }
 ```
 
