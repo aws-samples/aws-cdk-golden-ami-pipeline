@@ -131,8 +131,8 @@ export class ImagebuilderPipeline extends Construct {
 
     if (user_config["Distribution"]) {
       this.distribution = user_config["Distribution"];
-      const distribution_name = user_config['distributionName'] ?? `Golden_AMI_Distribution-${user_config['attr']}`
-      const distribution_desc = user_config['distributionDescription'] ?? `Destribution settings for ${user_config['attr']}`
+      const distribution_name = user_config['distributionName'] ?? `golden-ami-distribution-${attr}`
+      const distribution_desc = user_config['distributionDescription'] ?? `Destribution settings for ${attr}`
       this.dist = this.CreateDistribution(this.distribution, this.amitag, this.tag, distribution_name, distribution_desc);
       dist_arn = this.dist.attrArn
     }

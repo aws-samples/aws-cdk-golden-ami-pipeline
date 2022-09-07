@@ -198,9 +198,9 @@ resource_removal_policy?: string
 |infrastructure|yes|[**infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastrure details that will be used to launch EC2 instance|
 |Component_Config|Yes|[**ComponentConfig**](#ComponentConfig)|[**example**](#ComponentConfig)|NA|Defines the Build and Test Steps|
 |Distribution|No|list of [**distribution**](#distribution)|[**example**](#distribution)|NA|The config detail about which target account and region the golden AMI will be distributed|
-|distributionName|No|String|Golden_AMI_Distribution-am-amf|Golden_AMI_Distribution-$attr|Distribution settings name|
-|distributionDescription|No|String|example|Destribution settings for $'attr'|Description of the distribution settings
-|sns_topic|No|String|arn:aws:sns:us-east-1:0123456789:myTopic|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
+|distributionName|No|String|golden-ami-distribution-demo|golden-ami-distribution-${attr}|Distribution settings name|
+|distributionDescription|No|String|Destribution settings for demo|Destribution settings for ${attr}|Description of the distribution settings
+|sns_topic|No|String|arn:aws:sns:us-east-1:111122223333:myTopic|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
 |key_alias|No|String|golden-ami-cmk-key|NA|If not provided, KMS key will be created without alias name
 |schedule|No|{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String } . For more information, link|{ "scheduleExpression": "cron(0 10 * * ? *)"}|Manual|AMI Pipeline Schedule|
 
@@ -304,7 +304,7 @@ resource_removal_policy?: string
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 |name|Depends, check notes|String|Install_jq|NA|name of the Build/Test component
-|file|No ( If arn is mentioned)|golden_ami_amf_components/build1.yaml|NA|user provided component yaml  file path 
+|file|No ( If arn is mentioned)|components/build1.yaml|NA|user provided component yaml  file path 
 |version|Depends, check notes|String|1.0.0|NA|semantic version of the component to be created
 arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|NA|amazon managed component arn. Make sure this exists in the account/region the pipeline is being deployed( Navigate to image builder console ->component->select amazon owned).Also, if arn is provided, then name, file, version parameter is not required. Check the example|
 |parameter|Yes ( if the component is created with non default parameter)|List of [**Component Paremeter**](#parameter)|[**example**](#parameter)|NA|parameter is needed if the component is created with non default parameter
@@ -316,7 +316,7 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
     "Build": [
         {
             "name": "build1",
-            "file": "golden_ami_amf_components/build1.yaml",
+            "file": "components/build1.yaml",
             "version": "1.0.1",
             "parameter": [
                 {
@@ -332,14 +332,14 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
         },
         {
             "name": "build2",
-            "file": "golden_ami_amf_components/build2.yaml",
+            "file": "components/build2.yaml",
             "version": "1.0.1"
         }
     ],
     "Test": [
         {
             "name": "test2",
-            "file": "golden_ami_amf_components/test1.yaml",
+            "file": "components/test1.yaml",
             "version": "1.0.1"
         },
         {
