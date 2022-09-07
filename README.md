@@ -154,6 +154,10 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
     ``export CDK_DEPLOY_REGION=us-west-2``
 
+- set the **baseImage** value in ```bin/config.json``` file. This MUST be available in the account/region you are deploying the pipeline. For example, 
+
+   ```"baseImage": "ami-0c2ab3b8efb09f272"```
+
 - Install required packages
 
     ```npm install```
