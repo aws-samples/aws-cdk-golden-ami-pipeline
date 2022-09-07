@@ -180,14 +180,14 @@ resource_removal_policy?: string
 | attr | Yes | String | demo | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
 |baseImage|Yes|String|ami-090fa75af13c156b4 or /golden/ami|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.|
 |baseImageType| No| String | ssm or id | id | baseImageType select ssm, if baseImage contains SSM Parameter, Select id if baseImage contains AMI ID
-|resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.|
-|ami_component_bucket_name|No|String|golden-ami-component-nk|golden-ami-component-${attr}|This bucket will contain all the related user defined build and test component. If not specified, Bucket will be created with attribute name|
-|ami_component_bucket_create|No|Boolean|true or false | true|If true, ami_component_bucket_name will be created. If selected as false, then ami_component_bucket_name should exists|
+|resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder component and recipe will either be deleted or retained.|
+|ami_component_bucket_name|No|String|golden-ami-bucket-20220911|CDK application will create a dynamic name|This bucket will contain all the related user defined build and test component. If not specified, Bucket will be created with attribute name|
+|ami_component_bucket_create|No|Boolean|true or false | true|If true, a new S3 bucket will be created. If false, then ami_component_bucket_name must be provided and bucket must exist|
 |ami_component_bucket_version|No|Boolean|true or false|true|The parameter is used to enable/disable S3 Bucket version
-|instanceProfileName|No|String|Golden_AMI_Instance_Profile_nk-amf|Golden_AMI_Instance_Profile-${attr} | Instance Profile
-|instanceProfileRoleName|No|String|Golden_Image_Pipeline-nk-amf-role|CDK will create a dynamic name. This role will be attached to the EC2 instance Profile Role|
-|imagePipelineName|Yes|String|Golden_Image_Pipeline-nk-amf|NA|The Name of the Image pipeline to be created.|
-|components_prefix|Yes|String|golden_ami_amf_components|NA|prefix of the S3 Bucket ami_component_bucket_name where the related component will be deployed and referenced|
+|instanceProfileName|No|String|golden-ami-instance-profile-demo|golden-ami-instance-profile-${attr}| Instance Profile
+|instanceProfileRoleName|No|String|golden-ami-instance-profile-role-demo|CDK application will create a dynamic name|This role will be attached to the EC2 instance Profile Role|
+|imagePipelineName|No|String|golden-ami-pipeline-demo|golden-ami-pipeline-${attr}|The Name of the Image pipeline to be created.|
+|components_prefix|Yes|String|components|NA|prefix of the S3 Bucket ami_component_bucket_name where the related component will be deployed and referenced|
 |iamEncryption|No|Boolean|true or false|false|If enabled, a new CDK key will be created and underlying EBS volume of the AMI will be encrypted with the same|
 |amitag|No|object|example|NA|This tag will be appplied to the distributed AMI in target account/region|
 |tag|No|object|example|NA|This tag will be applied to all the resources created by the CDK application|
@@ -198,7 +198,7 @@ resource_removal_policy?: string
 |distributionName|No|String|Golden_AMI_Distribution-am-amf|Golden_AMI_Distribution-$attr|Distribution settings name|
 |distributionDescription|No|String|example|Destribution settings for $'attr'|Description of the distribution settings
 |sns_topic|No|String|arn:aws:sns:us-east-1:0123456789:myTopic|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
-|key_alias|No|String|Golden_AMI_key_nk_amf|NA|If not provided, KMS key will be created without alias name
+|key_alias|No|String|golden-ami-cmk-key|NA|If not provided, KMS key will be created without alias name
 |schedule|No|{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String } . For more information, link|{ "scheduleExpression": "cron(0 10 * * ? *)"}|Manual|AMI Pipeline Schedule|
 
 
