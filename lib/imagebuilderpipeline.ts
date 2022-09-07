@@ -56,7 +56,6 @@ export class ImagebuilderPipeline extends Construct {
     const bucket_create = user_config['ami_component_bucket_create'] ?? true
 
     if (bucket_create) {
-      console.log("create with  ", ami_component_bucket_name)
       this.bucket = new Bucket(this, id, {
         versioned: user_config['ami_component_bucket_version'],
         bucketName: ami_component_bucket_name,
@@ -144,7 +143,7 @@ export class ImagebuilderPipeline extends Construct {
       keyid = undefined
     }
     else{
-      if (user_config['iamEncryption']){
+      if (user_config.iamEncryption){
         this.cmk = this.CreateKMSKey(this.distribution, key_alias);
         keyid = this.cmk.keyId
       }

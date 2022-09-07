@@ -243,7 +243,7 @@
       "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
      }
     ],
-    "InstanceProfileName": "golden-ami-instance-profile-poc"
+    "InstanceProfileName": "golden-ami-instance-profile-demo"
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instanc_Profile"
@@ -278,7 +278,7 @@
       }
      }
     ],
-    "Name": "golden-ami-recipe-poc",
+    "Name": "golden-ami-recipe-demo",
     "ParentImage": "ami-0c2ab3b8efb09f272",
     "Version": "4.0.0",
     "BlockDeviceMappings": [
@@ -299,8 +299,8 @@
   "ImagebuilderPipelineGoldenAMIInstanceInfraCE69FF3F": {
    "Type": "AWS::ImageBuilder::InfrastructureConfiguration",
    "Properties": {
-    "InstanceProfileName": "golden-ami-instance-profile-poc",
-    "Name": "golden-ami-infra-poc"
+    "InstanceProfileName": "golden-ami-instance-profile-demo",
+    "Name": "golden-ami-infra-demo"
    },
    "DependsOn": [
     "ImagebuilderPipelineGoldenAMIInstancProfile216FA320"
@@ -318,7 +318,7 @@
       "Arn"
      ]
     },
-    "Name": "golden-ami-pipeline-poc",
+    "Name": "golden-ami-pipeline-demo",
     "ImageRecipeArn": {
      "Fn::GetAtt": [
       "ImagebuilderPipelineImageRecipe2B281ADA",
@@ -516,10 +516,16 @@
    }
   },
   "PipelineName": {
-   "Value": "golden-ami-pipeline-poc"
+   "Value": "golden-ami-pipeline-demo"
   },
   "ImageRecipeName": {
-   "Value": "golden-ami-recipe-poc"
+   "Value": "golden-ami-recipe-demo"
+  },
+  "ImagePipelineInfraName": {
+   "Value": "golden-ami-infra-demo"
+  },
+  "AMIInstanceProfile": {
+   "Value": "golden-ami-instance-profile-demo"
   }
  },
  "Parameters": {

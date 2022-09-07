@@ -36,7 +36,7 @@ On a **high level**, the image builder pipeline consists of the following -
 
 # Target Architecture
 
-![alt text](images/golden_ami.png)
+![alt text](images/Golden_AMI_v2.png)
 
 # <a name='keyfeatures'></a>Key Features 
 -   As part of the security best practice, there will be one Customer Managed Key ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later. 

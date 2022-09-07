@@ -1,35 +1,30 @@
 {
-    "Build": [
-        {
-            "name": "build1",
-            "file": "golden_ami_amf_components/build1.yaml",
-            "version": "1.0.1",
-            "parameter": [
-                {
-                    "name": "testparam",
-                    "value": [
-                        "samplevalue"
-                    ]
-                }
-            ]
-        },
-        {
-            "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
-        },
-        {
-            "name": "build2",
-            "file": "golden_ami_amf_components/build2.yaml",
-            "version": "1.0.1"
-        }
-    ],
-    "Test": [
-        {
-            "name": "test2",
-            "file": "golden_ami_amf_components/test1.yaml",
-            "version": "1.0.1"
-        },
-        {
-            "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
-        }
-    ]
+	"baseImage": "ami-0c2ab3b8efb09f272",
+	"components_prefix": "components",
+	"amitag": {
+		"env": "dev"
+	},
+	"tag": {
+		"env": "dev",
+		"Name": "golden-ami-poc"
+	},
+	"image_recipe": {
+		"image_recipe_version": "4.0.0"
+	},
+	"Component_Config": {
+		"Build": [
+			{
+				"name": "build1",
+				"file": "components/build1.yaml",
+				"version": "1.0.0"
+			}
+		],
+		"Test": [
+			{
+				"name": "test1",
+				"file": "components/test1.yaml",
+				"version": "1.0.0"
+			}
+		]
+	}
 }

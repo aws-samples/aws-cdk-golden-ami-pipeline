@@ -378,7 +378,7 @@
                         "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
                       }
                     ],
-                    "instanceProfileName": "golden-ami-instance-profile-poc"
+                    "instanceProfileName": "golden-ami-instance-profile-demo"
                   }
                 },
                 "constructInfo": {
@@ -418,7 +418,7 @@
                         }
                       }
                     ],
-                    "name": "golden-ami-recipe-poc",
+                    "name": "golden-ami-recipe-demo",
                     "parentImage": "ami-0c2ab3b8efb09f272",
                     "version": "4.0.0",
                     "blockDeviceMappings": [
@@ -442,8 +442,8 @@
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ImageBuilder::InfrastructureConfiguration",
                   "aws:cdk:cloudformation:props": {
-                    "instanceProfileName": "golden-ami-instance-profile-poc",
-                    "name": "golden-ami-infra-poc"
+                    "instanceProfileName": "golden-ami-instance-profile-demo",
+                    "name": "golden-ami-infra-demo"
                   }
                 },
                 "constructInfo": {
@@ -463,7 +463,7 @@
                         "Arn"
                       ]
                     },
-                    "name": "golden-ami-pipeline-poc",
+                    "name": "golden-ami-pipeline-demo",
                     "imageRecipeArn": {
                       "Fn::GetAtt": [
                         "ImagebuilderPipelineImageRecipe2B281ADA",
@@ -732,6 +732,22 @@
           "ImageRecipeName": {
             "id": "ImageRecipeName",
             "path": "ImagebuilderPipeline/ImageRecipeName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.34.2"
+            }
+          },
+          "ImagePipelineInfraName": {
+            "id": "ImagePipelineInfraName",
+            "path": "ImagebuilderPipeline/ImagePipelineInfraName",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.34.2"
+            }
+          },
+          "AMIInstanceProfile": {
+            "id": "AMIInstanceProfile",
+            "path": "ImagebuilderPipeline/AMIInstanceProfile",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnOutput",
               "version": "2.34.2"

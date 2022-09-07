@@ -27,7 +27,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2/3115808f0c6ba88981f6ae5c6e13c7c65dd892b7d1fdc6d0e651d37737cab3a4.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2/22c9b74405a6632ea4540da380d10fa9239b24ad04f81f12902d5497959112aa.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -158,6 +158,18 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ImageRecipeName"
+          }
+        ],
+        "/ImagebuilderPipeline/ImagePipelineInfraName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImagePipelineInfraName"
+          }
+        ],
+        "/ImagebuilderPipeline/AMIInstanceProfile": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AMIInstanceProfile"
           }
         ],
         "/ImagebuilderPipeline/CDKMetadata/Default": [

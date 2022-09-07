@@ -17,6 +17,9 @@ export class createImageBuilder extends cdk.Stack {
     new cdk.CfnOutput(this, 'S3bucketName', { value: Golden_AMI_Pipeline.bucket.bucketName });
     new cdk.CfnOutput(this, 'PipelineName', { value: Golden_AMI_Pipeline.pipeline.name });
     new cdk.CfnOutput(this, 'ImageRecipeName', { value: Golden_AMI_Pipeline.recipe.name });
+    new cdk.CfnOutput(this, 'ImagePipelineInfraName', { value: Golden_AMI_Pipeline.infra.name });
+    new cdk.CfnOutput(this, 'AMIInstanceProfile', { value: Golden_AMI_Pipeline.instance_profile_role.instanceProfileName! });
+
   }
 }
 new createImageBuilder(app, "ImagebuilderPipeline", {
