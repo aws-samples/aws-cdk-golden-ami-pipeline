@@ -4,11 +4,11 @@
 	"ami_component_bucket_name": "golden-ami-bucket-20220906",
 	"ami_component_bucket_create": false,
 	"ami_component_bucket_version": true,
-	"attr": "poc",
-	"imagePipelineName": "golden-ami-recipe-poc",
+	"attr": "demo",
+	"imagePipelineName": "golden-ami-recipe-demo",
 	"components_prefix": "components",
-	"instanceProfileName": "golden-ami-instance-profile-poc",
-	"instanceProfileRoleName": "golden-ami-instance-profile-role-poc",
+	"instanceProfileName": "golden-ami-instance-profile-demo",
+	"instanceProfileRoleName": "golden-ami-instance-profile-role-demo",
 	"iamEncryption": true,
 	"schedule": {
 		"scheduleExpression": "cron(0 10 * * ? *)"
@@ -20,17 +20,17 @@
 	},
 	"tag": {
 		"env": "dev",
-		"Name": "golden-ami-poc"
+		"Name": "golden-ami-demo"
 	},
 	"image_recipe": {
 		"image_recipe_version": "4.0.0",
-		"image_recipe_name": "golden-ami-recipe-poc",
+		"image_recipe_name": "golden-ami-recipe-demo",
 		"volume_size": 2048,
 		"volume_type": "gp2",
 		"deleteOnTermination": true
 	},
 	"infrastructure": {
-		"name": "golden-ami-infra-poc",
+		"name": "golden-ami-infra-demo",
         "instance_type": ["t2.small"],
         "subnet_id": "subnet-0cfa0bbca57d17c46",
         "security_groups": ["sg-0201b5fe0111842f9"]
@@ -67,7 +67,7 @@
 			]
 		}
 	],
-	"distributionName": "golden-ami-distribution-poc",
-	"distributionDescription": "Sample Distribution",
+	"distributionName": "golden-ami-distribution-demo",
+	"distributionDescription": "Distribution settings for Golden AMI Pipeline",
 	"resource_removal_policy": "retain"
 }

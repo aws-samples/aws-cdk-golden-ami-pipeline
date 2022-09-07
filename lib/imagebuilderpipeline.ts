@@ -51,7 +51,7 @@ export class ImagebuilderPipeline extends Construct {
       mandatory_component
     } = props;
 
-    const attr = user_config['attr'] ?? 'poc'
+    const attr = user_config['attr'] ?? 'demo'
     const ami_component_bucket_name = user_config['ami_component_bucket_name'] ?? undefined
     const bucket_create = user_config['ami_component_bucket_create'] ?? true
 

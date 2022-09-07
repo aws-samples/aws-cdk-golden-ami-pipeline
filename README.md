@@ -178,7 +178,7 @@ resource_removal_policy?: string
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-| attr | Yes | String | poc | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
+| attr | Yes | String | demo | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to all the resource name if not provided |
 |baseImage|Yes|String|ami-090fa75af13c156b4 or /golden/ami|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image.|
 |baseImageType| No| String | ssm or id | id | baseImageType select ssm, if baseImage contains SSM Parameter, Select id if baseImage contains AMI ID
 |resource_removal_policy|No|String | destroy or retain |retain|Image Builder component and recipe removal policy. Based on this value, the older version of image builder of component and receipt will either be deleted or retained.|
@@ -252,15 +252,15 @@ resource_removal_policy?: string
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 |name|Yes|String|Golden_AMI_Pipeline_infra_nk_amf|NA|Name of the infrastructure resource created in Image builder service.
-|instance_type|No|List of String|["t2.small"]|NA|Instance type to be used for Building Golden AMI
-|subnet_id|No|String|"subnet-123456"|NA|If not provided, default VPC and Subnet will be used.
-|security_groups|No|List of String|["sg-123456789"]|NA|This is needed if the subnet ID is provided.
+|instance_type|No|List of String|["t2.small"]|m5.large|Instance type to be used for Building Golden AMI
+|subnet_id|No|String|"subnet-123456"|Default VPC in the account/region|If not provided, default VPC should exist
+|security_groups|No|List of String|["sg-077b2c5e060e46f50"]|Default Security Group|This is needed if the subnet ID is provided.
 
 
 ### Example 
 ```
 {
-	"name": "Golden_AMI_Instance_Infra-nk-poc",
+	"name": "golden-ami-infra-demo",
 	"instance_type": ["t2.small"]
 }
 ```
@@ -332,7 +332,7 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
     ]
 }
 ```
->:warning: **Component_Config** contains one or more Build/Test components. Each Build or Test contains same parameter as given below - 
+>:warning: **Component_Config** contains one or more Build/Test components. Each Build or Test may contain some parameter as given below - 
 Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
 
 
@@ -349,7 +349,7 @@ Any changes in Component content , requires a new version to be created. All the
     deleteOnTermination?: boolean
 }
 ```
-> :warning: **Image Recipe** is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the receipt version. 
+> :warning: **Image Recipe** is immutable with a specific version. Recipe contains all the components with specific version in a specific order. If the component version changes, or new components added, or components order has been modified, please make sure to update the recipe version. 
 
 ### Details
 
@@ -357,15 +357,16 @@ Any changes in Component content , requires a new version to be created. All the
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 |image_recipe_name|Yes|String|Golden_AMI_Pipeline_recipe_nk_amf|NA|Image Recipe Name to be created
 |image_recipe_version|Yes|String|1.0.0|NA|Semantic version of the component
-|volume_size|No|Number|2048|NA|EBS volume size of the EC2 instance|EBS Volume type of the EC2 instance
+|volume_size|No|Number|2048|8192|EBS volume size of the EC2 instance|EBS Volume type of the EC2 instance
 |volume_type|No|String|gp2|NA|
+|deleteOnTermination|No|Boolean|false|if true, the underlying EBS volume will be deleted after AMI is created.
 
 ### Example
 
 ```
 {
 	"image_recipe_version": "3.1.6",
-	"image_recipe_name": "Golden_AMI_Image_Recipe-nk-poc",
+	"image_recipe_name": "golden-ami-recipe-demo",
 	"volume_size": 3072,
 	"deleteOnTermination": false,
 	"volume_type": "gp2"
@@ -381,12 +382,9 @@ Any changes in Component content , requires a new version to be created. All the
 
 ```
 {
-	"isv_name": "nk",
-	"cnf_name": "amf",
 	"env": "dev",
-	"Name": "golden-ami-nk-amf-dev-{{imagebuilder:buildDate}}",
+	"Name": "golden-ami-dev-{{imagebuilder:buildDate}}",
 	"Date_Created": "{{imagebuilder:buildDate}}",
-	"golden_ami": "true"
 }
 ``` 
 
@@ -396,10 +394,8 @@ Any changes in Component content , requires a new version to be created. All the
 ### Example
 ```
 {
-	"isv_name": "nk",
-	"cnf_name": "amf",
 	"env": "dev",
-	"Name": "golden-ami-nk-amf-dev"
+	"Name": "golden-ami-demo-dev"
 }
 ```
 
