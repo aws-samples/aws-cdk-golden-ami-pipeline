@@ -421,18 +421,19 @@ Any changes in Component content , requires a new version to be created. All the
 ### Example
 
 ```
-[{
-		"name": "param1",
-		"value": [
-			"value1"
-		]
-	},
-	{
-		"name": "param2",
-		"value": [
-			"value2"
-		]
-	}
+[
+    {
+        "name": "param1",
+        "value": [
+            "value1"
+        ]
+    },
+    {
+        "name": "param2",
+        "value": [
+            "value2"
+        ]
+    }
 ]
 ```
 
