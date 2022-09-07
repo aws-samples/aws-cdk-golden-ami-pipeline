@@ -119,8 +119,25 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 - Update Config files. There are two config files - 
 
     `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails)
+    The two additional sample config.json file has been provided. you can use content from these files based on your requirement. 
+        -   bin/basic_config.json --> This contains minimum paramter ( those are required ) to deploy the solution
+        -   bin/detailed_config.json --> this contains all the paremeters supported in this implementation
 
     `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below. In this example we used two Amazon-managed component.
+    if you do not want to use any default component file, replace the following line
+
+    ```
+    const Golden_AMI_Pipeline = new ImagebuilderPipeline(this, "ImagebuilderPipeline", {
+      user_config: ami_config,
+      default_component: default_component
+    });
+    ```
+    with
+    ```
+    const Golden_AMI_Pipeline = new ImagebuilderPipeline(this, "ImagebuilderPipeline", {
+      user_config: ami_config
+    });
+    ```
 
 - set the region where the stack will be deployed. For example
 
@@ -256,10 +273,10 @@ resource_removal_policy?: string
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-|name|No|String|golden-ami-infra-demo|golden-ami-infra-${attr}|Name of the infrastructure resource created in Image builder service.
-|instance_type|No|List of String|["t2.small"]|m5.large|Instance type to be used for Building Golden AMI
-|subnet_id|No|String|"subnet-0caeab2cb8575df26"|Default VPC in the account/region|If not provided, default VPC should exist
-|security_groups|No|List of String|["sg-077b2c5e060e46f50"]|Default Security Group|This is needed if the subnet ID is provided.
+|name|No|String|`golden-ami-infra-demo`|`golden-ami-infra-${attr}`|Name of the infrastructure resource created in Image builder service.
+|instance_type|No|List of String|`["t2.small"]`|m5.large|Instance type to be used for Building Golden AMI
+|subnet_id|No|String|`subnet-0caeab2cb8575df26`|Default VPC in the account/region|If not provided, default VPC should exist
+|security_groups|No|List of String|`["sg-077b2c5e060e46f50"]`|Default Security Group|This is needed if the subnet ID is provided.
 
 
 ### Example 
@@ -306,11 +323,11 @@ resource_removal_policy?: string
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
-|name|Depends, check notes|String|Install_jq|NA|name of the Build/Test component
-|file|No ( If arn is mentioned)|components/build1.yaml|NA|user provided component yaml  file path 
-|version|Depends, check notes|String|1.0.0|NA|semantic version of the component to be created
-arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|NA|amazon managed component arn. Make sure this exists in the account/region the pipeline is being deployed( Navigate to image builder console ->component->select amazon owned).Also, if arn is provided, then name, file, version parameter is not required. Check the example|
-|parameter|Yes ( if the component is created with non default parameter)|List of [**Component Paremeter**](#parameter)|[**example**](#parameter)|NA|parameter is needed if the component is created with non default parameter
+|name|Yes|String|Install_jq|NA|name of the Build/Test component. If **arn** is used, then this parameter is not required.
+|file|Yes|components/build1.yaml|NA|user provided component yaml file path. If **arn** is used, then this parameter is not required
+|version|Yes|String|1.0.0|NA|semantic version of the component to be created. If **arn** is used, then this parameter is not required
+arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|NA|amazon managed component arn. Make sure this exists in the account/region the pipeline is being used. Navigate to image builder console ->component->select amazon owned).Also, if arn is provided, then name, file, version parameter is not required. Check the below example|
+|parameter|No|List of [**Component Paremeter**](#parameter)|[**example**](#parameter)|NA|parameter is needed if the component is created with non default parameter
 
 ### Example
 
