@@ -230,8 +230,8 @@ resource_removal_policy?: string
     {
         "region": "us-east-1",
         "accounts": [
-            "1234556789",
-            "987654321"
+            "111122223333",
+            "444455556666"
         ]
     }
 ]
