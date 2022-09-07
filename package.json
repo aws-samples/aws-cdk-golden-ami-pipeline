@@ -33,7 +33,6 @@
     "@aws-cdk/core": "^1.166.1",
     "aws-cdk-lib": "2.34.2",
     "constructs": "^10.0.0",
-    "golden_ami_pipeline": "1.0.1-rc.32",
     "source-map-support": "^0.5.21"
   }
 }
