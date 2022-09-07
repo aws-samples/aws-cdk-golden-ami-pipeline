@@ -15,19 +15,18 @@ As part of Infra deployment pipeline, we have been deploying EKS cluster with No
 The following Solution describes how each ISV can create their own Golden AMI Pipeline to Build/Test/Distribute based on the configuration provided by them.
 
 
-
 # Solution
-In this solution, we will be using AWS Ec2 Image Builder service for the heavy lifting work of Building, testing and Distributing the Golden AMI. 
-The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple account/region. CDK application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) deploy the necessary resources in ISV CICD account. 
+In this solution, we will be using AWS EC2 Image Builder service for the heavy lifting work of Building, testing and Distributing the Golden AMI. 
+The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple account/region. CDK application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) and deploy the necessary resources to create AMI Pipeline. 
 On a **high level**, the image builder pipeline consists of the following - 
 
-- Recepi
+- Recipe
     -   What Base Image to Use
-    -   What are the Build step
-    -   What are the Test and validate step
+    -   What are the Build steps
+    -   What are the Test and validate steps
 - Infrastructure
-    -   What type of EC2 instance to launch to build and test
-    -   Which VPC, Subnet and Security Group to Use while launching the instance.
+    -   What type of EC2 instance to launch, build, test
+    -   Which VPC, Subnet and Security Group to use while launching the instance.
 - Distribution
     -   Where to Distribute the AMI after creation - which account/region
     -   What tag will be added in the AMI in the target account 
@@ -40,13 +39,13 @@ On a **high level**, the image builder pipeline consists of the following -
 ![alt text](images/golden_ami.png)
 
 # <a name='keyfeatures'></a>Key Features 
--   As part of the security best practice, there will be one Customer Manager Keys ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same
+-   As part of the security best practice, there will be one Customer Managed Key ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later. 
 
 -   Base image can refer to AWS managed public ssm parameter (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest EKS optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
 
 -   User can bring their own Build and Test steps ( in yaml file) or AWS managed pre-build SSM documentation can also be used.
 
--   Image Pipeline will send SNS notification for success or failure. Later this can be used to update DynamoDB ( This part is not implemented in the solution)
+-   Image Pipeline will send SNS notification for success or failure. 
 
 -   AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
 
