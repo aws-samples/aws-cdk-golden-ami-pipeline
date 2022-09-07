@@ -255,7 +255,7 @@ resource_removal_policy?: string
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 |name|Yes|String|Golden_AMI_Pipeline_infra_nk_amf|NA|Name of the infrastructure resource created in Image builder service.
 |instance_type|No|List of String|["t2.small"]|m5.large|Instance type to be used for Building Golden AMI
-|subnet_id|No|String|"subnet-123456"|Default VPC in the account/region|If not provided, default VPC should exist
+|subnet_id|No|String|"subnet-0caeab2cb8575df26"|Default VPC in the account/region|If not provided, default VPC should exist
 |security_groups|No|List of String|["sg-077b2c5e060e46f50"]|Default Security Group|This is needed if the subnet ID is provided.
 
 
@@ -263,7 +263,9 @@ resource_removal_policy?: string
 ```
 {
 	"name": "golden-ami-infra-demo",
-	"instance_type": ["t2.small"]
+	"instance_type": ["t2.small"],
+    "subnet_id": "subnet-0caeab2cb8575df26",
+    "security_groups": ["sg-077b2c5e060e46f50"]
 }
 ```
 
@@ -311,7 +313,15 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
         {
             "name": "build1",
             "file": "golden_ami_amf_components/build1.yaml",
-            "version": "1.0.1"
+            "version": "1.0.1",
+            "parameter": [
+					{
+						"name": "testparam",
+						"value": [
+							"samplevalue"
+						]
+					}
+				]
         },
         {
             "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
