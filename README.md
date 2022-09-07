@@ -319,13 +319,13 @@ arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|
             "file": "golden_ami_amf_components/build1.yaml",
             "version": "1.0.1",
             "parameter": [
-					{
-						"name": "testparam",
-						"value": [
-							"samplevalue"
-						]
-					}
-				]
+                {
+                    "name": "testparam",
+                    "value": [
+                        "samplevalue"
+                    ]
+                }
+            ]
         },
         {
             "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
