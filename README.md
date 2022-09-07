@@ -11,13 +11,20 @@
 - [**Clean Up**](#cleanup)
 
 # Background
-As part of Infra deployment pipeline, we have been deploying EKS cluster with Node Group. The launch template of the Auto Scaling Group provides the information about the AMI (Amazon Machine Image) to be used for the worker nodes. At present, each ISV creates their own AMI ( per CNF) using manual process.There is no automated Pipeline to build , test and distribute Golden AMI in target account. 
-The following Solution describes how each ISV can create their own Golden AMI Pipeline to Build/Test/Distribute based on the configuration provided by them.
+AMIs provide the information required to launch an Amazon EC2 instance, which is a virtual server in the AWS Cloud. A golden AMI is *an AMI that contains the latest security patches, software, configuration, and software agents that you need to install for logging, security maintenance, and performance monitoring. 
+*
+
+The golden AMI pipeline enables creation, distribution, verification, launch-compliance of the AMI and create a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipies, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using Ec2 image builder service. User needs to define each stage and resources required for each stage of the imge builder pipeline which is a lengthy process 
+
+
+
 
 
 # Solution
 In this solution, we will be using AWS EC2 Image Builder service for the heavy lifting work of Building, testing and Distributing the Golden AMI. 
 The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple account/region. CDK application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) and deploy the necessary resources to create AMI Pipeline. 
+
+In this blog, we will provide users a way to deploy Golden AMI Pipeline using CDK as Infrastructure as Code that will be driven by user configuration. User will be able to provide all configuration information including build, test, distribution that can be used by the CDK application to create and customize the Golden AMI Pipeline. The solution will ensure that the Security best practice is also integrated for AMI Image encryption and distribution. 
 On a **high level**, the image builder pipeline consists of the following - 
 
 - Recipe
@@ -53,7 +60,7 @@ On a **high level**, the image builder pipeline consists of the following -
 # <a name='prereq'></a>Pre-Requisite
 
 -   Ensure you have a Git client installed following [these](https://git-scm.com/downloads)
--   Set up AWS Credentials in your environment using [these](http://_https//docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html_))
+-   Set up AWS Credentials in your environment using [these](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
 -   Ensure you have Node [Node](https://nodejs.org/en/download/) installed
 
 To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
