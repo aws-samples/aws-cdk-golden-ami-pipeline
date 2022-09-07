@@ -87,7 +87,8 @@ To configure cross-account distribution permissions in AWS Identity and Access M
 }
 ```
 4. If the AMI you distribute is encrypted, the destination account owner must add the following inline policy to the ```EC2ImageBuilderDistributionCrossAccountRole``` in their account so that they can use your KMS keys. The Principal section contains their account number. This enables Image Builder to act on their behalf when it uses AWS KMS to encrypt and decrypt the AMI with the appropriate keys for each Region.
-:pushpin: set ```iamEncryption``` paramter in bin/config.json file to enable/disable encrytion. For information can be found [here](#ParameterDetails)
+
+:pushpin: set ```iamEncryption``` paramter in ```bin/config.json``` file to enable/disable encrytion. For information can be found [here](#ParameterDetails)
 ```
 
 {
