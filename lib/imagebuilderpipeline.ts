@@ -51,7 +51,7 @@ export class ImagebuilderPipeline extends Construct {
       mandatory_component
     } = props;
 
-    const attr = user_config['attr'] ?? 'poc-0906'
+    const attr = user_config['attr'] ?? 'poc'
     const ami_component_bucket_name = user_config['ami_component_bucket_name'] ?? undefined
     const bucket_create = user_config['ami_component_bucket_create'] ?? true
 
@@ -84,9 +84,6 @@ export class ImagebuilderPipeline extends Construct {
 
     if (mandatory_component) { this.AddComponent(mandatory_component, this.bucket.bucketName, "Build", s3componentdeploy); }
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Build", s3componentdeploy);
-    if (user_config.inspector_validation && user_config.Inspector_Config) {
-      this.AddComponent(user_config["Inspector_Config"], this.bucket.bucketName, "Build", s3componentdeploy);
-    }
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Test", s3componentdeploy);
     if (mandatory_component) { this.AddComponent(mandatory_component, this.bucket.bucketName, "Test", s3componentdeploy); }
 
@@ -117,7 +114,7 @@ export class ImagebuilderPipeline extends Construct {
       base_arn = user_config['baseImage'];
     }
 
-    const instance_profile_name = user_config['instanceProfileName'] ?? `Golden_AMI_Instance_Profile-${user_config['attr']}`
+    const instance_profile_name = user_config['instanceProfileName'] ?? `golden-ami-instance-profile-${attr}`
     const instance_profile_role_name = user_config['instanceProfileRoleName'] ?? undefined
 
 
@@ -142,14 +139,19 @@ export class ImagebuilderPipeline extends Construct {
 
     const key_alias = user_config['key_alias'] ?? undefined
     let keyid
-    if (user_config['iamEncryption'] && !user_config['iamEncryption']) {
+
+    if (user_config['iamEncryption'] === undefined) {
       keyid = undefined
     }
-    else {
-      this.cmk = this.CreateKMSKey(this.distribution, key_alias);
-      keyid = this.cmk.keyId
+    else{
+      if (user_config['iamEncryption']){
+        this.cmk = this.CreateKMSKey(this.distribution, key_alias);
+        keyid = this.cmk.keyId
+      }
+      else {
+        keyid = undefined
+      }
     }
-
     this.recipe = this.buildRecipe(
       base_arn,
       user_config,
@@ -205,12 +207,15 @@ export class ImagebuilderPipeline extends Construct {
     user_config: MainConfing,
     attr: string
   ): imagebuilder.CfnInfrastructureConfiguration {
+    if (user_config["infrastructure"] === undefined ){
+      user_config["infrastructure"] = {}
+    }
     try {
       const infraconfig = new imagebuilder.CfnInfrastructureConfiguration(
         this,
         "Golden_AMI_Instance_Infra",
         {
-          name: user_config["infrastructure"]["name"],
+          name: user_config["infrastructure"]["name"] ?? `golden-ami-infra-${attr}`,
           instanceTypes: user_config["infrastructure"]["instance_type"],
           instanceProfileName: instanceprofile.instanceProfileName!,
           subnetId: user_config["infrastructure"]["subnet_id"],

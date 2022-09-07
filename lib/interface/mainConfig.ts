@@ -15,15 +15,12 @@ export interface MainConfing {
   components_prefix: string;
   key_alias?: string;
   image_recipe: Recipe;
-  golden_ami?: string;
   sns_topic?: string;
   attr?: string
   amitag?: object;
   tag?: object;
   schedule?: object;
-  infrastructure: infrastructure;
-  inspector_validation?: boolean;
-  Inspector_Config?: ComponentConfig;
+  infrastructure?: infrastructure;
   Component_Config: ComponentConfig;
   Distribution?: distribution[];
   distributionName?: string;

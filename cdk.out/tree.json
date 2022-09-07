@@ -175,7 +175,7 @@
                   "aws:cdk:cloudformation:props": {
                     "name": "build1",
                     "platform": "Linux",
-                    "version": "3.0.0",
+                    "version": "4.0.0",
                     "uri": {
                       "Fn::Join": [
                         "",
@@ -195,34 +195,6 @@
                   "version": "2.34.2"
                 }
               },
-              "build2-Build": {
-                "id": "build2-Build",
-                "path": "ImagebuilderPipeline/ImagebuilderPipeline/build2-Build",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ImageBuilder::Component",
-                  "aws:cdk:cloudformation:props": {
-                    "name": "build2",
-                    "platform": "Linux",
-                    "version": "3.0.0",
-                    "uri": {
-                      "Fn::Join": [
-                        "",
-                        [
-                          "s3://",
-                          {
-                            "Ref": "ImagebuilderPipelineF62C751B"
-                          },
-                          "/components/build2.yaml"
-                        ]
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_imagebuilder.CfnComponent",
-                  "version": "2.34.2"
-                }
-              },
               "test1-Test": {
                 "id": "test1-Test",
                 "path": "ImagebuilderPipeline/ImagebuilderPipeline/test1-Test",
@@ -231,7 +203,7 @@
                   "aws:cdk:cloudformation:props": {
                     "name": "test1",
                     "platform": "Linux",
-                    "version": "3.0.0",
+                    "version": "4.0.0",
                     "uri": {
                       "Fn::Join": [
                         "",
@@ -406,108 +378,11 @@
                         "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
                       }
                     ],
-                    "instanceProfileName": "Golden_AMI_Instance_Profile-undefined"
+                    "instanceProfileName": "golden-ami-instance-profile-poc"
                   }
                 },
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.aws_iam.CfnInstanceProfile",
-                  "version": "2.34.2"
-                }
-              },
-              "Golden_AMI_Encryption_Key": {
-                "id": "Golden_AMI_Encryption_Key",
-                "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::KMS::Key",
-                      "aws:cdk:cloudformation:props": {
-                        "keyPolicy": {
-                          "Statement": [
-                            {
-                              "Action": "kms:*",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "AWS": {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      "arn:",
-                                      {
-                                        "Ref": "AWS::Partition"
-                                      },
-                                      ":iam::",
-                                      {
-                                        "Ref": "AWS::AccountId"
-                                      },
-                                      ":root"
-                                    ]
-                                  ]
-                                }
-                              },
-                              "Resource": "*"
-                            },
-                            {
-                              "Action": [
-                                "kms:CreateGrant",
-                                "kms:Decrypt",
-                                "kms:DescribeKey",
-                                "kms:Encrypt",
-                                "kms:Generate*",
-                                "kms:ReEncrypt*"
-                              ],
-                              "Condition": {
-                                "StringLike": {
-                                  "aws:PrincipalArn": {
-                                    "Fn::Join": [
-                                      "",
-                                      [
-                                        "arn:aws:iam::",
-                                        {
-                                          "Ref": "AWS::AccountId"
-                                        },
-                                        ":role/aws-service-role/imagebuilder.amazonaws.com/AWSServiceRoleForImageBuilder"
-                                      ]
-                                    ]
-                                  }
-                                }
-                              },
-                              "Effect": "Allow",
-                              "Principal": {
-                                "AWS": {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      "arn:",
-                                      {
-                                        "Ref": "AWS::Partition"
-                                      },
-                                      ":iam::",
-                                      {
-                                        "Ref": "AWS::AccountId"
-                                      },
-                                      ":root"
-                                    ]
-                                  ]
-                                }
-                              },
-                              "Resource": "*"
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_kms.CfnKey",
-                      "version": "2.34.2"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_kms.Key",
                   "version": "2.34.2"
                 }
               },
@@ -537,31 +412,20 @@
                       {
                         "componentArn": {
                           "Fn::GetAtt": [
-                            "ImagebuilderPipelinebuild2Build83E14989",
-                            "Arn"
-                          ]
-                        }
-                      },
-                      {
-                        "componentArn": {
-                          "Fn::GetAtt": [
                             "ImagebuilderPipelinetest1Test4CBF6C26",
                             "Arn"
                           ]
                         }
                       }
                     ],
-                    "name": "golden-ami-recipe-poc-0906",
+                    "name": "golden-ami-recipe-poc",
                     "parentImage": "ami-0c2ab3b8efb09f272",
-                    "version": "3.0.0",
+                    "version": "4.0.0",
                     "blockDeviceMappings": [
                       {
                         "deviceName": "/dev/xvda",
                         "ebs": {
-                          "encrypted": true,
-                          "kmsKeyId": {
-                            "Ref": "ImagebuilderPipelineGoldenAMIEncryptionKey56A7C01D"
-                          }
+                          "encrypted": false
                         }
                       }
                     ]
@@ -578,8 +442,8 @@
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::ImageBuilder::InfrastructureConfiguration",
                   "aws:cdk:cloudformation:props": {
-                    "instanceProfileName": "Golden_AMI_Instance_Profile-undefined",
-                    "name": "Golden_AMI_Instance_Infra-poc"
+                    "instanceProfileName": "golden-ami-instance-profile-poc",
+                    "name": "golden-ami-infra-poc"
                   }
                 },
                 "constructInfo": {
@@ -599,7 +463,7 @@
                         "Arn"
                       ]
                     },
-                    "name": "golden-ami-pipeline-poc-0906",
+                    "name": "golden-ami-pipeline-poc",
                     "imageRecipeArn": {
                       "Fn::GetAtt": [
                         "ImagebuilderPipelineImageRecipe2B281ADA",

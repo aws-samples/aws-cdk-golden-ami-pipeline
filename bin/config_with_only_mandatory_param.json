@@ -11,17 +11,14 @@
 		"Name": "golden-ami-poc"
 	},
 	"image_recipe": {
-		"image_recipe_version": "3.0.0"
-	},
-	"infrastructure": {
-		"name": "Golden_AMI_Instance_Infra-poc"
+		"image_recipe_version": "4.0.0"
 	},
 	"Component_Config": {
 		"Build": [
 			{
 				"name": "build1",
 				"file": "components/build1.yaml",
-				"version": "3.0.0",
+				"version": "4.0.0",
 				"parameter": [
 					{
 						"name": "testparam",
@@ -30,18 +27,13 @@
 						]
 					}
 				]
-			},
-			{
-				"name": "build2",
-				"file": "components/build2.yaml",
-				"version": "3.0.0"
 			}
 		],
 		"Test": [
 			{
 				"name": "test1",
 				"file": "components/test1.yaml",
-				"version": "3.0.0"
+				"version": "4.0.0"
 			}
 		]
 	}

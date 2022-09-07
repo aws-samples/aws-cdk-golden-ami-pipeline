@@ -68,7 +68,7 @@
    "Properties": {
     "Name": "build1",
     "Platform": "Linux",
-    "Version": "3.0.0",
+    "Version": "4.0.0",
     "Uri": {
      "Fn::Join": [
       "",
@@ -92,41 +92,12 @@
     "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/build1-Build"
    }
   },
-  "ImagebuilderPipelinebuild2Build83E14989": {
-   "Type": "AWS::ImageBuilder::Component",
-   "Properties": {
-    "Name": "build2",
-    "Platform": "Linux",
-    "Version": "3.0.0",
-    "Uri": {
-     "Fn::Join": [
-      "",
-      [
-       "s3://",
-       {
-        "Ref": "ImagebuilderPipelineF62C751B"
-       },
-       "/components/build2.yaml"
-      ]
-     ]
-    }
-   },
-   "DependsOn": [
-    "ImagebuilderPipelineDeployComponentsAwsCliLayerF34DBE13",
-    "ImagebuilderPipelineDeployComponentsCustomResource29782E2D"
-   ],
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain",
-   "Metadata": {
-    "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/build2-Build"
-   }
-  },
   "ImagebuilderPipelinetest1Test4CBF6C26": {
    "Type": "AWS::ImageBuilder::Component",
    "Properties": {
     "Name": "test1",
     "Platform": "Linux",
-    "Version": "3.0.0",
+    "Version": "4.0.0",
     "Uri": {
      "Fn::Join": [
       "",
@@ -272,94 +243,10 @@
       "Ref": "ImagebuilderPipelineGoldenAMIInstanceProfileRoleB7DD8107"
      }
     ],
-    "InstanceProfileName": "Golden_AMI_Instance_Profile-undefined"
+    "InstanceProfileName": "golden-ami-instance-profile-poc"
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Instanc_Profile"
-   }
-  },
-  "ImagebuilderPipelineGoldenAMIEncryptionKey56A7C01D": {
-   "Type": "AWS::KMS::Key",
-   "Properties": {
-    "KeyPolicy": {
-     "Statement": [
-      {
-       "Action": "kms:*",
-       "Effect": "Allow",
-       "Principal": {
-        "AWS": {
-         "Fn::Join": [
-          "",
-          [
-           "arn:",
-           {
-            "Ref": "AWS::Partition"
-           },
-           ":iam::",
-           {
-            "Ref": "AWS::AccountId"
-           },
-           ":root"
-          ]
-         ]
-        }
-       },
-       "Resource": "*"
-      },
-      {
-       "Action": [
-        "kms:CreateGrant",
-        "kms:Decrypt",
-        "kms:DescribeKey",
-        "kms:Encrypt",
-        "kms:Generate*",
-        "kms:ReEncrypt*"
-       ],
-       "Condition": {
-        "StringLike": {
-         "aws:PrincipalArn": {
-          "Fn::Join": [
-           "",
-           [
-            "arn:aws:iam::",
-            {
-             "Ref": "AWS::AccountId"
-            },
-            ":role/aws-service-role/imagebuilder.amazonaws.com/AWSServiceRoleForImageBuilder"
-           ]
-          ]
-         }
-        }
-       },
-       "Effect": "Allow",
-       "Principal": {
-        "AWS": {
-         "Fn::Join": [
-          "",
-          [
-           "arn:",
-           {
-            "Ref": "AWS::Partition"
-           },
-           ":iam::",
-           {
-            "Ref": "AWS::AccountId"
-           },
-           ":root"
-          ]
-         ]
-        }
-       },
-       "Resource": "*"
-      }
-     ],
-     "Version": "2012-10-17"
-    }
-   },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain",
-   "Metadata": {
-    "aws:cdk:path": "ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key/Resource"
    }
   },
   "ImagebuilderPipelineImageRecipe2B281ADA": {
@@ -385,31 +272,20 @@
      {
       "ComponentArn": {
        "Fn::GetAtt": [
-        "ImagebuilderPipelinebuild2Build83E14989",
-        "Arn"
-       ]
-      }
-     },
-     {
-      "ComponentArn": {
-       "Fn::GetAtt": [
         "ImagebuilderPipelinetest1Test4CBF6C26",
         "Arn"
        ]
       }
      }
     ],
-    "Name": "golden-ami-recipe-poc-0906",
+    "Name": "golden-ami-recipe-poc",
     "ParentImage": "ami-0c2ab3b8efb09f272",
-    "Version": "3.0.0",
+    "Version": "4.0.0",
     "BlockDeviceMappings": [
      {
       "DeviceName": "/dev/xvda",
       "Ebs": {
-       "Encrypted": true,
-       "KmsKeyId": {
-        "Ref": "ImagebuilderPipelineGoldenAMIEncryptionKey56A7C01D"
-       }
+       "Encrypted": false
       }
      }
     ]
@@ -423,8 +299,8 @@
   "ImagebuilderPipelineGoldenAMIInstanceInfraCE69FF3F": {
    "Type": "AWS::ImageBuilder::InfrastructureConfiguration",
    "Properties": {
-    "InstanceProfileName": "Golden_AMI_Instance_Profile-undefined",
-    "Name": "Golden_AMI_Instance_Infra-poc"
+    "InstanceProfileName": "golden-ami-instance-profile-poc",
+    "Name": "golden-ami-infra-poc"
    },
    "DependsOn": [
     "ImagebuilderPipelineGoldenAMIInstancProfile216FA320"
@@ -442,7 +318,7 @@
       "Arn"
      ]
     },
-    "Name": "golden-ami-pipeline-poc-0906",
+    "Name": "golden-ami-pipeline-poc",
     "ImageRecipeArn": {
      "Fn::GetAtt": [
       "ImagebuilderPipelineImageRecipe2B281ADA",
@@ -626,7 +502,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/01Qy2rDMBD8ltyVbZuU0mviUAgtNDjQq1HktdlYD6OVGoLxv1eWm7SnmX3NMrOC9TOsFvLCS1V3S00nGI5Bqk6kVjXwGoZtVB0GUTT2l82wlYyj4HU11NhrdzVoA8yj3b0hJDMGhs0Eo9DSnGoJQ9L6kFf0X+iZnBVHsq3G4OxbtCpMnTtJqzc+CjKyxVMkXaPPKoUzvbPTo1Tsp2mJinrMpW285OCjCtFj4WxDbfTyppq3D2lXk01GSBoYSqfzacaD06SuU/nH9paDtAoP3jWk01lnGIZ3zMME481jpSd/VQpRaYLNhQtN2bLIUaSI2+RZFJGDMyWyi17Nr//xzxj6mGKzrkY488P30wu8wuPizERLH20gg1DO+AMVXjigyQEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/01Q0WrDMAz8lr673taOsdc2Y1AYLKSw1+A4SlBry8GyV0rIv89x1m5PdzpJJ04buX2Wm5W68Fq357XBRo7HoPRZJKkeeSvHfdRnCKLo6JctsFcMk+BtPbYwGHe1QEEurbe7IBQzBJa7GSZhlG1aJcfk9aGu4L/AMzoSR6TeQHD0HkmHWbmTNHrjk0CremgimhZ8dimcHRzNh1JxmLsVaBwgl9R5xcFHHaKHwlGHffTq5pqnyzRrkFIQVFaOlTN5NWPpDOrrXP6xA3FQpKH0rkMD0y1SbeY4dfqZNih3Fy4M5oQiJ08f7VNEUUQOzlbALnq9XPrHP2MYYvoSuRbkiR++n17kq3xcnRhx7SMFtCCrBX8A+K4KZbgBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "ImagebuilderPipeline/CDKMetadata/Default"
@@ -640,10 +516,10 @@
    }
   },
   "PipelineName": {
-   "Value": "golden-ami-pipeline-poc-0906"
+   "Value": "golden-ami-pipeline-poc"
   },
   "ImageRecipeName": {
-   "Value": "golden-ami-recipe-poc-0906"
+   "Value": "golden-ami-recipe-poc"
   }
  },
  "Parameters": {

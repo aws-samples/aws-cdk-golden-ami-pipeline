@@ -27,7 +27,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2/70d6e32c5c8d69ce3ad3ffa562a6b13fe3ebebbf44f32243160a68338110baf0.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-west-2/3115808f0c6ba88981f6ae5c6e13c7c65dd892b7d1fdc6d0e651d37737cab3a4.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -82,12 +82,6 @@
             "data": "ImagebuilderPipelinebuild1BuildEA5A3692"
           }
         ],
-        "/ImagebuilderPipeline/ImagebuilderPipeline/build2-Build": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ImagebuilderPipelinebuild2Build83E14989"
-          }
-        ],
         "/ImagebuilderPipeline/ImagebuilderPipeline/test1-Test": [
           {
             "type": "aws:cdk:logicalId",
@@ -110,12 +104,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "ImagebuilderPipelineGoldenAMIInstancProfile216FA320"
-          }
-        ],
-        "/ImagebuilderPipeline/ImagebuilderPipeline/Golden_AMI_Encryption_Key/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "ImagebuilderPipelineGoldenAMIEncryptionKey56A7C01D"
           }
         ],
         "/ImagebuilderPipeline/ImagebuilderPipeline/ImageRecipe": [
