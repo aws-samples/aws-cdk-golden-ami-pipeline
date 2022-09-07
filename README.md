@@ -52,6 +52,9 @@ On a **high level**, the image builder pipeline consists of the following -
 
 # <a name='prereq'></a>Pre-Requisite
 
+-   Ensure you have a Git client installed following [these](https://git-scm.com/downloads)
+-   Set up AWS Credentials in your environment using [these](http://_https//docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html_))
+-   Ensure you have Node [Node](https://nodejs.org/en/download/) installed
 
 To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
 
