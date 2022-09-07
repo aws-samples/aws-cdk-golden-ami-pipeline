@@ -118,8 +118,9 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     ```cd cdk-golden-ami-pipeline```
 - Update Config files. There are two config files - 
 
-    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails)
-    The two additional sample config.json file has been provided. you can use content from these files based on your requirement. 
+    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails).
+
+    Two additional sample ```config.json``` file has been provided. you can use content from these files based on your requirement. 
         -   bin/basic_config.json --> This contains minimum paramter ( those are required ) to deploy the solution
         -   bin/detailed_config.json --> this contains all the paremeters supported in this implementation
 
