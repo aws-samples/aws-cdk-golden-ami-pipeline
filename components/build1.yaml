@@ -1,11 +1,11 @@
-name: InstallPython3Yum
-description: this document installs python3 on ubuntu
+name: Install1
+description: DummyInstall
 schemaVersion: 1.0
 parameters:
   - testparam:
       type: string
       default: "test"
-      description: "File path for payload download."
+      description: "sample parameter example."
 phases:
     - name: build
       steps:

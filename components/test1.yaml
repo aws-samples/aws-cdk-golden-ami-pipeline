@@ -1,7 +1,6 @@
 name: HelloWorldTestingDocument
 description: This is hello world testing document.
 schemaVersion: 1.0
-
 phases:
   - name: test
     steps:
@@ -9,5 +8,5 @@ phases:
         action: ExecuteBash
         inputs:
           commands:
-            - echo "Hello World Again! Test1."
+            - echo "Hello World Again!."
             - sudo cat ~/test.txt

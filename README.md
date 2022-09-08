@@ -129,10 +129,13 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 - Update Config files. There are two config files - 
 
     `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails).
+    
 
     Two additional sample ```config.json``` file has been provided. you can use content from these files based on your requirement. 
         -   bin/basic_config.json --> This contains minimum paramter ( those are required ) to deploy the solution
         -   bin/detailed_config.json --> this contains all the paremeters supported in this implementation
+
+    > Please note that you need to copy your desried configuration to `bin/config.json` file
 
     `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below. In this example we used two Amazon-managed component.
     if you do not want to use any default component file, replace the following line
@@ -181,6 +184,8 @@ The status of the pipeline will change through different phase .
     > Building :arrow_right:  Testing :arrow_right:  Distributing :arrow_right: Integrating :arrow_right: Available
 
     Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
+
+    > If you setup distribution, the image should be available in the traget account/region. Please check EC2 AMI section from AWS Console.
 
 
 # <a name='ParameterDetails'></a>Parameter Details
