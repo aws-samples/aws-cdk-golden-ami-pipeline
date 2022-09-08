@@ -14,10 +14,7 @@
 AMIs provide the information required to launch an Amazon EC2 instance, which is a virtual server in the AWS Cloud. A golden AMI is *an AMI that contains the latest security patches, software, configuration, and software agents that you need to install for logging, security maintenance, and performance monitoring. 
 *
 
-The golden AMI pipeline enables creation, distribution, verification, launch-compliance of the AMI and create a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipies, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using Ec2 image builder service. User needs to define each stage and resources required for each stage of the imge builder pipeline which is a lengthy process 
-
-
-
+The golden AMI pipeline enables creation, distribution, verification, launch-compliance of the AMI and create a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipes, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using Ec2 image builder service. User needs to define each stage and resources required for each stage of the image builder pipeline which is a lengthy process 
 
 
 # Solution
@@ -88,7 +85,7 @@ To configure cross-account distribution permissions in AWS Identity and Access M
 ```
 4. If the AMI you distribute is encrypted, the destination account owner must add the following inline policy to the ```EC2ImageBuilderDistributionCrossAccountRole``` in their account so that they can use your KMS keys. The Principal section contains their account number. This enables Image Builder to act on their behalf when it uses AWS KMS to encrypt and decrypt the AMI with the appropriate keys for each Region.
 
-:pushpin: set ```iamEncryption``` paramter in ```bin/config.json``` file to enable/disable encryption. More information can be found [here](#ParameterDetails)
+:pushpin: set ```iamEncryption``` parameter in ```bin/config.json``` file to enable/disable encryption. More information can be found [here](#ParameterDetails)
 ```
 
 {
@@ -129,13 +126,13 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 - Update Config files. There are two config files - 
 
     `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails).
-    
+
 
     Two additional sample ```config.json``` file has been provided. you can use content from these files based on your requirement. 
-        -   bin/basic_config.json --> This contains minimum paramter ( those are required ) to deploy the solution
-        -   bin/detailed_config.json --> this contains all the paremeters supported in this implementation
+        -   bin/basic_config.json --> This contains minimum parameters ( those are required ) to deploy the solution
+        -   bin/detailed_config.json --> this contains all the parameters supported in this implementation
 
-    > Please note that you need to copy your desried configuration to `bin/config.json` file
+    > Please note that you need to copy your desired configuration to `bin/config.json` file
 
     `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below. In this example we used two Amazon-managed component.
     if you do not want to use any default component file, replace the following line
@@ -185,12 +182,12 @@ The status of the pipeline will change through different phase .
 
     Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
 
-    > If you setup distribution, the image should be available in the traget account/region. Please check EC2 AMI section from AWS Console.
+    > If you setup distribution, the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
 
 
 # <a name='ParameterDetails'></a>Parameter Details
 
-`config.json` file contains the following parameters ("?" represensts optional paramter)- 
+`config.json` file contains the following parameters ("?" represents optional parameters)- 
 
 ```
 baseImage: string;
@@ -232,14 +229,14 @@ resource_removal_policy?: string
 |imagePipelineName|No|String|`golden-ami-pipeline-demo`|`golden-ami-pipeline-${attr}`|The Name of the Image pipeline to be created.|
 |components_prefix|Yes|String|`components`|NA|prefix of the S3 Bucket `ami_component_bucket_name` where the related component files will be uploaded and referenced|
 |iamEncryption|No|Boolean|`true` or `false`|`false`|If enabled, a new CMK key will be created and underlying EBS volume of the AMI will be encrypted with the same|
-|amitag|No|object|[**example**](#amitag)|NA|This tag will be appplied to the distributed AMI in target account/region|
+|amitag|No|object|[**example**](#amitag)|NA|This tag will be applied to the distributed AMI in target account/region|
 |tag|No|object|[**example**](#tag)|NA|This tag will be applied to all the resources created by the CDK application|
-|image_receipe|Yes|recipe|[**example**](#recipe)|NA|EC2 Builder image recipe|
-|infrastructure|yes|[**infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastrure details that will be used to launch EC2 instance|
+|image_recipe|Yes|recipe|[**example**](#recipe)|NA|EC2 Builder image recipe|
+|infrastructure|yes|[**infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastructure details that will be used to launch EC2 instance|
 |Component_Config|Yes|[**ComponentConfig**](#ComponentConfig)|[**example**](#ComponentConfig)|NA|Defines the Build and Test Steps|
 |Distribution|No|list of [**distribution**](#distribution)|[**example**](#distribution)|NA|The config detail about which target account and region the golden AMI will be distributed|
 |distributionName|No|String|`golden-ami-distribution-demo`|`golden-ami-distribution-${attr}`|Distribution settings name|
-|distributionDescription|No|String|`Destribution settings for demo`|`Destribution settings for ${attr}`|Description of the distribution settings
+|distributionDescription|No|String|`Distribution settings for demo`|`Distribution settings for ${attr}`|Description of the distribution settings
 |sns_topic|No|String|`arn:aws:sns:us-east-1:111122223333:myTopic`|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
 |key_alias|No|String|`golden-ami-cmk-key`|NA|If not provided, KMS key will be created without alias name
 |schedule|No|`{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String }` . For more information, [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-schedule.html)|{ "scheduleExpression": "cron(0 10 * * ? *)"}|`Manual`|AMI Pipeline Schedule|
@@ -347,7 +344,7 @@ resource_removal_policy?: string
 |file|Yes|String|components/build1.yaml|NA|user provided component yaml file path. If **arn** is used, then this parameter is not required
 |version|Yes|String|1.0.0|NA|semantic version of the component to be created. If **arn** is used, then this parameter is not required
 |arn|No|String|arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1|NA|amazon managed component arn. Make sure this exists in the account/region the pipeline is being used. Navigate to image builder console ->component->select amazon owned).Also, if arn is provided, then name, file, version parameter is not required. Check the below example|
-|parameter|No|List of [**Component Paremeter**](#parameter)|[**example**](#parameter)|NA|parameter is needed if the component is created with non default parameter
+|parameter|No|List of [**Component Parameter**](#parameter)|[**example**](#parameter)|NA|parameter is needed if the component is created with non default parameter
 
 ### Example
 
@@ -482,7 +479,7 @@ Any changes in Component content , requires a new version to be created. All the
 
 # <a name='cleanup'></a> Clean up
 
-- set the region where the stakc is deployed. For example
+- set the region where the stack is deployed. For example
 
     ``export CDK_DEPLOY_REGION=us-west-2``
 
