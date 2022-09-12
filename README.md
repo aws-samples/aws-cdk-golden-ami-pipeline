@@ -4,6 +4,7 @@
 - [**Solution**](#keyfeatures)
 - [**Target Architecture**](#Background)
 - [**Key Features**](#keyfeatures)
+- [**Limitations**](#limitations)
 - [**Pre Requisite**](#prereq)
 - [**How to Deploy**](#howtodeploy)
 - [**Parameter Details**](#ParameterDetails)
@@ -37,28 +38,45 @@ On a **high level**, the image builder pipeline consists of the following -
 
 
 
-
 # Target Architecture
 
-![alt text](images/Golden_AMI_v2.png)
+![alt text](images/Golden_AMI_v3.png)
 
 # <a name='keyfeatures'></a>Key Features 
--   As part of the security best practice, there will be one Customer Managed Key ( CMK) created per pipeline and the underlying EBS volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later. 
+-   As part of the security best practice, there will be one Customer Managed Key ( CMK) created per pipeline and the underlying Amazon Elastic Block Store (Amazon EBS) volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later.
 
--   Base image can refer to AWS managed public ssm parameter (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest EKS optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
+-   Base image can refer to AWS managed public Parameter Store, a capability of AWS Systems Manager (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest Amazon Elastic Kubernetes Service (Amazon EKS) optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
 
--   User can bring their own Build and Test steps ( in yaml file) or AWS managed pre-build SSM documentation can also be used.
+-   User can bring their own Build and Test steps ( in yaml file) or AWS managed pre-build Systems Manager documentation can also be used.
 
--   Image Pipeline will send SNS notification for success or failure. 
+-   Image Pipeline will send Amazon SNS (Amazon Simple Notification) notification for success or failure.
 
--   AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
+-   AMI Pipeline creation is configuration driven. AWS CDK application will read the user provided configuration and provision the pipeline. 
 
+
+
+
+# <a name='limitations'></a>Limitations
+- An EC2 Image Builder recipe defines the base image to use as your starting point to create a new image, along with the set of components that you add to customize your image and verify that everything is working as expected. A maximum of 20 components, which include build and test, can be applied to a recipe. After you create an image recipe you cannot modify or replace the recipe. To update components after a recipe is created, you must create a new recipe or recipe version. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the recipe version. Any changes to base image, components ( ad/delete/update/re-order) requires a new recipe or recipe version. More information on recipe can be found [here](https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-recipes.html)
+- Updating to any existing component requires a new version to be created. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the component version
 
 # <a name='prereq'></a>Pre-Requisite
 
 -   Ensure you have a Git client installed following [these](https://git-scm.com/downloads)
 -   Set up AWS Credentials in your environment using [these](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
+<<<<<<< HEAD
+-   Ensure you have [Node](https://nodejs.org/en/download/) installed
+-   An active AWS account
+-   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
+-   AWS CDK (version2 )  CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
+
+
+=======
 -   Ensure you have Node [Node](https://nodejs.org/en/download/) installed
+-   An active AWS account
+-   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
+-   AWS CDK (version2 ) CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
+>>>>>>> a60600861ce6d242f619a2790d7ffd5cf88e96a9
 
 To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
 
