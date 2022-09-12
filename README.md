@@ -4,6 +4,7 @@
 - [**Solution**](#keyfeatures)
 - [**Target Architecture**](#Background)
 - [**Key Features**](#keyfeatures)
+- [**Limitations**](#limitations)
 - [**Pre Requisite**](#prereq)
 - [**How to Deploy**](#howtodeploy)
 - [**Parameter Details**](#ParameterDetails)
@@ -54,11 +55,20 @@ On a **high level**, the image builder pipeline consists of the following -
 -   AMI Pipeline creation is configuration driven. CDK application will read the user provided configuration and provision the pipeline. 
 
 
+
+
+# <a name='limitations'></a>Limitations
+- An EC2 Image Builder recipe defines the base image to use as your starting point to create a new image, along with the set of components that you add to customize your image and verify that everything is working as expected. A maximum of 20 components, which include build and test, can be applied to a recipe. After you create an image recipe you cannot modify or replace the recipe. To update components after a recipe is created, you must create a new recipe or recipe version. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the recipe version. Any changes to base image, components ( ad/delete/update/re-order) requires a new recipe or recipe version. More information on recipe can be found [here](https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-recipes.html)
+- Updating to any existing component requires a new version to be created. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the component version
+
 # <a name='prereq'></a>Pre-Requisite
 
 -   Ensure you have a Git client installed following [these](https://git-scm.com/downloads)
 -   Set up AWS Credentials in your environment using [these](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
 -   Ensure you have Node [Node](https://nodejs.org/en/download/) installed
+-   An active AWS account
+-   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
+-   AWS CDK (version2 ) CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
 
 To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
 
