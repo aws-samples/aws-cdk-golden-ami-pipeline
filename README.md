@@ -43,7 +43,7 @@ On a **high level**, the image builder pipeline consists of the following -
 ![alt text](images/Golden_AMI_v2.png)
 
 # <a name='keyfeatures'></a>Key Features 
--   As part of the security best practice, there will be one Customer Managed Key ( CMK) created per pipeline and the underlying Amazon Elastic Block Store (Amazon EBS) volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later.
+-   As part of the security best practice, there will be one Customer Managed Key (CMK) created per pipeline and the underlying Amazon Elastic Block Store (Amazon EBS) volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later.
 
 -   Base image can refer to AWS managed public Parameter Store, a capability of AWS Systems Manager (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest Amazon Elastic Kubernetes Service (Amazon EKS) optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
 
