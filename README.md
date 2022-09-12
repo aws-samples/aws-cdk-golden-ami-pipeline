@@ -1,6 +1,6 @@
 <!-- vscode-markdown-toc -->
 # Table of Contents
-- [**Background**](#Background)
+- [**Overview**](#Background)
 - [**Solution**](#keyfeatures)
 - [**Target Architecture**](#Background)
 - [**Key Features**](#keyfeatures)
@@ -11,19 +11,15 @@
 - [**Conclusion**](#conclusion)
 - [**Clean Up**](#cleanup)
 
-# Background
-AMIs provide the information required to launch an Amazon EC2 instance, which is a virtual server in the AWS Cloud. A golden AMI is *an AMI that contains the latest security patches, software, configuration, and software agents that you need to install for logging, security maintenance, and performance monitoring. 
-*
+# Overview
+Golden Amazon Machine Image (AMI) pipeline enables creation, distribution, verification, launch-compliance of the AMI and creates a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipes, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using EC2 Image Builder service. User needs to define each stage and resources required for each stage of the image builder pipeline which is a lengthy process
 
-The golden AMI pipeline enables creation, distribution, verification, launch-compliance of the AMI and create a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipes, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using Ec2 image builder service. User needs to define each stage and resources required for each stage of the image builder pipeline which is a lengthy process 
+In this solution, we will be using EC2 Image Builder service for the heavy lifting work of building, testing and distributing the Golden AMI. The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple accounts/regions. AWS Cloud Development Kit (AWS CDK) application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) and deploy the necessary resources to create AMI Pipeline.
 
 
 # Solution
-In this solution, we will be using AWS EC2 Image Builder service for the heavy lifting work of Building, testing and Distributing the Golden AMI. 
-The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple account/region. CDK application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) and deploy the necessary resources to create AMI Pipeline. 
-
-In this blog, we will provide users a way to deploy Golden AMI Pipeline using CDK as Infrastructure as Code that will be driven by user configuration. User will be able to provide all configuration information including build, test, distribution that can be used by the CDK application to create and customize the Golden AMI Pipeline. The solution will ensure that the Security best practice is also integrated for AMI Image encryption and distribution. 
-On a **high level**, the image builder pipeline consists of the following - 
+Amazon Machine Image (AMI) provides the information required to launch an Elastic Compute Cloud (Amazon EC2) instance, which is a virtual server in the AWS Cloud. A golden AMI is an AMI that contains the latest security patches, software, configuration, and software agents that you need to install for logging, security maintenance, and performance monitoring.
+In this solution, we will provide users a way to deploy Golden AMI Pipeline using AWS CDK as Infrastructure as Code that will be driven by user configuration. User will be able to provide all configuration information including build, test, distribution that can be used by the AWS CDK application to create and customize the Golden AMI Pipeline. The solution will ensure that the Security best practice is also integrated for AMI Image encryption and distribution. On a **high** level, the image builder pipeline consists of the following -
 
 - Recipe
     -   What Base Image to Use
@@ -40,10 +36,10 @@ On a **high level**, the image builder pipeline consists of the following -
 
 # Target Architecture
 
-![alt text](images/Golden_AMI_v3.png)
+![alt text](images/Golden_AMI_v2.png)
 
 # <a name='keyfeatures'></a>Key Features 
--   As part of the security best practice, there will be one Customer Managed Key ( CMK) created per pipeline and the underlying Amazon Elastic Block Store (Amazon EBS) volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later.
+-   As part of the security best practice, there will be one Customer Managed Key (CMK) created per pipeline and the underlying Amazon Elastic Block Store (Amazon EBS) volume of AMI will be encrypted with the same. This can be turned on/off with parameters which is described later.
 
 -   Base image can refer to AWS managed public Parameter Store, a capability of AWS Systems Manager (for example - /aws/service/eks/optimized-ami/1.14/amazon-linux-2/recommended) that holds the latest Amazon Linux 2 AMI or latest Amazon Elastic Kubernetes Service (Amazon EKS) optimized AMI or it can refer any Base AMI ID (ami-0123456789) that is available in the region where the service is being deployed
 
