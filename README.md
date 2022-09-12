@@ -72,7 +72,6 @@ In this solution, we will provide users a way to deploy Golden AMI Pipeline usin
 -   An active AWS account
 -   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
 -   AWS CDK (version2 ) CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
->>>>>>> a60600861ce6d242f619a2790d7ffd5cf88e96a9
 
 To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
 
