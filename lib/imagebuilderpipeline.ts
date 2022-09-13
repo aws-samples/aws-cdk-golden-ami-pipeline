@@ -340,7 +340,14 @@ export class ImagebuilderPipeline extends Construct {
     );
     role.addToPolicy(
       new iam.PolicyStatement({
-        actions: ["s3:*"],
+        actions: [
+          "s3:Get*",
+          "s3:Delete*",
+          "s3:Create*",
+          "s3:Update*",
+          "s3:List*",
+          "s3:Put*",
+        ],
         resources: [
           `arn:aws:s3:::${bucket_name}`,
           `arn:aws:s3:::${bucket_name}/*`,
@@ -362,6 +369,7 @@ export class ImagebuilderPipeline extends Construct {
   private CreateKMSKey(dist: distribution[] | undefined, alias: string | undefined): kms.Key {
     const cmk = new kms.Key(this, "Golden_AMI_Encryption_Key", {
       alias: alias,
+      enableKeyRotation: true,
     });
 
     cmk.addToResourcePolicy(
