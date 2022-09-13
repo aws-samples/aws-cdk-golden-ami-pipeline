@@ -10,7 +10,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as imagebuilder from "aws-cdk-lib/aws-imagebuilder";
-import * as cdk from "@aws-cdk/core";
+import * as cdk from "aws-cdk-lib";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 
 export interface ImageBuilderProps {

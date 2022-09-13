@@ -28,9 +28,6 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-imagebuilder": "^1.166.1",
-    "@aws-cdk/aws-s3": "^1.166.1",
-    "@aws-cdk/core": "^1.166.1",
     "aws-cdk-lib": "2.34.2",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
