@@ -500,6 +500,9 @@ Any changes in Component content , requires a new version to be created. All the
 
     ```cdk destroy```
 
-
+### Contributors
+ - Sandip Gangapadhyay
+ - Siamak Heshmati
+ - Viyoma Sachdeva
 
 
