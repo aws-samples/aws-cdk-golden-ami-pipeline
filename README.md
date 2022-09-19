@@ -257,7 +257,7 @@ resource_removal_policy?: string
 
 
 
-## ![:large_blue_circle:](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='distribution'></a> **distribution**
+##  :large_blue_circle: <a name='distribution'></a> **distribution**
 
 ### Type
 ```
@@ -287,7 +287,7 @@ resource_removal_policy?: string
 ]
 ```
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='infrastructure'></a> **infrastructure**
+## :large_blue_circle: <a name='infrastructure'></a> **infrastructure**
 
 ### Type
 ```
@@ -324,7 +324,7 @@ resource_removal_policy?: string
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='ComponentConfig'></a> **Component_Config**
+## :large_blue_circle: <a name='ComponentConfig'></a> **Component_Config**
 
 ### Type
 ```
@@ -402,7 +402,7 @@ resource_removal_policy?: string
 Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='recipe'></a> **image_recipe**
+## :large_blue_circle: <a name='recipe'></a> **image_recipe**
 
 ### Type
 
@@ -440,7 +440,7 @@ Any changes in Component content , requires a new version to be created. All the
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='amitag'></a> **amitag**
+## :large_blue_circle: <a name='amitag'></a> **amitag**
 
 
 ### Example
@@ -455,7 +455,7 @@ Any changes in Component content , requires a new version to be created. All the
 ``` 
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='tag'></a> **tag**
+## :large_blue_circle: <a name='tag'></a> **tag**
 
 ### Example
 ```
@@ -466,7 +466,7 @@ Any changes in Component content , requires a new version to be created. All the
 ```
 
 
-## ![#1589F0](https://via.placeholder.com/15/1589F0/000000?text=+) <a name='parameter'></a> **Component parameter**
+## :large_blue_circle: <a name='parameter'></a> **Component parameter**
 
 ### Example
 
