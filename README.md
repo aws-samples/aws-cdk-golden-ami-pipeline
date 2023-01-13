@@ -124,9 +124,10 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
 1.   Clone the Repo and navigate to the folder
 
-    ```git clone https://github.com/aws-samples/aws-cdk-golden-ami-pipeline.git```
+        `git clone https://github.com/aws-samples/aws-cdk-golden-ami-pipeline.git`
 
-    ```cd cdk-golden-ami-pipeline```
+        `cd cdk-golden-ami-pipeline`
+
 2. Update Config files. There are two config files - 
 
     `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#parameterdetails).
