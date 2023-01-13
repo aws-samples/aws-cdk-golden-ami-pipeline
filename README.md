@@ -1,23 +1,24 @@
 <!-- vscode-markdown-toc -->
 # Table of Contents
-- [**Overview**](#Background)
-- [**Solution**](#keyfeatures)
-- [**Target Architecture**](#Background)
+- [**Overview**](#overview)
+- [**Solution**](#solution)
+- [**Target Architecture**](#arch)
 - [**Key Features**](#keyfeatures)
 - [**Limitations**](#limitations)
 - [**Pre Requisite**](#prereq)
 - [**How to Deploy**](#howtodeploy)
-- [**Parameter Details**](#ParameterDetails)
+- [**Verification**](#verification)
+- [**Run Image pipeline**](#pipeline)
+- [**Parameter Details**](#parameterdetails)
 - [**Conclusion**](#conclusion)
 - [**Clean Up**](#cleanup)
 
-# Overview
+# <a name='overview'></a>Overview
 Golden Amazon Machine Image (AMI) pipeline enables creation, distribution, verification, launch-compliance of the AMI and creates a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipes, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using EC2 Image Builder service. User needs to define each stage and resources required for each stage of the image builder pipeline which is a lengthy process
 
 In this solution, we will be using EC2 Image Builder service for the heavy lifting work of building, testing and distributing the Golden AMI. The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple accounts/regions. AWS Cloud Development Kit (AWS CDK) application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) and deploy the necessary resources to create AMI Pipeline.
 
-
-# Solution
+# <a name='solution'></a>Solution
 Amazon Machine Image (AMI) provides the information required to launch an Elastic Compute Cloud (Amazon EC2) instance, which is a virtual server in the AWS Cloud. A golden AMI is an AMI that contains the latest security patches, software, configuration, and software agents that you need to install for logging, security maintenance, and performance monitoring.
 In this solution, we will provide users a way to deploy Golden AMI Pipeline using AWS CDK as Infrastructure as Code that will be driven by user configuration. User will be able to provide all configuration information including build, test, distribution that can be used by the AWS CDK application to create and customize the Golden AMI Pipeline. The solution will ensure that the Security best practice is also integrated for AMI Image encryption and distribution. On a **high** level, the image builder pipeline consists of the following -
 
@@ -34,7 +35,7 @@ In this solution, we will provide users a way to deploy Golden AMI Pipeline usin
 
 
 
-# Target Architecture
+# <a name='arch'></a>Target Architecture
 
 ![alt text](images/Golden_AMI_v2.png)
 
@@ -50,28 +51,18 @@ In this solution, we will provide users a way to deploy Golden AMI Pipeline usin
 -   AMI Pipeline creation is configuration driven. AWS CDK application will read the user provided configuration and provision the pipeline. 
 
 
-
-
 # <a name='limitations'></a>Limitations
-- An EC2 Image Builder recipe defines the base image to use as your starting point to create a new image, along with the set of components that you add to customize your image and verify that everything is working as expected. A maximum of 20 components, which include build and test, can be applied to a recipe. After you create an image recipe you cannot modify or replace the recipe. To update components after a recipe is created, you must create a new recipe or recipe version. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the recipe version. Any changes to base image, components ( ad/delete/update/re-order) requires a new recipe or recipe version. More information on recipe can be found [here](https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-recipes.html)
-- Updating to any existing component requires a new version to be created. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the component version
+- An EC2 Image Builder recipe defines the base image to use as your starting point to create a new image, along with the set of components that you add to customize your image and verify that everything is working as expected. A maximum of 20 components, which include build and test, can be applied to a recipe. After you create an image recipe you cannot modify or replace the recipe. To update components after a recipe is created, you must create a new recipe or recipe version. Pease check the parameter details section [here](#parameterdetails) on how to provide the recipe version. Any changes to base image, components ( ad/delete/update/re-order) requires a new recipe or recipe version. More information on recipe can be found [here](https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-recipes.html)
+- Updating to any existing component requires a new version to be created. Pease check the parameter details section [here](#parameterdetails) on how to provide the component version
 
 # <a name='prereq'></a>Pre-Requisite
 
 -   Ensure you have a Git client installed following [these](https://git-scm.com/downloads)
 -   Set up AWS Credentials in your environment using [these](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
-<<<<<<< HEAD
 -   Ensure you have [Node](https://nodejs.org/en/download/) installed
 -   An active AWS account
 -   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
 -   AWS CDK (version2 )  CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
-
-
-=======
--   Ensure you have Node [Node](https://nodejs.org/en/download/) installed
--   An active AWS account
--   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
--   AWS CDK (version2 ) CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
 
 To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
 
@@ -98,7 +89,7 @@ To configure cross-account distribution permissions in AWS Identity and Access M
 ```
 4. If the AMI you distribute is encrypted, the destination account owner must add the following inline policy to the ```EC2ImageBuilderDistributionCrossAccountRole``` in their account so that they can use your KMS keys. The Principal section contains their account number. This enables Image Builder to act on their behalf when it uses AWS KMS to encrypt and decrypt the AMI with the appropriate keys for each Region.
 
-:pushpin: set ```iamEncryption``` parameter in ```bin/config.json``` file to enable/disable encryption. More information can be found [here](#ParameterDetails)
+:pushpin: set ```iamEncryption``` parameter in ```bin/config.json``` file to enable/disable encryption. More information can be found [here](#parameterdetails)
 ```
 
 {
@@ -131,19 +122,22 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
 # <a name='howtodeploy'></a>How to Deploy
 
--   Clone the Repo and navigate to the folder
+1.   Clone the Repo and navigate to the folder
 
-    ```git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git```
+        `git clone https://github.com/aws-samples/aws-cdk-golden-ami-pipeline.git`
 
-    ```cd cdk-golden-ami-pipeline```
-- Update Config files. There are two config files - 
+        `cd cdk-golden-ami-pipeline`
 
-    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails).
+2. Update Config files. There are two config files - 
+
+    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#parameterdetails).
 
 
     Two additional sample ```config.json``` file has been provided. you can use content from these files based on your requirement. 
-        -   bin/basic_config.json --> This contains minimum parameters ( those are required ) to deploy the solution
-        -   bin/detailed_config.json --> this contains all the parameters supported in this implementation
+
+    - ```bin/basic_config.json``` --> This contains minimum parameters ( those are required ) to deploy the solution
+
+    - ```bin/detailed_config.json``` --> this contains all the parameters supported in this implementation
 
     > Please note that you need to copy your desired configuration to `bin/config.json` file
 
@@ -163,42 +157,52 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     });
     ```
 
-- set the region where the stack will be deployed. For example
+3. set the region where the stack will be deployed. For example
 
     ``export CDK_DEPLOY_REGION=us-west-2``
 
-- set the **baseImage** value in ```bin/config.json``` file. This MUST be available in the account/region you are deploying the pipeline. For example, 
+4. set the **baseImage** value in ```bin/config.json``` file. This MUST be available in the account/region you are deploying the pipeline. For example, 
 
    ```"baseImage": "ami-0c2ab3b8efb09f272"```
 
-- Install required packages
+5. Install required packages
 
     ```npm install```
 
-- Deploy the CDK application
+6. Deploy the CDK application
 
     ```cdk deploy ```
 
--   Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
+# <a name='verification'></a>Verification
+Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
-    * Recipe
-    * Components
-    * Infrastructure
-    * Distribution
-    * Image Pipelines
+Recipe
+    ![alt text](images/Recipe.png)
+Components
+    ![alt text](images/Components.png)
+Infrastructure
+    ![alt text](images/Infrastructure.png)
+Distribution
+    ![alt text](images/Distribution.png)
+Image Pipelines
+    ![alt text](images/Pipeline.png)
+
+# <a name='pipeline'></a>Run the Image Pipeline
+
+Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
+
+ ![alt text](images/run_pipeline.png)
 
 
-- Run the Image Pipeline. Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
-The status of the pipeline will change through different phase . 
 
-    > Building :arrow_right:  Testing :arrow_right:  Distributing :arrow_right: Integrating :arrow_right: Available
+Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
+![alt text](images/imageversiona.png)
+![alt text](images/imageversionb.png)
 
-    Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
-
-    > If you setup distribution, the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
+> If you setup distribution([Settings](https://github.com/aws-samples/aws-cdk-golden-ami-pipeline#distribution) in the bin/config.json file), the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
 
 
-# <a name='ParameterDetails'></a>Parameter Details
+# <a name='parameterdetails'></a>Parameter Details
 
 `config.json` file contains the following parameters ("?" represents optional parameters)- 
 
