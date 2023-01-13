@@ -9,7 +9,7 @@
 - [**How to Deploy**](#howtodeploy)
 - [**Verification**](#verification)
 - [**Run Image pipeline**](#pipeline)
-- [**Parameter Details**](#Parameters)
+- [**Parameter Details**](#parameterdetails)
 - [**Conclusion**](#conclusion)
 - [**Clean Up**](#cleanup)
 
@@ -100,7 +100,7 @@ To configure cross-account distribution permissions in AWS Identity and Access M
 ```
 4. If the AMI you distribute is encrypted, the destination account owner must add the following inline policy to the ```EC2ImageBuilderDistributionCrossAccountRole``` in their account so that they can use your KMS keys. The Principal section contains their account number. This enables Image Builder to act on their behalf when it uses AWS KMS to encrypt and decrypt the AMI with the appropriate keys for each Region.
 
-:pushpin: set ```iamEncryption``` parameter in ```bin/config.json``` file to enable/disable encryption. More information can be found [here](#Parameters)
+:pushpin: set ```iamEncryption``` parameter in ```bin/config.json``` file to enable/disable encryption. More information can be found [here](#parameterdetails)
 ```
 
 {
@@ -140,7 +140,7 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     ```cd cdk-golden-ami-pipeline```
 2. Update Config files. There are two config files - 
 
-    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#Parameters).
+    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#parameterdetails).
 
 
     Two additional sample ```config.json``` file has been provided. you can use content from these files based on your requirement. 
@@ -203,13 +203,16 @@ Navigate to Image Builder Service Console, select the Image Pipeline and start t
 
  ![alt text](images/run_pipeline.png)
 
+
+
 Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
 ![alt text](images/imageversiona.png)
 ![alt text](images/imageversionb.png)
 
 > If you setup distribution([Settings](https://github.com/aws-samples/aws-cdk-golden-ami-pipeline#distribution) in the bin/config.json file), the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
 
-# <a name='Parameters'></a>Parameter Details
+
+# <a name='parameterdetails'></a>Parameter Details
 
 `config.json` file contains the following parameters ("?" represents optional parameters)- 
 
