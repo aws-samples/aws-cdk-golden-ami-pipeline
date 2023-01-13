@@ -135,7 +135,7 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
 1.   Clone the Repo and navigate to the folder
 
-    ```git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git```
+    ```git clone https://github.com/aws-samples/aws-cdk-golden-ami-pipeline.git```
 
     ```cd cdk-golden-ami-pipeline```
 2. Update Config files. There are two config files - 
@@ -210,7 +210,6 @@ Once the status of the Pipeline execution status is available, click version lin
 ![alt text](images/imageversionb.png)
 
 > If you setup distribution([Settings](https://github.com/aws-samples/aws-cdk-golden-ami-pipeline#distribution) in the bin/config.json file), the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
-
 
 # <a name='ParameterDetails'></a>Parameter Details
 
