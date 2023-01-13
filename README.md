@@ -10,8 +10,8 @@
 - [**Verification**](#verification)
 - [**Run Image pipeline**](#pipeline)
 - [**Parameter Details**](#parameterdetails)
-- [**Conclusion**](#conclusion)
 - [**Clean Up**](#cleanup)
+- [**Conclusion**](#conclusion)
 
 # <a name='overview'></a>Overview
 Golden Amazon Machine Image (AMI) pipeline enables creation, distribution, verification, launch-compliance of the AMI and creates a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipes, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using EC2 Image Builder service. User needs to define each stage and resources required for each stage of the image builder pipeline which is a lengthy process
@@ -188,16 +188,16 @@ Image Pipelines
     ![alt text](images/Pipeline.png)
 
 # <a name='pipeline'></a>Run the Image Pipeline
+After you deploy the solution, all you have to do is to navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner and your golden AMI is ready for distribution. 
 
-Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
-
- ![alt text](images/run_pipeline.png)
-
-
+![alt text](images/run_pipeline.png)
 
 Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
+
 ![alt text](images/imageversiona.png)
 ![alt text](images/imageversionb.png)
+
+In less than few minutes, you've created and deployed a new golden image pipeline that you can continue to iterate on in the future and leverage for additional image pipelines as your business grows
 
 > If you setup distribution([Settings](https://github.com/aws-samples/aws-cdk-golden-ami-pipeline#distribution) in the bin/config.json file), the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
 
@@ -491,9 +491,6 @@ Any changes in Component content , requires a new version to be created. All the
 ]
 ```
 
-# <a name='conclusion'></a>Conclusion
-
-
 # <a name='cleanup'></a> Clean up
 
 - set the region where the stack is deployed. For example
@@ -503,6 +500,16 @@ Any changes in Component content , requires a new version to be created. All the
 - Destroy the CDK application
 
     ```cdk destroy```
+
+# <a name='conclusion'></a>Conclusion
+
+In today’s world, organizations need to be agile and be able to scale their applications based on
+the demand. Applications need operating systems to run and operating systems need to have
+tools and third party apps installed on them and properly patched on a regular basis. Maintaining
+and managing organization-wide operating systems at scale can be a challenging task for the
+operation teams. Manually setting up servers just doesn’t scale. With this solution, customers can
+build, test, and deploy custom-built, secure AMIs for their organization and distribute them in a
+multi-account environment.
 
 ### Contributors
  - Sandip Gangapadhyay
