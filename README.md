@@ -7,6 +7,8 @@
 - [**Limitations**](#limitations)
 - [**Pre Requisite**](#prereq)
 - [**How to Deploy**](#howtodeploy)
+- [**Verification**](#verification)
+- [**Run Image pipeline**](#pipeline)
 - [**Parameter Details**](#ParameterDetails)
 - [**Conclusion**](#conclusion)
 - [**Clean Up**](#cleanup)
@@ -131,19 +133,21 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
 # <a name='howtodeploy'></a>How to Deploy
 
--   Clone the Repo and navigate to the folder
+1.   Clone the Repo and navigate to the folder
 
     ```git clone https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline.git```
 
     ```cd cdk-golden-ami-pipeline```
-- Update Config files. There are two config files - 
+2. Update Config files. There are two config files - 
 
     `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#ParameterDetails).
 
 
     Two additional sample ```config.json``` file has been provided. you can use content from these files based on your requirement. 
-        -   bin/basic_config.json --> This contains minimum parameters ( those are required ) to deploy the solution
-        -   bin/detailed_config.json --> this contains all the parameters supported in this implementation
+
+    - ```bin/basic_config.json``` --> This contains minimum parameters ( those are required ) to deploy the solution
+
+    - ```bin/detailed_config.json``` --> this contains all the parameters supported in this implementation
 
     > Please note that you need to copy your desired configuration to `bin/config.json` file
 
@@ -163,39 +167,49 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     });
     ```
 
-- set the region where the stack will be deployed. For example
+3. set the region where the stack will be deployed. For example
 
     ``export CDK_DEPLOY_REGION=us-west-2``
 
-- set the **baseImage** value in ```bin/config.json``` file. This MUST be available in the account/region you are deploying the pipeline. For example, 
+4. set the **baseImage** value in ```bin/config.json``` file. This MUST be available in the account/region you are deploying the pipeline. For example, 
 
    ```"baseImage": "ami-0c2ab3b8efb09f272"```
 
-- Install required packages
+5. Install required packages
 
     ```npm install```
 
-- Deploy the CDK application
+6. Deploy the CDK application
 
     ```cdk deploy ```
 
+# <a name='verification'></a>Verification
 -   Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
     * Recipe
+    ![alt text](images/Recipe.png)
     * Components
+    ![alt text](images/Components.png)
     * Infrastructure
+    ![alt text](images/Infrastructure.png)
     * Distribution
+    ![alt text](images/Distribution.png)
     * Image Pipelines
+    ![alt text](images/Pipeline.png)
+
+# <a name='pipeline'></a>Run the Image Pipeline
+
+Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
+
+ ![alt text](images/run_pipeline.png)
 
 
-- Run the Image Pipeline. Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
-The status of the pipeline will change through different phase . 
 
-    > Building :arrow_right:  Testing :arrow_right:  Distributing :arrow_right: Integrating :arrow_right: Available
+Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
+![alt text](images/imageversiona.png)
+![alt text](images/imageversionb.png)
 
-    Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
-
-    > If you setup distribution, the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
+> If you setup distribution([Settings](https://github.com/aws-samples/aws-cdk-golden-ami-pipeline#distribution) in the bin/config.json file), the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
 
 
 # <a name='ParameterDetails'></a>Parameter Details
