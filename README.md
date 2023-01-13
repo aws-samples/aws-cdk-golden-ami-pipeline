@@ -188,16 +188,16 @@ Image Pipelines
     ![alt text](images/Pipeline.png)
 
 # <a name='pipeline'></a>Run the Image Pipeline
+After you deploy the solution, all you have to do is to navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner and your golden AMI is ready for distribution. 
 
-Navigate to Image Builder Service Console, select the Image Pipeline and start the pipeline by clicking ‘Run Pipeline’ button in the upper right corner. 
-
- ![alt text](images/run_pipeline.png)
-
-
+![alt text](images/run_pipeline.png)
 
 Once the status of the Pipeline execution status is available, click version link to get all the AMI ids ( along with the distributed AMI is different region/account)
+
 ![alt text](images/imageversiona.png)
 ![alt text](images/imageversionb.png)
+
+In less than few minutes, you've created and deployed a new golden image pipeline that you can continue to iterate on in the future and leverage for additional image pipelines as your business grows
 
 > If you setup distribution([Settings](https://github.com/aws-samples/aws-cdk-golden-ami-pipeline#distribution) in the bin/config.json file), the image should be available in the target account/region. Please check EC2 AMI section from AWS Console.
 
