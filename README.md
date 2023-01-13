@@ -1,8 +1,8 @@
 <!-- vscode-markdown-toc -->
 # Table of Contents
-- [**Overview**](#Background)
-- [**Solution**](#keyfeatures)
-- [**Target Architecture**](#Background)
+- [**Overview**](#overview)
+- [**Solution**](#solution)
+- [**Target Architecture**](#arch)
 - [**Key Features**](#keyfeatures)
 - [**Limitations**](#limitations)
 - [**Pre Requisite**](#prereq)
@@ -13,13 +13,12 @@
 - [**Conclusion**](#conclusion)
 - [**Clean Up**](#cleanup)
 
-# Overview
+# <a name='overview'></a>Overview
 Golden Amazon Machine Image (AMI) pipeline enables creation, distribution, verification, launch-compliance of the AMI and creates a continuous and repeatable process for the consumers to generate the golden AMI. Currently when a user wants to build, test and distribute a Golden AMI across multiple accounts/regions, user will have to create multiple resources including image recipes, build and test steps, infrastructure creation and distribution step and connect them together in image pipeline using EC2 Image Builder service. User needs to define each stage and resources required for each stage of the image builder pipeline which is a lengthy process
 
 In this solution, we will be using EC2 Image Builder service for the heavy lifting work of building, testing and distributing the Golden AMI. The code repository contains all the configuration files provided the user. These configuration files will define how the AMI will be built, tested and distributed across multiple accounts/regions. AWS Cloud Development Kit (AWS CDK) application will read configuration file ( the details of the configuration file provided by user is described in Configuration File section) and deploy the necessary resources to create AMI Pipeline.
 
-
-# Solution
+# <a name='solution'></a>Solution
 Amazon Machine Image (AMI) provides the information required to launch an Elastic Compute Cloud (Amazon EC2) instance, which is a virtual server in the AWS Cloud. A golden AMI is an AMI that contains the latest security patches, software, configuration, and software agents that you need to install for logging, security maintenance, and performance monitoring.
 In this solution, we will provide users a way to deploy Golden AMI Pipeline using AWS CDK as Infrastructure as Code that will be driven by user configuration. User will be able to provide all configuration information including build, test, distribution that can be used by the AWS CDK application to create and customize the Golden AMI Pipeline. The solution will ensure that the Security best practice is also integrated for AMI Image encryption and distribution. On a **high** level, the image builder pipeline consists of the following -
 
@@ -36,7 +35,7 @@ In this solution, we will provide users a way to deploy Golden AMI Pipeline usin
 
 
 
-# Target Architecture
+# <a name='arch'></a>Target Architecture
 
 ![alt text](images/Golden_AMI_v2.png)
 
@@ -52,28 +51,18 @@ In this solution, we will provide users a way to deploy Golden AMI Pipeline usin
 -   AMI Pipeline creation is configuration driven. AWS CDK application will read the user provided configuration and provision the pipeline. 
 
 
-
-
 # <a name='limitations'></a>Limitations
-- An EC2 Image Builder recipe defines the base image to use as your starting point to create a new image, along with the set of components that you add to customize your image and verify that everything is working as expected. A maximum of 20 components, which include build and test, can be applied to a recipe. After you create an image recipe you cannot modify or replace the recipe. To update components after a recipe is created, you must create a new recipe or recipe version. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the recipe version. Any changes to base image, components ( ad/delete/update/re-order) requires a new recipe or recipe version. More information on recipe can be found [here](https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-recipes.html)
-- Updating to any existing component requires a new version to be created. Pease check the parameter details section [here](https://gitlab.aws.dev/gangapad/cdk-golden-ami-pipeline) on how to provide the component version
+- An EC2 Image Builder recipe defines the base image to use as your starting point to create a new image, along with the set of components that you add to customize your image and verify that everything is working as expected. A maximum of 20 components, which include build and test, can be applied to a recipe. After you create an image recipe you cannot modify or replace the recipe. To update components after a recipe is created, you must create a new recipe or recipe version. Pease check the parameter details section [here](#parameterdetails) on how to provide the recipe version. Any changes to base image, components ( ad/delete/update/re-order) requires a new recipe or recipe version. More information on recipe can be found [here](https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-recipes.html)
+- Updating to any existing component requires a new version to be created. Pease check the parameter details section [here](#parameterdetails) on how to provide the component version
 
 # <a name='prereq'></a>Pre-Requisite
 
 -   Ensure you have a Git client installed following [these](https://git-scm.com/downloads)
 -   Set up AWS Credentials in your environment using [these](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
-<<<<<<< HEAD
 -   Ensure you have [Node](https://nodejs.org/en/download/) installed
 -   An active AWS account
 -   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
 -   AWS CDK (version2 )  CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
-
-
-=======
--   Ensure you have Node [Node](https://nodejs.org/en/download/) installed
--   An active AWS account
--   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
--   AWS CDK (version2 ) CLI. Refer [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) on how to install
 
 To configure cross-account distribution permissions in AWS Identity and Access Management (IAM), follow these steps:
 
