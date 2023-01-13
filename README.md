@@ -174,17 +174,17 @@ For more information on setting up cross-account AMI distribution, visit [Page](
     ```cdk deploy ```
 
 # <a name='verification'></a>Verification
--   Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
+Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
 
-    * Recipe
+Recipe
     ![alt text](images/Recipe.png)
-    * Components
+Components
     ![alt text](images/Components.png)
-    * Infrastructure
+Infrastructure
     ![alt text](images/Infrastructure.png)
-    * Distribution
+Distribution
     ![alt text](images/Distribution.png)
-    * Image Pipelines
+Image Pipelines
     ![alt text](images/Pipeline.png)
 
 # <a name='pipeline'></a>Run the Image Pipeline
