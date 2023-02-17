@@ -57,8 +57,8 @@ In this solution, we will provide users a way to deploy Golden AMI Pipeline usin
 
 # <a name='prereq'></a>Pre-Requisite
 
--   Ensure you have a Git client installed following [these](https://git-scm.com/downloads)
--   Set up AWS Credentials in your environment using [these](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html)
+-   Ensure you have a Git client installed following [these](https://git-scm.com/downloads) instruction
+-   Set up AWS Credentials in your environment using [these](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html) instruction
 -   Ensure you have [Node](https://nodejs.org/en/download/) installed
 -   An active AWS account
 -   A web browser that is supported for use with the AWS Management Console. (See the [list](https://aws.amazon.com/premiumsupport/knowledge-center/browsers-management-console/) of supported browsers)
