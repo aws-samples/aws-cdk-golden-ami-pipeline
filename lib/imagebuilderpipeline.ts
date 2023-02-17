@@ -54,14 +54,17 @@ export class ImagebuilderPipeline extends Construct {
     const attr = user_config['attr'] ?? 'demo'
     const ami_component_bucket_name = user_config['ami_component_bucket_name'] ?? undefined
     const bucket_create = user_config['ami_component_bucket_create'] ?? true
-    console.log(bucket_create)
-
     if (bucket_create) {
-      console.log(bucket_create)
       this.bucket = new Bucket(this, id, {
         versioned: user_config['ami_component_bucket_version'],
         bucketName: ami_component_bucket_name,
+        encryption: cdk.aws_s3.BucketEncryption.S3_MANAGED
       });
+      this.bucket.addToResourcePolicy(new iam.PolicyStatement({
+        actions: ['s3:Get*','s3:Put*','s3:List*'],
+        resources: [`arn:aws:s3:::${this.bucket.bucketName}`,`arn:aws:s3:::${this.bucket.bucketName}/*`],
+        principals: [new iam.AccountRootPrincipal()],
+      }));
     }
     else {
       if (ami_component_bucket_name === undefined) {
@@ -331,11 +334,10 @@ export class ImagebuilderPipeline extends Construct {
     role.addManagedPolicy(
       iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonInspectorFullAccess")
     );
-
     role.addToPolicy(
       new iam.PolicyStatement({
-        actions: ["ssm:SendCommand", "ec2:CreateTags"],
-        resources: ["*"],
+        actions: ["ec2:CreateTags"],
+        resources: [`arn:aws:ec2:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:*/*`]
       })
     );
     role.addToPolicy(
