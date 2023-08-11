@@ -14,6 +14,8 @@ import * as cdk from "aws-cdk-lib";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { ISecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
+import { infrastructure } from "./interface/Infrastructure";
+import { Recipe } from "./interface/Recipe";
 
 
 export interface ImageBuilderProps {
@@ -28,7 +30,7 @@ export interface component_list {
     value: string[];
   }[];
 }
-export class ImagebuilderPipeline extends Construct {
+export class ImagebuilderPipeline extends Construct implements MainConfing{
   private amitag: object;
   private tag: object;
   public instance_profile_role: iam.CfnInstanceProfile;
@@ -185,6 +187,27 @@ export class ImagebuilderPipeline extends Construct {
     );
     this.pipeline.addDependsOn(this.infra);
   }
+  baseImage: cdk.aws_ec2.IMachineImage;
+  baseImageType?: string | undefined;
+  ami_component_bucket_name?: IBucket | undefined;
+  ami_component_bucket_create?: boolean | undefined;
+  ami_component_bucket_version?: boolean | undefined;
+  imagePipelineName?: string | undefined;
+  instanceProfileName?: string | undefined;
+  instanceProfileRoleName?: string | undefined;
+  iamEncryption?: boolean | undefined;
+  components_prefix: string;
+  key_alias?: string | undefined;
+  image_recipe: Recipe;
+  sns_topic?: cdk.aws_sns.ITopic | undefined;
+  attr?: string | undefined;
+  schedule?: object | undefined;
+  infrastructure?: infrastructure | undefined;
+  Component_Config: ComponentConfig;
+  Distribution?: distribution[] | undefined;
+  distributionName?: string | undefined;
+  distributionDescription?: string | undefined;
+  resource_removal_policy?: cdk.RemovalPolicy | undefined;
 
   private CreateImagePipeline(
     imageRecipe: imagebuilder.CfnImageRecipe,
