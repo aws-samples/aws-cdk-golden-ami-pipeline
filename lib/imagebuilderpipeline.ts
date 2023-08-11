@@ -1,8 +1,8 @@
 import { CfnResource, IResolvable, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { MainConfing } from "./interface/MainConfig";
-import { ComponentConfig } from "./interface/Component_config";
-import { distribution } from "./interface/Distribution";
+import { MainConfing } from "./interface/mainConfig";
+import { ComponentConfig } from "./interface/component_config";
+import { distribution } from "./interface/distribution";
 import path = require("path");
 import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { IBucket, Bucket } from "aws-cdk-lib/aws-s3";
@@ -12,6 +12,9 @@ import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as imagebuilder from "aws-cdk-lib/aws-imagebuilder";
 import * as cdk from "aws-cdk-lib";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
+import { ISecurityGroup } from "aws-cdk-lib/aws-ec2";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+
 
 export interface ImageBuilderProps {
   user_config: MainConfing
@@ -25,7 +28,6 @@ export interface component_list {
     value: string[];
   }[];
 }
-
 export class ImagebuilderPipeline extends Construct {
   private amitag: object;
   private tag: object;
@@ -51,13 +53,15 @@ export class ImagebuilderPipeline extends Construct {
       default_component
     } = props;
 
+
+
     const attr = user_config['attr'] ?? 'demo'
     const ami_component_bucket_name = user_config['ami_component_bucket_name'] ?? undefined
     const bucket_create = user_config['ami_component_bucket_create'] ?? true
     if (bucket_create) {
       this.bucket = new Bucket(this, id, {
         versioned: user_config['ami_component_bucket_version'],
-        bucketName: ami_component_bucket_name,
+        bucketName: ami_component_bucket_name?.bucketName,
         encryption: cdk.aws_s3.BucketEncryption.S3_MANAGED
       });
       this.bucket.addToResourcePolicy(new iam.PolicyStatement({
@@ -75,7 +79,7 @@ export class ImagebuilderPipeline extends Construct {
         this.bucket = Bucket.fromBucketName(
           this,
           'imported-bucket-from-name',
-          ami_component_bucket_name,
+          ami_component_bucket_name.bucketName,
         );
       }
     }
@@ -111,11 +115,11 @@ export class ImagebuilderPipeline extends Construct {
 
     let base_arn: string = "";
     if (user_config["baseImageType"] === "ssm") {
-      base_arn = ssm.StringParameter.fromStringParameterAttributes(this, "existingssm", { parameterName: user_config['baseImage'] }).stringValue
+      base_arn = ssm.StringParameter.fromStringParameterAttributes(this, "existingssm", { parameterName: user_config['baseImage'].getImage(this).imageId }).stringValue
 
     }
     else {
-      base_arn = user_config['baseImage'];
+      base_arn = user_config['baseImage'].getImage(this).imageId
     }
 
     const instance_profile_name = user_config['instanceProfileName'] ?? `golden-ami-instance-profile-${attr}`
@@ -214,17 +218,24 @@ export class ImagebuilderPipeline extends Construct {
     if (user_config["infrastructure"] === undefined ){
       user_config["infrastructure"] = {}
     }
+    console.log(ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.LARGE).toString)
+    console.log(user_config["infrastructure"]["instance_type"])
+    console.log("$$",user_config["infrastructure"]["instance_type"]!.forEach(element => [element.toString()]))
     try {
       const infraconfig = new imagebuilder.CfnInfrastructureConfiguration(
         this,
         "Golden_AMI_Instance_Infra",
         {
           name: user_config["infrastructure"]["name"] ?? `golden-ami-infra-${attr}`,
-          instanceTypes: user_config["infrastructure"]["instance_type"],
+          instanceTypes: ["t2.large"],
+          // instanceTypes: user_config["infrastructure"]["instance_type"]?.map(value => value.toString)
+
           instanceProfileName: instanceprofile.instanceProfileName!,
-          subnetId: user_config["infrastructure"]["subnet_id"],
-          securityGroupIds: user_config["infrastructure"]["security_groups"],
-          snsTopicArn: user_config["sns_topic"]
+          subnetId: user_config["infrastructure"]["subnet_id"]?.subnetId,
+          // securityGroupIds: user_config["infrastructure"]["security_groups"] as ISecurityGroup,
+          securityGroupIds: ["sg-00be3805ab84f7567"],
+
+          snsTopicArn: user_config["sns_topic"]?.topicArn
         }
       );
       return infraconfig;

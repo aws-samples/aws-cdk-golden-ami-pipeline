@@ -4,6 +4,7 @@
 	"ami_component_bucket_name": "golden-ami-bucket-20230802",
 	"ami_component_bucket_create": true,
 	"attr": "blog-demo",
+	"sns_topic": "arn:aws:sns:us-east-1:993348658863:test",
 	"imagePipelineName": "golden-ami-recipe-blog-demo",
 	"components_prefix": "components",
 	"instanceProfileName": "golden-ami-instance-profile-blog-demo",
