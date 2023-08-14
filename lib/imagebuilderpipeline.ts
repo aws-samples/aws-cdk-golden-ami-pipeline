@@ -265,6 +265,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
       throw new Error("Error creating infra config");
     }
   }
+  
   private CreateDistribution(
     distribution: distribution[],
     amitag: Tags | undefined,
