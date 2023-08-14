@@ -1,6 +1,5 @@
 import { CfnResource, IResolvable, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { MainConfing } from "./interface/mainConfig";
 import { ComponentConfig } from "./interface/component_config";
 import { distribution } from "./interface/distribution";
 import path = require("path");
@@ -12,16 +11,19 @@ import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as imagebuilder from "aws-cdk-lib/aws-imagebuilder";
 import * as cdk from "aws-cdk-lib";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { ISecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { infrastructure } from "./interface/Infrastructure";
 import { Recipe } from "./interface/Recipe";
+import { MainConfig } from "./interface/mainConfig";
+import { Tags } from "./interface/common_interfaces";
+
 
 
 export interface ImageBuilderProps {
-  user_config: MainConfing
+  user_config: MainConfig
   default_component?: ComponentConfig
 }
+
 
 export interface component_list {
   componentArn: string;
@@ -30,9 +32,9 @@ export interface component_list {
     value: string[];
   }[];
 }
-export class ImagebuilderPipeline extends Construct implements MainConfing{
-  private amitag: object;
-  private tag: object;
+export class ImagebuilderPipeline extends Construct implements MainConfig {
+  amitag: Tags;
+  tag: Tags;
   public instance_profile_role: iam.CfnInstanceProfile;
   public cmk: kms.Key
   public dist: imagebuilder.CfnDistributionConfiguration;
@@ -235,29 +237,26 @@ export class ImagebuilderPipeline extends Construct implements MainConfing{
   }
   private CreateInfra(
     instanceprofile: iam.CfnInstanceProfile,
-    user_config: MainConfing,
+    user_config: MainConfig,
     attr: string
   ): imagebuilder.CfnInfrastructureConfiguration {
     if (user_config["infrastructure"] === undefined ){
       user_config["infrastructure"] = {}
     }
-    console.log(ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.LARGE).toString)
-    console.log(user_config["infrastructure"]["instance_type"])
-    console.log("$$",user_config["infrastructure"]["instance_type"]!.forEach(element => [element.toString()]))
+    let instance_type = [user_config["infrastructure"]["instance_type"]]
+    let security_group = [user_config["infrastructure"]["security_groups"]]
+    
     try {
       const infraconfig = new imagebuilder.CfnInfrastructureConfiguration(
         this,
         "Golden_AMI_Instance_Infra",
         {
           name: user_config["infrastructure"]["name"] ?? `golden-ami-infra-${attr}`,
-          instanceTypes: ["t2.large"],
-          // instanceTypes: user_config["infrastructure"]["instance_type"]?.map(value => value.toString)
-
+          //instanceTypes: ["t2.large"],
+          instanceTypes: instance_type.map(instance_type => instance_type?.toString()!),
           instanceProfileName: instanceprofile.instanceProfileName!,
           subnetId: user_config["infrastructure"]["subnet_id"]?.subnetId,
-          // securityGroupIds: user_config["infrastructure"]["security_groups"] as ISecurityGroup,
-          securityGroupIds: ["sg-00be3805ab84f7567"],
-
+          securityGroupIds: security_group.map(security_group => security_group?.toString()!),
           snsTopicArn: user_config["sns_topic"]?.topicArn
         }
       );
@@ -268,7 +267,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfing{
   }
   private CreateDistribution(
     distribution: distribution[],
-    amitag: object | undefined,
+    amitag: Tags | undefined,
     tag: object | undefined,
     name: string,
     description: string | undefined
@@ -278,7 +277,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfing{
     distribution.forEach((value) => {
       const amiDistributionConfiguration: imagebuilder.CfnDistributionConfiguration.AmiDistributionConfigurationProperty =
       {
-        amiTags: amitag as IResolvable,
+        amiTags: amitag,
         targetAccountIds: value.accounts,
       };
       const distributionProperty: imagebuilder.CfnDistributionConfiguration.DistributionProperty =
@@ -307,7 +306,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfing{
   }
   private buildRecipe(
     base_arn: string,
-    user_config: MainConfing,
+    user_config: MainConfig,
     keyid: string | undefined,
     component_list: component_list[],
     attr: string

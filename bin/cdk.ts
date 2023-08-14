@@ -3,7 +3,7 @@ import user_config from "./config.json";
 import default_component from "./default_component.json";
 import { Stack } from "aws-cdk-lib";
 import { ImagebuilderPipeline } from './../lib/imagebuilderpipeline'
-import { MainConfing } from './../lib/interface/mainConfig'
+import { MainConfig } from './../lib/interface/mainConfig'
 import * as sns from "aws-cdk-lib/aws-sns";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as s3 from "aws-cdk-lib/aws-s3";
@@ -23,7 +23,7 @@ export class createImageBuilder extends cdk.Stack {
     super(scope, id, props);
 
 
-    const ami_config: MainConfing = {
+    const ami_config: MainConfig = {
       // "baseImage": EcsEc2LaunchTarget."ami-0f34c5ae932e6f0e4",
       "baseImage": ec2.MachineImage.latestAmazonLinux(),
       "baseImageType": "id",
