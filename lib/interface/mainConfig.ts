@@ -31,3 +31,5 @@ export interface MainConfing {
   distributionDescription?: string;
   resource_removal_policy?: cdk.RemovalPolicy
 }
+
+
