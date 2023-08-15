@@ -6,7 +6,7 @@ import * as sns from "aws-cdk-lib/aws-sns";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as cdk from "aws-cdk-lib";
-import { Tags } from "./common_interfaces";
+import { Tags } from "./tag_interfaces";
 
 export interface MainConfig {
   baseImage: ec2.IMachineImage

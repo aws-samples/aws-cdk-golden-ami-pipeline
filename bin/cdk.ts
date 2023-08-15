@@ -1,5 +1,4 @@
 import * as cdk from "aws-cdk-lib";
-import user_config from "./config.json";
 import default_component from "./default_component.json";
 import { Stack } from "aws-cdk-lib";
 import { ImagebuilderPipeline } from './../lib/imagebuilderpipeline'
@@ -24,14 +23,12 @@ export class createImageBuilder extends cdk.Stack {
 
 
     const ami_config: MainConfig = {
-      // "baseImage": EcsEc2LaunchTarget."ami-0f34c5ae932e6f0e4",
       "baseImage": ec2.MachineImage.latestAmazonLinux(),
       "baseImageType": "id",
       "ami_component_bucket_name": s3.Bucket.fromBucketName(this, 'MyBucket', "golden-ami-bucket-20230802-1"),
       "ami_component_bucket_create": true,
       "attr": "blog-demo",
       "sns_topic": sns.Topic.fromTopicArn(this, 'MyTopic', "arn:aws:sns:us-east-1:993348658863:test"),
-      // "sns_topic": new sns.Topic(this, 'MyTopic').topicArn,
       "imagePipelineName": "golden-ami-recipe-blog-demo",
       "components_prefix": "components",
       "instanceProfileName": "golden-ami-instance-profile-blog-demo",
@@ -125,6 +122,3 @@ const stack = new createImageBuilder(app, "ImagebuilderPipeline", {
 cdk.Tags.of(stack).add(tag_env.key,tag_env.value)
 cdk.Tags.of(stack).add(tag_name.key,tag_name.value)
 app.synth();
-
-
-// instanceTypes: ! user_config["infrastructure"]["instance_type"]!.forEach((value) => [value!]),

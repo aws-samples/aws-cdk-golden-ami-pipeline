@@ -15,7 +15,7 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { infrastructure } from "./interface/Infrastructure";
 import { Recipe } from "./interface/Recipe";
 import { MainConfig } from "./interface/mainConfig";
-import { Tags } from "./interface/common_interfaces";
+import { Tags } from "./interface/tag_interfaces";
 
 
 
@@ -35,6 +35,29 @@ export interface component_list {
 export class ImagebuilderPipeline extends Construct implements MainConfig {
   amitag: Tags;
   tag: Tags;
+  
+  baseImage: cdk.aws_ec2.IMachineImage;
+  baseImageType?: string | undefined;
+  ami_component_bucket_name?: IBucket | undefined;
+  ami_component_bucket_create?: boolean | undefined;
+  ami_component_bucket_version?: boolean | undefined;
+  imagePipelineName?: string | undefined;
+  instanceProfileName?: string | undefined;
+  instanceProfileRoleName?: string | undefined;
+  iamEncryption?: boolean | undefined;
+  components_prefix: string;
+  key_alias?: string | undefined;
+  image_recipe: Recipe;
+  sns_topic?: cdk.aws_sns.ITopic | undefined;
+  attr?: string | undefined;
+  schedule?: object | undefined;
+  infrastructure?: infrastructure | undefined;
+  Component_Config: ComponentConfig;
+  Distribution?: distribution[] | undefined;
+  distributionName?: string | undefined;
+  distributionDescription?: string | undefined;
+  resource_removal_policy?: cdk.RemovalPolicy | undefined;
+
   public instance_profile_role: iam.CfnInstanceProfile;
   public cmk: kms.Key
   public dist: imagebuilder.CfnDistributionConfiguration;
@@ -56,7 +79,6 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
       user_config,
       default_component
     } = props;
-
 
 
     const attr = user_config['attr'] ?? 'demo'
@@ -189,28 +211,6 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
     );
     this.pipeline.addDependsOn(this.infra);
   }
-  baseImage: cdk.aws_ec2.IMachineImage;
-  baseImageType?: string | undefined;
-  ami_component_bucket_name?: IBucket | undefined;
-  ami_component_bucket_create?: boolean | undefined;
-  ami_component_bucket_version?: boolean | undefined;
-  imagePipelineName?: string | undefined;
-  instanceProfileName?: string | undefined;
-  instanceProfileRoleName?: string | undefined;
-  iamEncryption?: boolean | undefined;
-  components_prefix: string;
-  key_alias?: string | undefined;
-  image_recipe: Recipe;
-  sns_topic?: cdk.aws_sns.ITopic | undefined;
-  attr?: string | undefined;
-  schedule?: object | undefined;
-  infrastructure?: infrastructure | undefined;
-  Component_Config: ComponentConfig;
-  Distribution?: distribution[] | undefined;
-  distributionName?: string | undefined;
-  distributionDescription?: string | undefined;
-  resource_removal_policy?: cdk.RemovalPolicy | undefined;
-
   private CreateImagePipeline(
     imageRecipe: imagebuilder.CfnImageRecipe,
     dist: string | undefined,
@@ -246,8 +246,8 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
     let instance_type = user_config["infrastructure"]["instance_type"]
     let security_group = user_config["infrastructure"]["security_groups"]
 
-    console.log(instance_type.map(instance_type => instance_type?.toString()!))
-    console.log(security_group.map(security_group => security_group?.toString()!))
+    // console.log(instance_type.map(instance_type => instance_type?.toString()!))
+    // console.log(security_group.map(security_group => security_group?.toString()!))
     
     try {
       const infraconfig = new imagebuilder.CfnInfrastructureConfiguration(
@@ -256,10 +256,10 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
         {
           name: user_config["infrastructure"]["name"] ?? `golden-ami-infra-${attr}`,
           //instanceTypes: ["t2.large"],
-          instanceTypes: instance_type.map(instance_type => instance_type?.toString()!),
+          instanceTypes: instance_type!.map(instance_type => instance_type?.toString()!),
           instanceProfileName: instanceprofile.instanceProfileName!,
           subnetId: user_config["infrastructure"]["subnet_id"]?.subnetId,
-          securityGroupIds: security_group.map(security_group => security_group?.toString()!),
+          securityGroupIds: security_group!.map(security_group => security_group.securityGroupId?.toString()!),
           snsTopicArn: user_config["sns_topic"]?.topicArn
         }
       );
