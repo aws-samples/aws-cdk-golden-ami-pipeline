@@ -3,7 +3,7 @@
 	"ami_component_bucket_name": s3.Bucket.fromBucketName(this, 'MyBucket', "<New_S3_Bucket_Name>"),
 	"ami_component_bucket_create": true,
 	"attr": "blog-demo",
-    "sns_topic": sns.Topic.fromTopicArn(this, 'MyTopic', "arn:aws:sns:us-east-1:993348658863:test"),
+    "sns_topic": sns.Topic.fromTopicArn(this, 'MyTopic', "arn:aws:sns:us-east-1:11111111111:YOUR_TOPIC_NAME"),
 	"imagePipelineName": "golden-ami-recipe-blog-demo",
 	"components_prefix": "components",
 	"instanceProfileName": "golden-ami-instance-profile-blog-demo",

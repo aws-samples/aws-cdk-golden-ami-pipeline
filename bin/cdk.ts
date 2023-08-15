@@ -2,6 +2,10 @@ import * as cdk from "aws-cdk-lib";
 import { Stack } from "aws-cdk-lib";
 import { ImagebuilderPipeline } from './../lib/imagebuilderpipeline'
 import { MainConfig } from './../lib/interface/mainConfig'
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import * as sns from "aws-cdk-lib/aws-sns";
+
 const app = new cdk.App();
 
 // const ami_config: MainConfing = user_config;
@@ -18,7 +22,7 @@ export class createImageBuilder extends cdk.Stack {
     super(scope, id, props);
     // Props can be passed using ami_config variable. For example, refer to the folder `example_props`
     let ami_config: MainConfig 
-
+   
     const Golden_AMI_Pipeline = new ImagebuilderPipeline(this, "ImagebuilderPipeline", {
       user_config: ami_config!
     });

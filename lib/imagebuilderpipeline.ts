@@ -253,7 +253,9 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
       );
       return infraconfig;
     } catch (error) {
-      throw new Error("Error creating infra config");
+      console.log(error)
+        console.log(error)
+        throw new Error("Error creating infra config");
     }
   }
   
