@@ -110,7 +110,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
       destinationBucket: this.bucket,
       destinationKeyPrefix: user_config['components_prefix']
     });
-    let default_component = user_config['default_Component_Config']
+    const default_component = user_config['default_Component_Config']
     if (default_component) { this.AddComponent(default_component, this.bucket.bucketName, "Build", s3componentdeploy); }
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Build", s3componentdeploy);
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Test", s3componentdeploy);
@@ -134,7 +134,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
       comp_list = { componentArn: "" };
     });
 
-    let base_arn = user_config['baseImage'].getImage(this).imageId
+    const base_arn = user_config['baseImage'].getImage(this).imageId
 
     const instance_profile_name = user_config['instanceProfileName'] ?? `golden-ami-instance-profile-${attr}`
     const instance_profile_role_name = user_config['instanceProfileRoleName'] ?? undefined
@@ -231,8 +231,8 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
     if (user_config["infrastructure"] === undefined ){
       user_config["infrastructure"] = {}
     }
-    let instance_type = user_config["infrastructure"]["instance_type"]
-    let security_group = user_config["infrastructure"]["security_groups"]
+    const instance_type = user_config["infrastructure"]["instance_type"]
+    const security_group = user_config["infrastructure"]["security_groups"]
 
     // console.log(instance_type.map(instance_type => instance_type?.toString()!))
     // console.log(security_group.map(security_group => security_group?.toString()!))
@@ -264,7 +264,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
     name: string,
     description: string | undefined
   ): imagebuilder.CfnDistributionConfiguration {
-    let distributions_list: imagebuilder.CfnDistributionConfiguration.DistributionProperty[] =
+    const distributions_list: imagebuilder.CfnDistributionConfiguration.DistributionProperty[] =
       [];
     distribution.forEach((value) => {
       const amiDistributionConfiguration: imagebuilder.CfnDistributionConfiguration.AmiDistributionConfigurationProperty =
@@ -442,7 +442,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
           );
         });
       })
-    };
+    }
     return cmk;
   }
   private AddComponent(
@@ -458,10 +458,10 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
     else if (component_type === "Test") build_type = "Test";
 
     if (build_type in config) {
-      let cfg = config[build_type as keyof typeof config];
+      const cfg = config[build_type as keyof typeof config];
 
       cfg!.forEach((value) => {
-        let arn = value.arn;
+        const arn = value.arn;
         if (value.arn) {
           if ("parameter" in value) {
             this.componentArn.push({
@@ -472,8 +472,8 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
             this.componentArn.push({ arn: arn! });
           }
         } else if (value.file) {
-          let uri = `s3://${bucket_name}/${value.file}`;
-          let imageBuild = new imagebuilder.CfnComponent(
+          const uri = `s3://${bucket_name}/${value.file}`;
+          const imageBuild = new imagebuilder.CfnComponent(
             this,
             `${value.name}-${build_type}`,
             {
