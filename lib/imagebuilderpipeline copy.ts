@@ -243,9 +243,8 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
     if (user_config["infrastructure"] === undefined ){
       user_config["infrastructure"] = {}
     }
-    let instance_type = user_config["infrastructure"]["instance_type"]
-    let security_group = user_config["infrastructure"]["security_groups"]
-
+    let instance_type = [user_config["infrastructure"]["instance_type"]]
+    let security_group = [user_config["infrastructure"]["security_groups"]]
     console.log(instance_type.map(instance_type => instance_type?.toString()!))
     console.log(security_group.map(security_group => security_group?.toString()!))
     

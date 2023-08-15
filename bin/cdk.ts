@@ -27,7 +27,7 @@ export class createImageBuilder extends cdk.Stack {
       // "baseImage": EcsEc2LaunchTarget."ami-0f34c5ae932e6f0e4",
       "baseImage": ec2.MachineImage.latestAmazonLinux(),
       "baseImageType": "id",
-      "ami_component_bucket_name": s3.Bucket.fromBucketName(this, 'MyBucket', "golden-ami-bucket-20230802"),
+      "ami_component_bucket_name": s3.Bucket.fromBucketName(this, 'MyBucket', "golden-ami-bucket-20230802-1"),
       "ami_component_bucket_create": true,
       "attr": "blog-demo",
       "sns_topic": sns.Topic.fromTopicArn(this, 'MyTopic', "arn:aws:sns:us-east-1:993348658863:test"),
@@ -50,7 +50,7 @@ export class createImageBuilder extends cdk.Stack {
         "Name": "golden-ami-blog-demo"
       },
       "image_recipe": {
-        "image_recipe_version": "2.0.0",
+        "image_recipe_version": "1.0.2",
         "image_recipe_name": "golden-ami-recipe-blog-demo",
         "volume_size": 2048,
         "volume_type": "gp2",
@@ -72,7 +72,7 @@ export class createImageBuilder extends cdk.Stack {
           {
             "name": "build1",
             "file": "components/build1.yaml",
-            "version": "1.0.1",
+            "version": "1.0.0",
             "parameter": [
               {
                 "name": "testparam",
@@ -87,7 +87,7 @@ export class createImageBuilder extends cdk.Stack {
           {
             "name": "test1",
             "file": "components/test1.yaml",
-            "version": "1.0.1"
+            "version": "1.0.0"
           }
         ]
       },

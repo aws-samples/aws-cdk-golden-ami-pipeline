@@ -44,7 +44,7 @@
 			{
 				"name": "build1",
 				"file": "components/build1.yaml",
-				"version": "1.0.1",
+				"version": "2.0.1",
 				"parameter": [
 					{
 						"name": "testparam",
@@ -59,7 +59,7 @@
 			{
 				"name": "test1",
 				"file": "components/test1.yaml",
-				"version": "1.0.1"
+				"version": "2.0.1"
 			}
 		]
 	},
