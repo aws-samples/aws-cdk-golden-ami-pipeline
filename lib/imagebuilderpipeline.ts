@@ -19,7 +19,6 @@ import { Tags } from "./interface/tag_interfaces";
 
 export interface ImageBuilderProps {
   user_config: MainConfig
-  default_component?: ComponentConfig
 }
 
 export interface component_list {
@@ -54,6 +53,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
   distributionName?: string | undefined;
   distributionDescription?: string | undefined;
   resource_removal_policy?: cdk.RemovalPolicy | undefined;
+  default_Component_Config?: ComponentConfig
 
   public instance_profile_role: iam.CfnInstanceProfile;
   public cmk: kms.Key
@@ -73,8 +73,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
   constructor(scope: Construct, id: string, props: ImageBuilderProps) {
     super(scope, id);
     const {
-      user_config,
-      default_component
+      user_config
     } = props;
 
 
@@ -112,7 +111,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
       destinationBucket: this.bucket,
       destinationKeyPrefix: user_config['components_prefix']
     });
-
+    let default_component = user_config['default_Component_Config']
     if (default_component) { this.AddComponent(default_component, this.bucket.bucketName, "Build", s3componentdeploy); }
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Build", s3componentdeploy);
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Test", s3componentdeploy);

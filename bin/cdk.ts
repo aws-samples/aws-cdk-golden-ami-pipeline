@@ -1,5 +1,4 @@
 import * as cdk from "aws-cdk-lib";
-import default_component from "./default_component.json";
 import { Stack } from "aws-cdk-lib";
 import { ImagebuilderPipeline } from './../lib/imagebuilderpipeline'
 import { MainConfig } from './../lib/interface/mainConfig'
@@ -21,8 +20,19 @@ export class createImageBuilder extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-
     const ami_config: MainConfig = {
+      "default_Component_Config": {
+        "Build": [
+          {
+            "arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+          }
+        ],
+        "Test": [
+          {
+            "arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+          }
+        ]
+      },
       "baseImage": ec2.MachineImage.latestAmazonLinux(),
       "baseImageType": "id",
       "ami_component_bucket_name": s3.Bucket.fromBucketName(this, 'MyBucket', "golden-ami-bucket-20230802-1"),
@@ -102,8 +112,7 @@ export class createImageBuilder extends cdk.Stack {
     }
 
     const Golden_AMI_Pipeline = new ImagebuilderPipeline(this, "ImagebuilderPipeline", {
-      user_config: ami_config,
-      default_component: default_component
+      user_config: ami_config
     });
     new cdk.CfnOutput(this, 'S3bucketName', { value: Golden_AMI_Pipeline.bucket.bucketName });
     new cdk.CfnOutput(this, 'PipelineName', { value: Golden_AMI_Pipeline.pipeline.name });

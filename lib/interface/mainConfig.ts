@@ -31,7 +31,8 @@ export interface MainConfig {
   Distribution?: distribution[];
   distributionName?: string;
   distributionDescription?: string;
-  resource_removal_policy?: cdk.RemovalPolicy
+  resource_removal_policy?: cdk.RemovalPolicy;
+  default_Component_Config?: ComponentConfig
 }
 
 
