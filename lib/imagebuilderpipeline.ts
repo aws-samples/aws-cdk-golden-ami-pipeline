@@ -17,8 +17,6 @@ import { Recipe } from "./interface/Recipe";
 import { MainConfig } from "./interface/mainConfig";
 import { Tags } from "./interface/tag_interfaces";
 
-
-
 export interface ImageBuilderProps {
   user_config: MainConfig
   default_component?: ComponentConfig
