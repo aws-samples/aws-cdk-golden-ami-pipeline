@@ -1,5 +1,5 @@
 {
-	"baseImage": "ami-0c2ab3b8efb09f272",
+	"baseImage": ec2.MachineImage.latestAmazonLinux(),
 	"components_prefix": "components",
 	"iamEncryption": true,
 	"amitag": {
@@ -12,14 +12,14 @@
 		"Name": "golden-ami-poc"
 	},
 	"image_recipe": {
-		"image_recipe_version": "4.0.0"
+		"image_recipe_version": "1.0.0"
 	},
 	"Component_Config": {
 		"Build": [
 			{
 				"name": "build1",
 				"file": "components/build1.yaml",
-				"version": "4.0.0",
+				"version": "1.0.0",
 				"parameter": [
 					{
 						"name": "testparam",
@@ -34,7 +34,7 @@
 			{
 				"name": "test1",
 				"file": "components/test1.yaml",
-				"version": "4.0.0"
+				"version": "1.0.0"
 			}
 		]
 	}

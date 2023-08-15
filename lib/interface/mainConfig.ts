@@ -10,7 +10,6 @@ import { Tags } from "./tag_interfaces";
 
 export interface MainConfig {
   baseImage: ec2.IMachineImage
-  baseImageType?: string;
   ami_component_bucket_name?: s3.IBucket;
   ami_component_bucket_create?: boolean;
   ami_component_bucket_version?: boolean;

@@ -33,7 +33,6 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
   tag: Tags;
   
   baseImage: cdk.aws_ec2.IMachineImage;
-  baseImageType?: string | undefined;
   ami_component_bucket_name?: IBucket | undefined;
   ami_component_bucket_create?: boolean | undefined;
   ami_component_bucket_version?: boolean | undefined;
@@ -135,14 +134,7 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
       comp_list = { componentArn: "" };
     });
 
-    let base_arn: string = "";
-    if (user_config["baseImageType"] === "ssm") {
-      base_arn = ssm.StringParameter.fromStringParameterAttributes(this, "existingssm", { parameterName: user_config['baseImage'].getImage(this).imageId }).stringValue
-
-    }
-    else {
-      base_arn = user_config['baseImage'].getImage(this).imageId
-    }
+    let base_arn = user_config['baseImage'].getImage(this).imageId
 
     const instance_profile_name = user_config['instanceProfileName'] ?? `golden-ami-instance-profile-${attr}`
     const instance_profile_role_name = user_config['instanceProfileRoleName'] ?? undefined
