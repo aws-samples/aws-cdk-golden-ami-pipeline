@@ -72,5 +72,18 @@
 	],
 	"distributionName": "golden-ami-distribution-blog-demo",
 	"distributionDescription": "Distribution settings for Golden AMI Pipeline",
-	"resource_removal_policy": "retain"
+	"resource_removal_policy": "retain",
+	"default_Component_Config" : {
+		"Build": [
+		  {
+			"arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+		  }
+		],
+		"Test": [
+		  {
+			"arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+		  }
+		]
+	  }
+	  
 }

@@ -2,9 +2,6 @@ import * as cdk from "aws-cdk-lib";
 import { Stack } from "aws-cdk-lib";
 import { ImagebuilderPipeline } from './../lib/imagebuilderpipeline'
 import { MainConfig } from './../lib/interface/mainConfig'
-import * as sns from "aws-cdk-lib/aws-sns";
-import * as ec2 from "aws-cdk-lib/aws-ec2";
-import * as s3 from "aws-cdk-lib/aws-s3";
 const app = new cdk.App();
 
 // const ami_config: MainConfing = user_config;
