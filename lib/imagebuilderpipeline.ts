@@ -22,7 +22,6 @@ export interface ImageBuilderProps {
   default_component?: ComponentConfig
 }
 
-
 export interface component_list {
   componentArn: string;
   parameters?: {
