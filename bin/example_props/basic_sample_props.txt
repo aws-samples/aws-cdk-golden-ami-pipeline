@@ -1,5 +1,5 @@
 {
-	"baseImage": "ami-0c2ab3b8efb09f272",
+	"baseImage": ec2.MachineImage.latestAmazonLinux(),
 	"components_prefix": "components",
 	"iamEncryption": true,
 	"amitag": {

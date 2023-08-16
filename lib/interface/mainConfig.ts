@@ -1,11 +1,16 @@
-import { ComponentConfig } from "./Component_config";
-import { distribution } from "./Distribution";
+import { ComponentConfig } from "./component_config";
+import { distribution } from "./distribution";
 import { infrastructure } from "./Infrastructure";
-import { Recipe } from "./Recipe"
-export interface MainConfing {
-  baseImage: string;
-  baseImageType?: string;
-  ami_component_bucket_name?: string;
+import { Recipe } from "./Recipe";
+import * as sns from "aws-cdk-lib/aws-sns";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as s3 from "aws-cdk-lib/aws-s3";
+import * as cdk from "aws-cdk-lib";
+import { Tags } from "./tag_interfaces";
+
+export interface MainConfig {
+  baseImage: ec2.IMachineImage
+  ami_component_bucket_name?: s3.IBucket;
   ami_component_bucket_create?: boolean;
   ami_component_bucket_version?: boolean;
   imagePipelineName?: string;
@@ -15,15 +20,22 @@ export interface MainConfing {
   components_prefix: string;
   key_alias?: string;
   image_recipe: Recipe;
-  sns_topic?: string;
-  attr?: string
-  amitag?: object;
-  tag?: object;
+  sns_topic?: sns.ITopic
+  attr?: string;
+  amitag?: Tags;
+  tag?: Tags;
   schedule?: object;
   infrastructure?: infrastructure;
   Component_Config: ComponentConfig;
   Distribution?: distribution[];
   distributionName?: string;
   distributionDescription?: string;
-  resource_removal_policy?: string
+  resource_removal_policy?: cdk.RemovalPolicy;
+  default_Component_Config?: ComponentConfig
 }
+
+
+
+
+
+

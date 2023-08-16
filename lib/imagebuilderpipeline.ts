@@ -1,8 +1,7 @@
 import { CfnResource, IResolvable, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { MainConfing } from "./interface/MainConfig";
-import { ComponentConfig } from "./interface/Component_config";
-import { distribution } from "./interface/Distribution";
+import { ComponentConfig } from "./interface/component_config";
+import { distribution } from "./interface/distribution";
 import path = require("path");
 import { ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { IBucket, Bucket } from "aws-cdk-lib/aws-s3";
@@ -12,10 +11,14 @@ import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as imagebuilder from "aws-cdk-lib/aws-imagebuilder";
 import * as cdk from "aws-cdk-lib";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+import { infrastructure } from "./interface/Infrastructure";
+import { Recipe } from "./interface/Recipe";
+import { MainConfig } from "./interface/mainConfig";
+import { Tags } from "./interface/tag_interfaces";
 
 export interface ImageBuilderProps {
-  user_config: MainConfing
-  default_component?: ComponentConfig
+  user_config: MainConfig
 }
 
 export interface component_list {
@@ -25,10 +28,32 @@ export interface component_list {
     value: string[];
   }[];
 }
+export class ImagebuilderPipeline extends Construct implements MainConfig {
+  amitag: Tags;
+  tag: Tags;
+  
+  baseImage: cdk.aws_ec2.IMachineImage;
+  ami_component_bucket_name?: IBucket | undefined;
+  ami_component_bucket_create?: boolean | undefined;
+  ami_component_bucket_version?: boolean | undefined;
+  imagePipelineName?: string | undefined;
+  instanceProfileName?: string | undefined;
+  instanceProfileRoleName?: string | undefined;
+  iamEncryption?: boolean | undefined;
+  components_prefix: string;
+  key_alias?: string | undefined;
+  image_recipe: Recipe;
+  sns_topic?: cdk.aws_sns.ITopic | undefined;
+  attr?: string | undefined;
+  schedule?: object | undefined;
+  infrastructure?: infrastructure | undefined;
+  Component_Config: ComponentConfig;
+  Distribution?: distribution[] | undefined;
+  distributionName?: string | undefined;
+  distributionDescription?: string | undefined;
+  resource_removal_policy?: cdk.RemovalPolicy | undefined;
+  default_Component_Config?: ComponentConfig
 
-export class ImagebuilderPipeline extends Construct {
-  private amitag: object;
-  private tag: object;
   public instance_profile_role: iam.CfnInstanceProfile;
   public cmk: kms.Key
   public dist: imagebuilder.CfnDistributionConfiguration;
@@ -47,9 +72,9 @@ export class ImagebuilderPipeline extends Construct {
   constructor(scope: Construct, id: string, props: ImageBuilderProps) {
     super(scope, id);
     const {
-      user_config,
-      default_component
+      user_config
     } = props;
+
 
     const attr = user_config['attr'] ?? 'demo'
     const ami_component_bucket_name = user_config['ami_component_bucket_name'] ?? undefined
@@ -57,7 +82,7 @@ export class ImagebuilderPipeline extends Construct {
     if (bucket_create) {
       this.bucket = new Bucket(this, id, {
         versioned: user_config['ami_component_bucket_version'],
-        bucketName: ami_component_bucket_name,
+        bucketName: ami_component_bucket_name?.bucketName,
         encryption: cdk.aws_s3.BucketEncryption.S3_MANAGED
       });
       this.bucket.addToResourcePolicy(new iam.PolicyStatement({
@@ -75,7 +100,7 @@ export class ImagebuilderPipeline extends Construct {
         this.bucket = Bucket.fromBucketName(
           this,
           'imported-bucket-from-name',
-          ami_component_bucket_name,
+          ami_component_bucket_name.bucketName,
         );
       }
     }
@@ -85,7 +110,7 @@ export class ImagebuilderPipeline extends Construct {
       destinationBucket: this.bucket,
       destinationKeyPrefix: user_config['components_prefix']
     });
-
+    const default_component = user_config['default_Component_Config']
     if (default_component) { this.AddComponent(default_component, this.bucket.bucketName, "Build", s3componentdeploy); }
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Build", s3componentdeploy);
     this.AddComponent(user_config["Component_Config"], this.bucket.bucketName, "Test", s3componentdeploy);
@@ -109,14 +134,7 @@ export class ImagebuilderPipeline extends Construct {
       comp_list = { componentArn: "" };
     });
 
-    let base_arn: string = "";
-    if (user_config["baseImageType"] === "ssm") {
-      base_arn = ssm.StringParameter.fromStringParameterAttributes(this, "existingssm", { parameterName: user_config['baseImage'] }).stringValue
-
-    }
-    else {
-      base_arn = user_config['baseImage'];
-    }
+    const base_arn = user_config['baseImage'].getImage(this).imageId
 
     const instance_profile_name = user_config['instanceProfileName'] ?? `golden-ami-instance-profile-${attr}`
     const instance_profile_role_name = user_config['instanceProfileRoleName'] ?? undefined
@@ -181,7 +199,6 @@ export class ImagebuilderPipeline extends Construct {
     );
     this.pipeline.addDependsOn(this.infra);
   }
-
   private CreateImagePipeline(
     imageRecipe: imagebuilder.CfnImageRecipe,
     dist: string | undefined,
@@ -208,43 +225,53 @@ export class ImagebuilderPipeline extends Construct {
   }
   private CreateInfra(
     instanceprofile: iam.CfnInstanceProfile,
-    user_config: MainConfing,
+    user_config: MainConfig,
     attr: string
   ): imagebuilder.CfnInfrastructureConfiguration {
     if (user_config["infrastructure"] === undefined ){
       user_config["infrastructure"] = {}
     }
+    const instance_type = user_config["infrastructure"]["instance_type"]
+    const security_group = user_config["infrastructure"]["security_groups"]
+
+    // console.log(instance_type.map(instance_type => instance_type?.toString()!))
+    // console.log(security_group.map(security_group => security_group?.toString()!))
+    
     try {
       const infraconfig = new imagebuilder.CfnInfrastructureConfiguration(
         this,
         "Golden_AMI_Instance_Infra",
         {
           name: user_config["infrastructure"]["name"] ?? `golden-ami-infra-${attr}`,
-          instanceTypes: user_config["infrastructure"]["instance_type"],
+          //instanceTypes: ["t2.large"],
+          instanceTypes: instance_type!?.map(instance_type => instance_type?.toString()!),
           instanceProfileName: instanceprofile.instanceProfileName!,
-          subnetId: user_config["infrastructure"]["subnet_id"],
-          securityGroupIds: user_config["infrastructure"]["security_groups"],
-          snsTopicArn: user_config["sns_topic"]
+          subnetId: user_config["infrastructure"]["subnet_id"]?.subnetId,
+          securityGroupIds: security_group!?.map(security_group => security_group.securityGroupId?.toString()!),
+          snsTopicArn: user_config["sns_topic"]?.topicArn
         }
       );
       return infraconfig;
     } catch (error) {
-      throw new Error("Error creating infra config");
+      console.log(error)
+        console.log(error)
+        throw new Error("Error creating infra config");
     }
   }
+  
   private CreateDistribution(
     distribution: distribution[],
-    amitag: object | undefined,
+    amitag: Tags | undefined,
     tag: object | undefined,
     name: string,
     description: string | undefined
   ): imagebuilder.CfnDistributionConfiguration {
-    let distributions_list: imagebuilder.CfnDistributionConfiguration.DistributionProperty[] =
+    const distributions_list: imagebuilder.CfnDistributionConfiguration.DistributionProperty[] =
       [];
     distribution.forEach((value) => {
       const amiDistributionConfiguration: imagebuilder.CfnDistributionConfiguration.AmiDistributionConfigurationProperty =
       {
-        amiTags: amitag as IResolvable,
+        amiTags: amitag,
         targetAccountIds: value.accounts,
       };
       const distributionProperty: imagebuilder.CfnDistributionConfiguration.DistributionProperty =
@@ -273,7 +300,7 @@ export class ImagebuilderPipeline extends Construct {
   }
   private buildRecipe(
     base_arn: string,
-    user_config: MainConfing,
+    user_config: MainConfig,
     keyid: string | undefined,
     component_list: component_list[],
     attr: string
@@ -417,7 +444,7 @@ export class ImagebuilderPipeline extends Construct {
           );
         });
       })
-    };
+    }
     return cmk;
   }
   private AddComponent(
@@ -433,10 +460,10 @@ export class ImagebuilderPipeline extends Construct {
     else if (component_type === "Test") build_type = "Test";
 
     if (build_type in config) {
-      let cfg = config[build_type as keyof typeof config];
+      const cfg = config[build_type as keyof typeof config];
 
       cfg!.forEach((value) => {
-        let arn = value.arn;
+        const arn = value.arn;
         if (value.arn) {
           if ("parameter" in value) {
             this.componentArn.push({
@@ -447,8 +474,8 @@ export class ImagebuilderPipeline extends Construct {
             this.componentArn.push({ arn: arn! });
           }
         } else if (value.file) {
-          let uri = `s3://${bucket_name}/${value.file}`;
-          let imageBuild = new imagebuilder.CfnComponent(
+          const uri = `s3://${bucket_name}/${value.file}`;
+          const imageBuild = new imagebuilder.CfnComponent(
             this,
             `${value.name}-${build_type}`,
             {

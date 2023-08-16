@@ -128,48 +128,19 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
         `cd cdk-golden-ami-pipeline`
 
-2. Update Config files. There are two config files - 
+2. Provide the props `ami_config` (which is type of `MainConfig`) inside the class name `createImageBuilder` located in the file `bin/cdk.ts`
+   For sample props, refer to  `example_props` folder and the parameter details are described [**here**](#parameterdetails).
 
-    `bin/config.json` - Configuration file that defines all the parameters needed to deploy the AMI Pipeline. For the details for all the parameters in thsi file, check [**here**](#parameterdetails).
-
-
-    Two additional sample ```config.json``` file has been provided. you can use content from these files based on your requirement. 
-
-    - ```bin/basic_config.json``` --> This contains minimum parameters ( those are required ) to deploy the solution
-
-    - ```bin/detailed_config.json``` --> this contains all the parameters supported in this implementation
-
-    > Please note that you need to copy your desired configuration to `bin/config.json` file
-
-    `bin/default_component.json` - Optional component file that contains Build and Test step that can be added by default. The Build Steps added in this file will be executed at first. The Test steps added in this file will be executed last. This is one way to enforce mandatory build and test step. For example, This file can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. Type of this value is ComponentConfig which is described below. In this example we used two Amazon-managed component.
-    if you do not want to use any default component file, replace the following line
-
-    ```
-    const Golden_AMI_Pipeline = new ImagebuilderPipeline(this, "ImagebuilderPipeline", {
-      user_config: ami_config,
-      default_component: default_component
-    });
-    ```
-    with
-    ```
-    const Golden_AMI_Pipeline = new ImagebuilderPipeline(this, "ImagebuilderPipeline", {
-      user_config: ami_config
-    });
-    ```
 
 3. set the region where the stack will be deployed. For example
 
     ``export CDK_DEPLOY_REGION=us-west-2``
 
-4. set the **baseImage** value in ```bin/config.json``` file. This MUST be available in the account/region you are deploying the pipeline. For example, 
-
-   ```"baseImage": "ami-0c2ab3b8efb09f272"```
-
-5. Install required packages
+4. Install required packages
 
     ```npm install```
 
-6. Deploy the CDK application
+5. Deploy the CDK application
 
     ```cdk deploy ```
 
@@ -204,12 +175,12 @@ In less than few minutes, you've created and deployed a new golden image pipelin
 
 # <a name='parameterdetails'></a>Parameter Details
 
-`config.json` file contains the following parameters ("?" represents optional parameters)- 
+`MainConfig` interface contains the following parameters ("?" represents optional parameters)- 
 
 ```
-baseImage: string;
+baseImage: ec2.IMachineImage
 baseImageType?: string;
-ami_component_bucket_name?: string;
+ami_component_bucket_name?: s3.IBucket;
 ami_component_bucket_create?: boolean;
 ami_component_bucket_version?: boolean;
 imagePipelineName?: string;
@@ -219,24 +190,24 @@ iamEncryption?: boolean;
 components_prefix: string;
 key_alias?: string;
 image_recipe: Recipe;
-sns_topic?: string;
-attr?: string
-amitag?: object;
-tag?: object;
+sns_topic?: sns.ITopic
+attr?: string;
+amitag?: Tags;
+tag?: Tags;
 schedule?: object;
 infrastructure?: infrastructure;
 Component_Config: ComponentConfig;
 Distribution?: distribution[];
 distributionName?: string;
 distributionDescription?: string;
-resource_removal_policy?: string
+resource_removal_policy?: cdk.RemovalPolicy;
+default_Component_Config?: ComponentConfig
 ```
 
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 | attr | Yes | String | `demo` | NA | Meaningful String that uniquely identifies the pipeline. This attribute will be appended to deployed resource name if not provided |
-|baseImage|Yes|String|`ami-090fa75af13c156b4` or `/golden/ami`|NA| baseImage  refer to base AMI ID or SSM parameter that contains AMI ID. Golden AMI will be created based off this base image. **baseImage** AMI id MUST be available in the account/region you are deploying the pipeline to|
-|baseImageType| No| String | `ssm` or `id` | `id` | select `ssm`, if baseImage contains SSM Parameter, Select `id` if baseImage contains AMI ID
+|baseImage|Yes|String|`ami-090fa75af13c156b4` or `/golden/ami`|NA| baseImage  refer to base AMI ID. Golden AMI will be created based off this base image. **baseImage** AMI id MUST be available in the account/region you are deploying the pipeline to|
 |resource_removal_policy|No|String | `destroy` or `retain` |`retain`|Image Builder component and recipe removal policy. Based on this, the older version of image builder component and recipe will either be deleted or retained.|
 |ami_component_bucket_name|No|String|`golden-ami-bucket-20220911`|CDK application will create a dynamic name|This bucket will contain all the related user defined build and test component. If not specified, CDK application will create a new bucket with autogenerated name|
 |ami_component_bucket_create|No|Boolean|`true` or `false` | `true`|If true, a new S3 bucket will be created. If false, then `ami_component_bucket_name` must be provided and bucket must exist|
@@ -256,6 +227,7 @@ resource_removal_policy?: string
 |distributionDescription|No|String|`Distribution settings for demo`|`Distribution settings for ${attr}`|Description of the distribution settings
 |sns_topic|No|String|`arn:aws:sns:us-east-1:111122223333:myTopic`|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
 |key_alias|No|String|`golden-ami-cmk-key`|NA|If not provided, KMS key will be created without alias name
+|default_Component_Config|No|[**ComponentConfig**](#ComponentConfig)|[**example**](#default_component_config)|NA|Optional parameter that contains Build and Test step that can be added by default. The Build Steps added in this parameter will be executed at first. The Test steps added in this parameter will be executed last. This is one way to enforce mandatory build and test step. For example, This parameter can contain mandatory build step such as upgrading all available OS Package and mandatory test step to check if reboot is working after all build is completed. 
 |schedule|No|`{ "PipelineExecutionStartCondition" : String, "ScheduleExpression" : String }` . For more information, [link](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-schedule.html)|{ "scheduleExpression": "cron(0 10 * * ? *)"}|`Manual`|AMI Pipeline Schedule|
 
 
@@ -405,6 +377,22 @@ resource_removal_policy?: string
 >:warning: **Component_Config** contains one or more Build/Test components. Each Build or Test may contain some parameter as given below - 
 Any changes in Component content , requires a new version to be created. All the Components immutable with a specific version. If you change the content of any component , update the version as well. Otherwise, component creation will fail. 
 
+## :large_blue_circle: <a name='default_component_config'></a> **Default_component_config**
+
+```
+	"default_Component_Config" : {
+		"Build": [
+		  {
+			"arn": "arn:aws:imagebuilder:us-east-1:aws:component/update-linux/1.0.2/1"
+		  }
+		],
+		"Test": [
+		  {
+			"arn": "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
+		  }
+		]
+	  }
+```
 
 ## :large_blue_circle: <a name='recipe'></a> **image_recipe**
 
