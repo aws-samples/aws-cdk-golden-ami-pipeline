@@ -244,10 +244,10 @@ export class ImagebuilderPipeline extends Construct implements MainConfig {
         {
           name: user_config["infrastructure"]["name"] ?? `golden-ami-infra-${attr}`,
           //instanceTypes: ["t2.large"],
-          instanceTypes: instance_type!.map(instance_type => instance_type?.toString()!),
+          instanceTypes: instance_type!?.map(instance_type => instance_type?.toString()!),
           instanceProfileName: instanceprofile.instanceProfileName!,
           subnetId: user_config["infrastructure"]["subnet_id"]?.subnetId,
-          securityGroupIds: security_group!.map(security_group => security_group.securityGroupId?.toString()!),
+          securityGroupIds: security_group!?.map(security_group => security_group.securityGroupId?.toString()!),
           snsTopicArn: user_config["sns_topic"]?.topicArn
         }
       );

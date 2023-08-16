@@ -37,11 +37,5 @@
 				"version": "1.0.0"
 			}
 		]
-	},	
-  "infrastructure": {
-	  "name": "golden-ami-infra-blog-demo",
-	  "instance_type": [],
-	  "subnet_id": undefined,
-	  "security_groups": []
-	},
+	}
 }
