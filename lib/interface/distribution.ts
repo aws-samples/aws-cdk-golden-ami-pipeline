@@ -1,4 +1,4 @@
-export interface distribution {
+export interface Distribution {
   region: string;
   accounts: string[];
 }

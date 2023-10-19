@@ -1,7 +1,7 @@
 export interface Recipe {
-    image_recipe_version: string; 
-    image_recipe_name?: string ; 
-    volume_size?: number;
-    volume_type?: string;
+    imageRecipeVersion: string; 
+    imageRecipeName?: string ; 
+    volumeSize?: number;
+    volumeType?: string;
     deleteOnTermination?: boolean
 }

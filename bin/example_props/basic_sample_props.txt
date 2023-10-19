@@ -1,6 +1,6 @@
 {
 	"baseImage": ec2.MachineImage.latestAmazonLinux(),
-	"components_prefix": "components",
+	"componentsPrefix": "components",
 	"iamEncryption": true,
 	"amitag": {
 		"env": "dev",
@@ -11,10 +11,10 @@
 		"env": "dev",
 		"Name": "golden-ami-poc"
 	},
-	"image_recipe": {
-		"image_recipe_version": "1.0.0"
+	"imageRecipe": {
+		"imageRecipeVersion": "1.0.0"
 	},
-	"Component_Config": {
+	"componentConfig": {
 		"Build": [
 			{
 				"name": "build1",
