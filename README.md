@@ -200,7 +200,7 @@ componentConfig: ComponentConfig;
 Distribution?: distribution[];
 distributionName?: string;
 distributionDescription?: string;
-resource_removal_policy?: cdk.RemovalPolicy;
+resourceRemovalPolicy?: cdk.RemovalPolicy;
 defaultComponentConfig?: ComponentConfig
 ```
 
