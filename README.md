@@ -179,7 +179,6 @@ In less than few minutes, you've created and deployed a new golden image pipelin
 
 ```
 baseImage: ec2.IMachineImage
-baseImageType?: string;
 amiComponentBucketName?: s3.IBucket;
 amiComponentBucketCreate?: boolean;
 amiComponentBucketVersion?: boolean;
@@ -269,9 +268,9 @@ defaultComponentConfig?: ComponentConfig
 ```
 {
         name?: string;
-        instanceType?: string[];
-        subnetId?: string;
-        securityGroups?: string[];
+        instanceType?: ec2.InstanceType[];
+        subnetId?: ec2.ISubnet;
+        securityGroups?: ec2.ISecurityGroup[];
 }
 ```
 
@@ -280,9 +279,9 @@ defaultComponentConfig?: ComponentConfig
 | Parameter Name | Required | Type | example | Default Value | Notes |
 | :--------------- |:---------------|:---------------|:---------------|:---------------|:---------------|
 |name|No|String|`golden-ami-infra-demo`|`golden-ami-infra-${attribute}`|Name of the infrastructure resource created in Image builder service.
-|instanceType|No|List of String|`["t2.small"]`|m5.large|Instance type to be used for Building Golden AMI
-|subnetId|No|String|`subnet-0caeab2cb8575df26`|Default VPC in the account/region|If not provided, default VPC should exist
-|securityGroups|No|List of String|`["sg-077b2c5e060e46f50"]`|Default Security Group|This is needed if the subnet ID is provided.
+|instanceType|No|List of ec2.InstanceType|`["t2.small"]`|m5.large|Instance type to be used for Building Golden AMI
+|subnetId|No|ec2.ISubnet|`subnet-0caeab2cb8575df26`|Default VPC in the account/region|If not provided, default VPC should exist
+|securityGroups|No|ec2.ISecurityGroup|`["sg-077b2c5e060e46f50"]`|Default Security Group|This is needed if the subnet ID is provided.
 
 
 ### Example 
