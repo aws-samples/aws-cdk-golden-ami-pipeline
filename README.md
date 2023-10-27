@@ -300,7 +300,7 @@ defaultComponentConfig?: ComponentConfig
 ```
 
 
-## :large_blue_circle: <a name='ComponentConfig'></a> **componentConfig**
+## :large_blue_circle: <a name='ComponentConfig'></a> **ComponentConfig**
 
 ### Type
 ```
