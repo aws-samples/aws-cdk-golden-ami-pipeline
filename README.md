@@ -194,9 +194,9 @@ attribute?: string;
 amitag?: Tags;
 tag?: Tags;
 schedule?: object;
-infrastructure?: infrastructure;
+infrastructure?: Infrastructure;
 componentConfig: ComponentConfig;
-Distribution?: distribution[];
+Distribution?: Distribution[];
 distributionName?: string;
 distributionDescription?: string;
 resourceRemovalPolicy?: cdk.RemovalPolicy;
@@ -219,9 +219,9 @@ defaultComponentConfig?: ComponentConfig
 |amitag|No|object|[**example**](#amitag)|NA|This tag will be applied to the distributed AMI in target account/region|
 |tag|No|object|[**example**](#tag)|NA|This tag will be applied to all the resources created by the CDK application|
 |imageRecipe|Yes|[**Recipe**](#imageRecipe)|[**example**](#recipe)|NA|EC2 Builder image recipe|
-|infrastructure|yes|[**infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastructure details that will be used to launch EC2 instance|
+|infrastructure|yes|[**Infrastructure**](#infrastructure)|[**example**](#infrastructure)|Ec2 Builder Infrastructure details that will be used to launch EC2 instance|
 |componentConfig|Yes|[**ComponentConfig**](#ComponentConfig)|[**example**](#ComponentConfig)|NA|Defines the Build and Test Steps|
-|Distribution|No|list of [**distribution**](#distribution)|[**example**](#distribution)|NA|The config detail about which target account and region the golden AMI will be distributed|
+|Distribution|No|list of [**Distribution**](#distribution)|[**example**](#distribution)|NA|The config detail about which target account and region the golden AMI will be distributed|
 |distributionName|No|String|`golden-ami-distribution-demo`|`golden-ami-distribution-${attribute}`|Distribution settings name|
 |distributionDescription|No|String|`Distribution settings for demo`|`Distribution settings for ${attribute}`|Description of the distribution settings
 |snsTopic|No|sns.ITopic|[Topic](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_sns.Topic.html)|NA|Notification will be sent to this SNS Topic, after Image builder pipeline execution is completed.|
@@ -232,7 +232,7 @@ defaultComponentConfig?: ComponentConfig
 
 
 
-##  :large_blue_circle: <a name='distribution'></a> **distribution**
+##  :large_blue_circle: <a name='distribution'></a> **Distribution**
 
 ### Type
 ```
@@ -394,7 +394,7 @@ Any changes in Component content , requires a new version to be created. All the
 	  }
 ```
 
-## :large_blue_circle: <a name='imageRecipe'></a> **imageRecipe**
+## :large_blue_circle: <a name='imageRecipe'></a> **Recipe**
 
 ### Type
 
