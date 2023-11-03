@@ -1,7 +1,7 @@
 import { ComponentConfig } from "./componentConfig";
 import { Distribution } from "./distribution";
-import { Infrastructure } from "./infrastructure";
-import { Recipe } from "./recipe";
+import { Infrastructure } from "./infrastructureConfig";
+import { Recipe } from "./recipeConfig";
 import * as sns from "aws-cdk-lib/aws-sns";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as s3 from "aws-cdk-lib/aws-s3";
