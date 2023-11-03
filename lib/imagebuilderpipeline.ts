@@ -12,8 +12,8 @@ import * as imagebuilder from "aws-cdk-lib/aws-imagebuilder";
 import * as cdk from "aws-cdk-lib";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
-import { Infrastructure } from "./interface/infrastructure"
-import { Recipe } from "./interface/recipe";
+import { Infrastructure } from "./interface/infrastructureConfig"
+import { Recipe } from "./interface/recipeConfig";
 import { MainConfig } from "./interface/mainConfig";
 import { Tags } from "./interface/tagInterfaces";
 
