@@ -1,0 +1,20 @@
+name: InstallVirtualJTAGXVC
+description: [
+  Installs the Xilinx Virtual Cable driver. This can be used to debug your application at runtime by examining waveforms via the Vivado Hardware Manager.
+  See our guide on Virtual JTAG here: https://awsdocs-fpga-f2.readthedocs-hosted.com/latest/hdk/docs/Virtual-JTAG-XVC.html
+]
+schemaVersion: 1.0
+parameters:
+  - customer_device_id:
+      type: string
+      default: "0x0000"
+      description: "The device number given to your CL. IE 0xF002 -> cl_dram_hbm_dma"
+phases:
+    - name: install_virtual_jtag_xvc
+      steps:
+        - name: InstallVirtualJTAGXVC
+          action: ExecuteBash
+          inputs:
+            commands:
+                - |
+                  # TODO: get info from AMD on how this will work, since it relies on Cloud Install stuff.

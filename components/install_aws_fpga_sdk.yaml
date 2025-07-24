@@ -1,0 +1,31 @@
+name: InstallXRT
+description: Installs the XRT based on the supplied Vitis tool version.
+schemaVersion: 1.0
+parameters:
+  - vitis_tool_version:
+      type: string
+      default: "2024.1"
+      description: "Vitis tool version."
+  - XILINX_VITIS:
+      type: string
+      default: "/opt/Xilinx/2025.1/Vitis"
+      description: "Location of Vitis dependencies."
+phases:
+    - name: install_xrt
+      steps:
+        - name: InstallXRT
+          action: ExecuteBash
+          inputs:
+            commands:
+                - mkdir -p "${HOME}/f2_runtime/"
+                - cd "${HOME}"
+                - git clone https://github.com/aws/aws-fpga.git
+                - cd aws-fpga
+                - mv sdk_setup.sh "${HOME}/f2_runtime/"
+                - mv shared "${HOME}/f2_runtime/"
+                - mv sdk/ "${HOME}/f2_runtime/"
+                - cd "${HOME}/f2_runtime/"
+                - source sdk_setup.sh
+                - cd "${HOME}"
+                - rm -rf aws-fpga
+                - TODO: Can I just move the SDK folders anywhere and still perform the install? -> Yes, Steven thinks so.

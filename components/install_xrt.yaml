@@ -1,0 +1,25 @@
+name: InstallXRT
+description: Installs the XRT based on the supplied Vitis tool version.
+schemaVersion: 1.0
+parameters:
+  - vitis_tool_version:
+      type: string
+      default: "2024.1"
+      description: "Vitis tool version."
+  - XILINX_VITIS:
+      type: string
+      default: "/opt/Xilinx/2025.1/Vitis"
+      description: "Location of Vitis dependencies."
+phases:
+    - name: install_xrt
+      steps:
+        - name: InstallXRT
+          action: ExecuteBash
+          inputs:
+            commands:
+                - cd "${HOME}"
+                - git clone https://github.com/aws/aws-fpga.git
+                - cd aws-fpga
+                - source vitis_setup.sh
+                - install_xrt
+                - cd "${HOME}"

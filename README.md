@@ -122,27 +122,92 @@ For more information on setting up cross-account AMI distribution, visit [Page](
 
 # <a name='howtodeploy'></a>How to Deploy
 
-1.   Clone the Repo and navigate to the folder
+1. Clone the Repo and navigate to the folder
 
-        `git clone https://github.com/aws-samples/aws-cdk-golden-ami-pipeline.git`
+```bash
+git clone https://github.com/aws-samples/aws-cdk-golden-ami-pipeline.git
+cd cdk-golden-ami-pipeline
+```
 
-        `cd cdk-golden-ami-pipeline`
+2. Assign the props to the `amiConfig` variable (which is type of `MainConfig`) in `bin/cdk.ts`
 
-2. Provide the props `ami_config` (which is type of `MainConfig`) inside the class name `createImageBuilder` located in the file `bin/cdk.ts`
-   For sample props, refer to  `example_props` folder and the parameter details are described [**here**](#parameterdetails).
+   For sample props, refer to `example_props` folder.
+   [The parameter details are described here](#parameterdetails).
 
+```typescript
+// Use this variable to define your props.
+// There are two examples in the bin/example_props directory.
+// This is the basic sample.
+let amiConfig: MainConfig = {
+    "baseImage": ec2.MachineImage.latestAmazonLinux2023(),
+    "componentsPrefix": "components",
+    "iamEncryption": true,
+    "amitag": {
+        "env": "dev",
+        "Name": "golden-ami-{{imagebuilder:buildDate}}",
+        "Date_Created": "{{imagebuilder:buildDate}}"
+    },
+    "tag": {
+        "env": "dev",
+        "Name": "golden-ami-poc"
+    },
+    "imageRecipe": {
+        "imageRecipeVersion": "1.0.0"
+    },
+    "componentConfig": {
+        "Build": [
+            {
+                "name": "build1",
+                "file": "components/build1.yaml",
+                "version": "1.0.0",
+                "parameter": [
+                    {
+                        "name": "testparam",
+                        "value": [
+                            "samplevalue"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Test": [
+            {
+                "name": "test1",
+                "file": "components/test1.yaml",
+                "version": "1.0.0"
+            }
+        ]
+    }
+}
 
-3. set the region where the stack will be deployed. For example
+```
+
+3. Assign a the name of your Image Builder Pipeline to the `imageBuilderPipelineName` variable in `bin/cdk.ts`
+
+```typescript
+// Define the name of your CloudFormation stack here
+const imageBuilderPipelineName: string = "ImagebuilderPipeline";
+```
+
+4. Set the region where the stack will be deployed. For example
 
     ``export CDK_DEPLOY_REGION=us-west-2``
 
-4. Install required packages
+5. Install the AWS CDK
+
+    ```npm install -g aws-cdk```
+
+5. Install required packages
 
     ```npm install```
 
-5. Deploy the CDK application
+6. Bootstrap the CDK
 
-    ```cdk deploy ```
+    ```cdk bootstrap```
+
+7. Deploy the CDK application
+
+    ```cdk deploy```
 
 # <a name='verification'></a>Verification
 Once the CDK application is deployed successfully , navigate to Image Builder Service to verify and check all the following resources created
@@ -503,5 +568,4 @@ multi-account environment.
  - Sandip Gangapadhyay
  - Siamak Heshmati
  - Viyoma Sachdeva
-
 

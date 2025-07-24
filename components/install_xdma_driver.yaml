@@ -1,0 +1,37 @@
+name: InstallXDMA
+description: Installs the XDMA driver.
+schemaVersion: 1.0
+parameters:
+  - customer_device_id:
+      type: string
+      default: "0x0000"
+      description: "The device number given to your CL. IE 0xF002 -> cl_dram_hbm_dma"
+phases:
+    - name: install_xdma_driver
+      steps:
+        - name: InstallXDMADriver
+          action: ExecuteBash
+          inputs:
+            commands: # NOTE: This worked even on my dev desktop
+                - |
+                  if [[ -n $(lsmod | grep xocl) ]]; then
+                    echo "[ERROR] XDMA driver and XOCL driver cannot be installed on the same system!"
+                    return 1
+                  fi
+                  
+                  cd "${HOME}"
+                  git clone https://github.com/Xilinx/dma_ip_drivers.git
+                  
+                  cd dma_ip_drivers/XDMA/linux-kernel/xdma/
+                  sed -i '112i\	{ PCI_DEVICE(0x1d0f, {{ parameter.customer_device_id }}), },' xdma_mod.c
+                  sudo make clean
+                  sudo make install
+                  sudo modprobe xdma
+                  
+                  if [[ -z $(lsmod | grep xdma) ]]; then
+                    echo "[ERROR] XDMA driver not active after install!"
+                    return 1
+                  fi 
+                  
+                  cd "${HOME}"
+                  rm -rf dma_ip_drivers

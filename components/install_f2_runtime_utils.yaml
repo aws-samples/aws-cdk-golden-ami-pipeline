@@ -1,0 +1,103 @@
+name: InstallF2RuntimeUtils
+description: [
+  Installs various libraries and utilities needed by the F2 platform at runtime. In particular, numactl
+  is necessary for optimal memory allocation and application speed at runtime.
+]
+schemaVersion: 1.0
+phases:
+    - name: install_f2_runtime_utils
+      steps:
+        - name: InstallF2RuntimeUtils
+          action: ExecuteBash
+          inputs:
+            commands:
+                - |
+                  common_packages_to_install=(
+                    bzip2
+                    csh
+                    devmem2
+                    environment-modules
+                    gcc
+                    gdb
+                    git
+                    git-lfs
+                    nvme-cli
+                    numactl
+                    opencl-headers
+                    pciutils
+                    perl
+                    python3-pip
+                    tcl
+                    tmux
+                    unzip
+                    wget
+                    xauth
+                  )
+
+                  ubuntu_utils_to_install=(
+                    build-essential
+                    dkms
+                    linux-image-generic
+                    linux-headers-generic
+                    libjpeg-turbo8-dev
+                    libopencv-dev
+                    libpng-dev
+                    libsecret-1-dev
+                    libtiff5-dev
+                    libtinfo6
+                    libx11-6
+                    libx11-dev
+                    libxi6
+                    libxkbfile-dev
+                    libxrender1
+                    libxtst6
+                    linux-headers-$(uname -r)
+                    ocl-icd-libopencl1
+                    ocl-icd-opencl-dev
+                    screen
+                    tcl-dev
+                  )
+
+                  rhel_utils_to_install=(
+                    cmake
+                    epel-release
+                    gcc-c++
+                    kernel-devel
+                    kernel-headers
+                    libjpeg-turbo-devel
+                    libpng-devel
+                    libsecret-devel
+                    libstdc++
+                    libtiff-devel
+                    libtiff
+                    libX11-devel
+                    libX11
+                    libXi
+                    libxkbfile
+                    libXrender
+                    libXtst
+                    ncurses-libs
+                    ocl-icd
+                    tcl-devel
+                  )
+
+                  utils_to_install=""
+                  install_command=""
+
+                  if [[ $(cat /etc/os-release) == *"Ubuntu"* ]]; then
+                    install_command="sudo apt install -y"
+                    utils_to_install=("${ubuntu_utils_to_install[@]}")
+                  elif [[ $(cat /etc/os-release) == *"Amazon Linux"* ]]; then
+                    install_command="sudo yum install -y"
+                    utils_to_install=("${rhel_utils_to_install[@]}")
+                  else
+                    echo "Couldn't find a package list for this distro!"
+                  fi
+
+                  for pkg in "${common_packages_to_install[@]}"; do
+                    $install_command $pkg
+                  done
+
+                  for util in "${utils_to_install[@]}"; do
+                    $install_command $util
+                  done
